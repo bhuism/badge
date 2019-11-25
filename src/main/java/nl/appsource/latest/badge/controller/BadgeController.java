@@ -42,12 +42,6 @@ public class BadgeController {
 
     private final RestTemplate restTemplate;
 
-    private final static HttpHeaders headers = new HttpHeaders();
-
-    static {
-        headers.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
-    }
-
     @GetMapping("/")
     public ModelAndView redirectWithUsingRedirectPrefix(final ModelMap model) {
         return new ModelAndView("redirect:https://github.com/bhuism/badge", model);
@@ -61,10 +55,10 @@ public class BadgeController {
 
         try {
             final String commit_sha = getCommitShaFromActuatorUrl(actuator_url);
-        return calcSieldIoResponse(owner, repo, branch, commit_sha, label);
+            return calcSieldIoResponse(owner, repo, branch, commit_sha, label);
         } catch (Exception e) {
             log.info("", e);
-            final ShieldsIoResponse shieldsIoResponse  = new ShieldsIoResponse();
+            final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
             shieldsIoResponse.setLabel("exception:");
             shieldsIoResponse.setMessage(e.getMessage());
             shieldsIoResponse.setColor("red");
@@ -83,7 +77,7 @@ public class BadgeController {
             return calcSieldIoResponse(owner, repo, branch, commit_sha, label);
         } catch (Exception e) {
             log.info("", e);
-            final ShieldsIoResponse shieldsIoResponse  = new ShieldsIoResponse();
+            final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
             shieldsIoResponse.setLabel("exception:");
             shieldsIoResponse.setMessage(e.getMessage());
             shieldsIoResponse.setColor("red");
@@ -94,6 +88,9 @@ public class BadgeController {
 
     private String getCommitShaFromActuatorUrl(final String actuator_url) {
 
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
         final ResponseEntity<Info> info = restTemplate.exchange(actuator_url, HttpMethod.GET, new HttpEntity<>(headers), Info.class);
 
         if (info.getStatusCode().equals(HttpStatus.OK)) {
@@ -101,6 +98,7 @@ public class BadgeController {
         } else {
             return info.getStatusCode().name();
         }
+
     }
 
     private ShieldsIoResponse calcSieldIoResponse(final String owner, final String repo, final String branch, final String commit_sha, final String label) {
@@ -110,6 +108,9 @@ public class BadgeController {
         if (StringUtils.hasText(label)) {
             shieldsIoResponse.setLabel(label);
         }
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
 
         final Map<String, String> vars = new HashMap<>();
 
