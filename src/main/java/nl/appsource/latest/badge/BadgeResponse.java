@@ -10,7 +10,7 @@ public class BadgeResponse {
 
     private Long schemaVersion = 1L;
     private String label = "label";
-    private String message = "message";
+    private String message = "message" + System.currentTimeMillis() % 1000;
     private String color = "blue";
     private Long cacheSeconds = 60L;
 
