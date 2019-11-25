@@ -12,6 +12,6 @@ public class ShieldsIoResponse {
     private String label = "label";
     private String message = "message";
     private String color = "color";
-    private Long cacheSeconds = 1L;
+    private Long cacheSeconds = 120L;
 
 }

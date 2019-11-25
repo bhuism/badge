@@ -77,6 +77,7 @@ public class BadgeController {
             log.info("" + gitHubResponseEntity, e);
             shieldsIoResponse.setMessage(e.getMessage());
             shieldsIoResponse.setColor("red");
+            shieldsIoResponse.setCacheSeconds(10L);
         }
 
         return shieldsIoResponse;
