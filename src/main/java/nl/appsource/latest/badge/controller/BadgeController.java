@@ -1,4 +1,4 @@
-package nl.appsource.latest.badge.model;
+package nl.appsource.latest.badge.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,10 +65,10 @@ public class BadgeController {
                 if (gitHubResponse.stream().anyMatch(g  -> {
                     return g.getName().equals(branch);
                 })) {
-                    shieldsIoResponse.setMessage("latest");
+                    shieldsIoResponse.setMessage("yes");
                     shieldsIoResponse.setColor("green");
                 } else {
-                    shieldsIoResponse.setMessage("not found");
+                    shieldsIoResponse.setMessage("no");
                     shieldsIoResponse.setColor("orange");
                 }
 
