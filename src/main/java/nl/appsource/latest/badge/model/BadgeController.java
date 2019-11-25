@@ -1,5 +1,6 @@
 package nl.appsource.latest.badge.model;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.model.github.GitHubResponse;
 import nl.appsource.latest.badge.model.shieldsio.ShieldsIoResponse;
@@ -24,12 +25,12 @@ import java.util.Map;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class BadgeController {
 
     private static final String GIT_BRANCHE_WHERE_HEAD_URL = "https://api.github.com/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head";
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @ResponseBody
     @GetMapping(value = "/github/latest/{owner}/{repo}/{branch}/{commit_sha}")
@@ -60,8 +61,6 @@ public class BadgeController {
             if (gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
                 final List<GitHubResponse> gitHubResponse = Arrays.asList(gitHubResponseEntity.getBody());
-
-                final int size = gitHubResponse.size();
 
                 if (gitHubResponse.stream().anyMatch(g  -> {
                     return g.getName().equals(branch);
