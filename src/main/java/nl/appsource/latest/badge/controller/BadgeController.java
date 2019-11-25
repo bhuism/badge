@@ -12,10 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +33,11 @@ public class BadgeController {
     private static final String GIT_BRANCHE_WHERE_HEAD_URL = "https://api.github.com/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head";
 
     private final RestTemplate restTemplate;
+
+    @GetMapping("/")
+    public ModelAndView redirectWithUsingRedirectPrefix(final ModelMap model) {
+        return new ModelAndView("redirect:https://github.com/bhuism/badge", model);
+    }
 
     @ResponseBody
     @GetMapping(value = "/github/latest/{owner}/{repo}/{branch}/{commit_sha}")
