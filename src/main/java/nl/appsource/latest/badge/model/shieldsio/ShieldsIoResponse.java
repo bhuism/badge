@@ -9,9 +9,9 @@ import lombok.Setter;
 public class ShieldsIoResponse {
 
     private Long schemaVersion = 1L;
-    private String label = "latest";
+    private String label = null;
     private String message = "message";
     private String color = "color";
-    private Long cacheSeconds = 120L;
+    private Long cacheSeconds = 10L;
 
 }

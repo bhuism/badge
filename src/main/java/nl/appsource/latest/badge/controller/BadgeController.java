@@ -58,6 +58,10 @@ public class BadgeController {
 
             gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHE_WHERE_HEAD_URL, HttpMethod.GET, entity, GitHubResponse[].class, vars);
 
+            final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
+
+            shieldsIoResponse.setMessage(commit_sha_short);
+
             if (gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
                 final List<GitHubResponse> gitHubResponse = Arrays.asList(gitHubResponseEntity.getBody());
@@ -65,19 +69,25 @@ public class BadgeController {
                 if (gitHubResponse.stream().anyMatch(g  -> {
                     return g.getName().equals(branch);
                 })) {
-                    shieldsIoResponse.setMessage("yes");
                     shieldsIoResponse.setColor("green");
+                    shieldsIoResponse.setCacheSeconds(300L);
                 } else {
-                    shieldsIoResponse.setMessage("no");
                     shieldsIoResponse.setColor("orange");
+                    shieldsIoResponse.setCacheSeconds(60L);
                 }
 
+            } else {
+                shieldsIoResponse.setLabel("github:");
+                shieldsIoResponse.setMessage(gitHubResponseEntity.getStatusCode().getReasonPhrase());
+                shieldsIoResponse.setColor("red");
             }
+
+
         } catch (Exception e) {
             log.info("" + gitHubResponseEntity, e);
+            shieldsIoResponse.setLabel("exception:");
             shieldsIoResponse.setMessage(e.getMessage());
             shieldsIoResponse.setColor("red");
-            shieldsIoResponse.setCacheSeconds(10L);
         }
 
         return shieldsIoResponse;
