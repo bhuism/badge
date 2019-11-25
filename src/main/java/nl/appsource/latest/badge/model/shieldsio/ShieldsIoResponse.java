@@ -13,7 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 public class ShieldsIoResponse {
 
     private Long schemaVersion = 1L;
-    private String label = null;
+    private String label = "";
     private String message = "message";
     private String color = "color";
     private Long cacheSeconds = 10L;

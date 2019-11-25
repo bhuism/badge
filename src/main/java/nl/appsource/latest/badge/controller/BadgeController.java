@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,7 +48,10 @@ public class BadgeController {
         log.info("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha);
 
         final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
-        shieldsIoResponse.setLabel(label);
+
+        if (StringUtils.hasText(label)) {
+            shieldsIoResponse.setLabel(label);
+        }
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.valueOf("application/vnd.github.groot-preview+json")));
