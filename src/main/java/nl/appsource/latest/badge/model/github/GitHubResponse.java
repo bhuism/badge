@@ -14,8 +14,17 @@ public class GitHubResponse {
 
     private String name;
 
+    @ToString
     @Getter
     @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class Commit {
+
+        private String sha;
+        private String url;
+
+    }
+
     private Commit commit;
 
     @JsonProperty("protected")
