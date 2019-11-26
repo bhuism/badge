@@ -61,7 +61,6 @@ after_script:
       --max-instances=10 \
       --memory=256Mi \
       --timeout=30s \
-      --cpu=2 \
       --allow-unauthenticated;
     set +x  
   
