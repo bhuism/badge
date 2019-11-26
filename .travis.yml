@@ -57,6 +57,11 @@ after_script:
       --image="${IMAGE}:${IMAGE_TAG}" \
       --platform=managed \
       --region="${CLOUD_RUN_REGION}" \
+      --concurrency=80 \
+      --max-instances=10 \
+      --memory=256Mi \
+      --timeout=30s \
+      --cpu=2 \
       --allow-unauthenticated;
     set +x  
   
