@@ -10,7 +10,7 @@ env:
   
 
 language: java
-sudo: false
+
 cache:
   directories:
     - .autoconf
@@ -50,8 +50,6 @@ after_script:
   - ./cc-test-reporter upload-coverage
   - |
     set -ex;
-#    docker build -t "${IMAGE}:${TRAVIS_COMMIT}" ./src && \
-#    docker push "${IMAGE}:${TRAVIS_COMMIT}" && \
     gcloud beta run deploy "${CLOUD_RUN_SERVICE}" \
       --image="${IMAGE}:${TRAVIS_COMMIT}" \
       --platform=managed \
