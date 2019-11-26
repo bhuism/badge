@@ -57,8 +57,14 @@ public class BadgeController {
 
     @Profile("production")
     @GetMapping(value = "/actuator/info", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity fakeActuator() throws IOException {
+    public ResponseEntity info() throws IOException {
         return ResponseEntity.ok(new InputStreamResource(index.getInputStream()));
+    }
+
+    @Profile("production")
+    @GetMapping(value = "/actuator/health", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity health() {
+        return ResponseEntity.ok("{\"status\":\"UP\"}");
     }
 
     @ResponseBody
