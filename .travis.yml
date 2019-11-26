@@ -63,4 +63,10 @@ after_script:
       --timeout=30s \
       --allow-unauthenticated;
     set +x  
-  
+    for digest in $(gcloud container images list-tags $IMAGE --limit=unlimited --sort-by=~TIMESTAMP \
+      --filter="TAGS!='latest'" --format='get(digest)'); do
+      (
+        set -x
+        gcloud container images delete -q --force-delete-tags "${IMAGE}@${digest}"
+      )
+    done
