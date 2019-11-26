@@ -51,9 +51,9 @@ public class BadgeController {
 
     @ResponseBody
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}")
-    public ShieldsIoResponse actuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label, @RequestHeader(value = "referer", required = false) final String referer) {
+    public ShieldsIoResponse actuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
-        log.info("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label + ", referer=" + referer);
+        log.info("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
 
         try {
             final String commit_sha = getCommitShaFromActuatorUrl(actuator_url);
@@ -71,9 +71,9 @@ public class BadgeController {
 
     @ResponseBody
     @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}")
-    public ShieldsIoResponse commit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label, @RequestHeader(value = "referer", required = false) final String referer) {
+    public ShieldsIoResponse commit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
 
-        log.info("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label + ", referer=" + referer);
+        log.info("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
 
         try {
             return calcSieldIoResponse(owner, repo, branch, commit_sha, label);
