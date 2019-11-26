@@ -142,6 +142,7 @@ public class BadgeController {
             shieldsIoResponse.setLabel("github:");
             shieldsIoResponse.setMessage(gitHubResponseEntity.getStatusCode().getReasonPhrase());
             shieldsIoResponse.setColor("red");
+            shieldsIoResponse.setIsError(true);
         }
 
         return shieldsIoResponse;
