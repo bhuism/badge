@@ -139,6 +139,7 @@
                             <jvmFlag>-server</jvmFlag>
                             <jvmFlag>-Duser.timezone=Europe/Amsterdam</jvmFlag>
                             <jvmFlag>-noverify</jvmFlag>
+                            <jvmFlag>-Xshare:auto</jvmFlag>
                         </jvmFlags>
                         <mainClass>nl.appsource.latest.badge.BadgeApplication</mainClass>
                         <ports>
