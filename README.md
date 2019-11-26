@@ -27,7 +27,11 @@ Shieldsio Example:
 
 https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
-Endpoint URL Example:
+Endpoint URL Example for commit_sha:
+
+https://badge.odee.net/github/sha/bhuism/citaten/master/683ae55b512bc1c303d7157f1e43e58197fcf925?label=latest
+
+Endpoint URL Example for actuator:
 
 https://badge.odee.net/github/actuator/bhuism/badge/master?label=latest&actuator_url=https://badge.odee.net/actuator/info
 
