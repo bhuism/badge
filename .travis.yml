@@ -3,7 +3,7 @@
 env:
   global:
   - GCP_PROJECT_ID=badge-260212
-  - IMAGE=gcr.io/badge-260212/badge
+  - IMAGE=eu.gcr.io/badge-260212/badge
   - IMAGE_TAG=latest
   - CLOUD_RUN_SERVICE=badge
   - CLOUD_RUN_REGION=europe-west1
