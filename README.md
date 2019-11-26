@@ -15,7 +15,7 @@
 
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
 
-When the commit_sha is known (in your app) use:
+When the commit_sha is known (in your app) use for shieldsio endoint:
 
 https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}
 
