@@ -122,12 +122,16 @@
                         <image>openjdk:11.0.4-jre-slim</image>
                     </from>
                     <to>
+                        <image>gcr.io/badge-260212/badge</image>
+                        <!--
                         <image>bhuism/${project.artifactId}:latest</image>
                         <auth>
                             <username>${env.DOCKER_USERNAME}</username>
                             <password>${env.DOCKER_PASSWORD}</password>
                         </auth>
+                        -->
                     </to>
+
                     <container>
                         <args>
                             <arg>--spring.profiles.active=production</arg>
@@ -140,12 +144,14 @@
                             <jvmFlag>-Duser.timezone=Europe/Amsterdam</jvmFlag>
                             <jvmFlag>-noverify</jvmFlag>
                             <jvmFlag>-Xshare:auto</jvmFlag>
+                            <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
                         </jvmFlags>
                         <mainClass>nl.appsource.latest.badge.BadgeApplication</mainClass>
                         <ports>
                             <port>8080</port>
                         </ports>
                     </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>
                 <executions>
                     <execution>

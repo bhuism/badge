@@ -1,3 +1,14 @@
+#services: docker
+
+env:
+  global:
+  - GCP_PROJECT_ID=badge-260212
+  - IMAGE=gcr.io/badge-260212/badge
+  - CLOUD_RUN_SERVICE=badge
+  - CLOUD_RUN_REGION=europe-west1
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  
+
 language: java
 sudo: false
 cache:
@@ -13,6 +24,18 @@ jobs:
       script:
         - mvn -B -V clean deploy jacoco:report
 
+
+before_install:
+- openssl aes-256-cbc -K $encrypted_68a40552119b_key -iv $encrypted_68a40552119b_iv -in google-key.json.enc -out google-key.json -d
+- curl https://sdk.cloud.google.com | bash > /dev/null
+- source "$HOME/google-cloud-sdk/path.bash.inc"
+- gcloud auth activate-service-account --key-file=google-key.json
+- gcloud auth configure-docker    # enable "docker push" to gcr
+- gcloud config set project "${GCP_PROJECT_ID}"
+- gcloud components install beta  # until Cloud Run is generally available (GA)
+
+install: true # no-op
+
 #code climate
 rvm:
   - 2.2.0
@@ -25,3 +48,14 @@ script:
 after_script:
   - JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco
   - ./cc-test-reporter upload-coverage
+  - |
+    set -ex;
+#    docker build -t "${IMAGE}:${TRAVIS_COMMIT}" ./src && \
+#    docker push "${IMAGE}:${TRAVIS_COMMIT}" && \
+    gcloud beta run deploy "${CLOUD_RUN_SERVICE}" \
+      --image="${IMAGE}:${TRAVIS_COMMIT}" \
+      --platform=managed \
+      --region="${CLOUD_RUN_REGION}" \
+      --allow-unauthenticated;
+    set +x  
+  
