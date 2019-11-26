@@ -1,5 +1,3 @@
 management:
   endpoints:
-    web:
-      exposure:
-        include: 'info,health'
+    enabled-by-default: false

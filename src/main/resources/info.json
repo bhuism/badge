@@ -1,0 +1,9 @@
+{
+  "git": {
+    "branch": "@git.commit.id@",
+    "commit": {
+      "id": "@git.commit.id.abbrev@",
+      "time": "@maven.build.timestamp@"
+    }
+  }
+}

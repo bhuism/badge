@@ -5,6 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.model.actuator.Info;
 import nl.appsource.latest.badge.model.github.GitHubResponse;
 import nl.appsource.latest.badge.model.shieldsio.ShieldsIoResponse;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,13 +20,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,6 +50,15 @@ public class BadgeController {
     @GetMapping("/")
     public ModelAndView redirectWithUsingRedirectPrefix(final ModelMap model) {
         return new ModelAndView("redirect:https://github.com/bhuism/badge", model);
+    }
+
+    @Value("classpath:/info.json")
+    private Resource index;
+
+    @Profile("production")
+    @GetMapping(value = "/actuator/info", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity fakeActuator() throws IOException {
+        return ResponseEntity.ok(new InputStreamResource(index.getInputStream()));
     }
 
     @ResponseBody
