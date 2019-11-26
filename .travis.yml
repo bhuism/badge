@@ -32,7 +32,7 @@ before_install:
 - gcloud auth activate-service-account --key-file=google-key.json
 - gcloud auth configure-docker    # enable "docker push" to gcr
 - gcloud config set project "${GCP_PROJECT_ID}"
-- gcloud components install beta  # until Cloud Run is generally available (GA)
+- gcloud components install
 
 install: true # no-op
 
