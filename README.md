@@ -13,6 +13,6 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=code_smells)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 
-Shields endpoint api for showing if your app is latest or not.
+[Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
 
 https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}
