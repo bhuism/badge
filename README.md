@@ -1,4 +1,4 @@
-# Badge
+# GIT Badge Service
 
 [![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2F/health)](https://badge.odee.net/)
 [![Version badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo)](https://badge.odee.net)
@@ -15,7 +15,7 @@
 
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
 
-When the commit_sha is known (in your app) use:
+When the commit_sha is known (in your app) use for shieldsio endoint:
 
 https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}
 
@@ -23,9 +23,15 @@ when the commit_sha is not known (outside your app) the commit_sha can be retrei
 
 https://badge.odee.net/github/sha/{user}/{repo}/{branch}?actuator_url={actuator_url}
 
-Example:
+Shieldsio Example:
 
-https://img.shields.io/endpoint?style=plastic&url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
+https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
+Endpoint URL Example for commit_sha:
 
+https://badge.odee.net/github/sha/bhuism/citaten/master/683ae55b512bc1c303d7157f1e43e58197fcf925?label=latest
+
+Endpoint URL Example for actuator:
+
+https://badge.odee.net/github/actuator/bhuism/badge/master?label=latest&actuator_url=https://badge.odee.net/actuator/info
 
