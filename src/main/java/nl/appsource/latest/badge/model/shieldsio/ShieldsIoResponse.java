@@ -25,6 +25,6 @@ public class ShieldsIoResponse {
     private Long logoWidth;
     private Long logoPosition;
     private String style;
-    private Long cacheSeconds = 10L;
+    private Long cacheSeconds;
 
 }

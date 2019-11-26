@@ -152,10 +152,8 @@ public class BadgeController {
                 return g.getName().equals(branch);
             })) {
                 shieldsIoResponse.setColor("green");
-                shieldsIoResponse.setCacheSeconds(300L);
             } else {
                 shieldsIoResponse.setColor("orange");
-                shieldsIoResponse.setCacheSeconds(60L);
             }
 
         } else {
