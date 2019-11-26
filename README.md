@@ -15,4 +15,17 @@
 
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
 
+When the commit_sha is known (in your app) use:
+
 https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}
+
+when the commit_sha is not known (outside your app) the commit_sha can be retreived with the spring info actuator:
+
+https://badge.odee.net/github/sha/{user}/{repo}/{branch}?actuator_url={actuator_url}
+
+Example:
+
+https://img.shields.io/endpoint?style=plastic&url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
+
+
+
