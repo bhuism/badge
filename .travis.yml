@@ -4,6 +4,7 @@ env:
   global:
   - GCP_PROJECT_ID=badge-260212
   - IMAGE=gcr.io/badge-260212/badge
+  - IMAGE_TAG=latest
   - CLOUD_RUN_SERVICE=badge
   - CLOUD_RUN_REGION=europe-west1
   - CLOUDSDK_CORE_DISABLE_PROMPTS=1
@@ -50,8 +51,8 @@ after_script:
   - ./cc-test-reporter upload-coverage
   - |
     set -ex;
-    gcloud beta run deploy "${CLOUD_RUN_SERVICE}" \
-      --image="${IMAGE}:${TRAVIS_COMMIT}" \
+    gcloud run deploy "${CLOUD_RUN_SERVICE}" \
+      --image="${IMAGE}:${IMAGE_TAG}" \
       --platform=managed \
       --region="${CLOUD_RUN_REGION}" \
       --allow-unauthenticated;
