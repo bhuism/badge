@@ -140,6 +140,7 @@
                             <jvmFlag>-Duser.timezone=Europe/Amsterdam</jvmFlag>
                             <jvmFlag>-noverify</jvmFlag>
                         </jvmFlags>
+                        <mainClass>nl.appsource.latest.badge.BadgeApplication</mainClass>
                         <ports>
                             <port>8080</port>
                         </ports>
