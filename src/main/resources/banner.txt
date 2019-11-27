@@ -3,4 +3,4 @@
 | __ -| .'| . | . | -_|
 |_____|__,|___|_  |___|
               |___|
-${Ansi.RED} :: Spring Boot${spring-boot.formatted-version} :: @git.commit.id.abbrev@ :: ${Ansi.DEFAULT}
+${Ansi.RED} :: Spring Boot${spring-boot.formatted-version} :: @env.SHORT_SHA@ :: ${Ansi.DEFAULT}

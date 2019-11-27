@@ -66,29 +66,29 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>get-the-git-infos</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>validate-the-git-infos</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>validateRevision</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <verbose>false</verbose>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>pl.project13.maven</groupId>-->
+<!--                <artifactId>git-commit-id-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>get-the-git-infos</id>-->
+<!--                        <phase>initialize</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>revision</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>validate-the-git-infos</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>validateRevision</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <verbose>false</verbose>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
