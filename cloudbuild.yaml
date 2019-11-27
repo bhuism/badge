@@ -3,3 +3,5 @@ steps:
     entrypoint: 'mvn'
     args: ['-B', 'clean', 'install', 'jib:build']
 
+
+
