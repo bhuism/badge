@@ -20,7 +20,7 @@ IMAGE=eu.gcr.io/badge-260212/badge
 
 C=0
 for digest in $(gcloud container images list-tags $IMAGE --limit=unlimited --sort-by=~TIMESTAMP \
-	--filter="TAGS!='latest'" --format='get(digest)'); do
+	--filter="NOT tags:('latest')" --format='get(digest)'); do
 	(
 		set -x
 		gcloud container images delete -q --force-delete-tags "${IMAGE}@${digest}"
