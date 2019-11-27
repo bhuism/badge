@@ -2,11 +2,11 @@ package nl.appsource.latest.badge.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.appsource.latest.badge.lib.ReplacingInputStream;
 import nl.appsource.latest.badge.model.actuator.Info;
 import nl.appsource.latest.badge.model.github.GitHubResponse;
 import nl.appsource.latest.badge.model.shieldsio.ShieldsIoResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
@@ -16,14 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -50,21 +48,25 @@ public class BadgeController {
     @Value("classpath:/info.json")
     private Resource index;
 
-    @Profile("production")
+    @Value("classpath:/template.svg")
+    private Resource templateSvg;
+
+    @Value("classpath:/test.svg")
+    private Resource testSvg;
+
     @GetMapping(value = "/actuator/info", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity info() throws IOException {
         return ResponseEntity.ok(new InputStreamResource(index.getInputStream()));
     }
 
-    @Profile("production")
     @GetMapping(value = "/actuator/health", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity health() {
         return ResponseEntity.ok("{\"status\":\"UP\"}");
     }
 
     @ResponseBody
-    @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}")
-    public ShieldsIoResponse actuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) {
+    @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ShieldsIoResponse actuatorShieldsIoJson(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
@@ -84,9 +86,15 @@ public class BadgeController {
 
     }
 
+//    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = "image/svg+xml")
+//    public ResponseEntity badgeCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) throws IOException {
+//        new InputStreamResource(new ReplacingInputStream(testSvg.getInputStream(), "aa", "bb"));
+//        return ResponseEntity.ok(new InputStreamResource(testSvg.getInputStream()));
+//    }
+
     @ResponseBody
-    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}")
-    public ShieldsIoResponse commit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
+    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ShieldsIoResponse shieldsIoCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
