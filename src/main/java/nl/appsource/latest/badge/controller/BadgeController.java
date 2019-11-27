@@ -47,11 +47,6 @@ public class BadgeController {
 
     private final RestTemplate restTemplate;
 
-    @GetMapping("/")
-    public ModelAndView redirectWithUsingRedirectPrefix(final ModelMap model) {
-        return new ModelAndView("redirect:https://github.com/bhuism/badge", model);
-    }
-
     @Value("classpath:/info.json")
     private Resource index;
 
