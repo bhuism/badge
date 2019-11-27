@@ -125,7 +125,7 @@
                         <image>eu.gcr.io/badge-260212/badge</image>
                         <tags>
                             <tag>latest</tag>
-                            <tag>$COMMIT_SHA</tag>
+                            <tag>${env.COMMIT_SHA}</tag>
                         </tags>
                     </to>
                     <container>
