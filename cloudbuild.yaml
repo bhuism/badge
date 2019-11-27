@@ -5,4 +5,4 @@ steps:
     args: ['-B', 'install', 'jib:build']
 # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['beta', 'run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west1', '--platform', 'managed', '--allow-unauthenticated', '--concurrency', '80', '--max-instances', '10', '--memory', '256Mi', '--timeout', '30s']
+    args: ['beta', 'run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west1', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '256Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
