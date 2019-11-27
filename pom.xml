@@ -108,9 +108,7 @@
                     <container>
                         <args>
                             <arg>--spring.profiles.active=production</arg>
-                            <arg>
-                                --spring.config.location=/app/resources/application.yml,/app/resources/application-production.yml
-                            </arg>
+                            <arg>--spring.config.location=/app/resources/application.yml,/app/resources/application-production.yml</arg>
                         </args>
                         <jvmFlags>
                             <jvmFlag>-Duser.timezone=Europe/Amsterdam</jvmFlag>
