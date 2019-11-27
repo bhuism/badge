@@ -6,3 +6,9 @@ management:
 logging:
   level:
     root: info
+server:
+  servlet:
+    session:
+      timeout: 0
+
+
