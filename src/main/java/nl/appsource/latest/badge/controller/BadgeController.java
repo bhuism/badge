@@ -41,7 +41,7 @@ public class BadgeController {
     private static final String REPO = "repo";
     private static final String COMMIT_SHA = "commit_sha";
 
-    private static final String GIT_BRANCHE_WHERE_HEAD_URL = "https://api.github.com/repos/{" + OWNER + "}/{" + REPO + "}/commits/{" + COMMIT_SHA + "}/branches-where-head";
+    private static final String GIT_BRANCHES_WHERE_HEAD_URL = "https://api.github.com/repos/{" + OWNER + "}/{" + REPO + "}/commits/{" + COMMIT_SHA + "}/branches-where-head";
 
     private static final MediaType GITHUB_PREVIEW_MEDIATYPE = MediaType.valueOf("application/vnd.github.groot-preview+json");
 
@@ -129,10 +129,6 @@ public class BadgeController {
 
         final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
 
-        if (StringUtils.hasText(label)) {
-            shieldsIoResponse.setLabel(label);
-        }
-
         final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
 
@@ -142,7 +138,7 @@ public class BadgeController {
         vars.put(REPO, repo);
         vars.put(COMMIT_SHA, commit_sha);
 
-        final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHE_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(headers), GitHubResponse[].class, vars);
+        final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(headers), GitHubResponse[].class, vars);
 
         final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
 
@@ -155,8 +151,10 @@ public class BadgeController {
             if (gitHubResponse.stream().anyMatch(g -> {
                 return g.getName().equals(branch);
             })) {
+                shieldsIoResponse.setLabel("latest");
                 shieldsIoResponse.setColor("green");
             } else {
+                shieldsIoResponse.setLabel("outdated");
                 shieldsIoResponse.setColor("orange");
             }
 
@@ -165,6 +163,10 @@ public class BadgeController {
             shieldsIoResponse.setMessage(gitHubResponseEntity.getStatusCode().getReasonPhrase());
             shieldsIoResponse.setColor("red");
             shieldsIoResponse.setIsError(true);
+        }
+
+        if (StringUtils.hasText(label)) {
+            shieldsIoResponse.setLabel(label);
         }
 
         return shieldsIoResponse;
