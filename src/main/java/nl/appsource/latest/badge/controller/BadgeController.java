@@ -86,11 +86,11 @@ public class BadgeController {
 
     }
 
-//    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = "image/svg+xml")
-//    public ResponseEntity badgeCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) throws IOException {
-//        new InputStreamResource(new ReplacingInputStream(testSvg.getInputStream(), "aa", "bb"));
-//        return ResponseEntity.ok(new InputStreamResource(testSvg.getInputStream()));
-//    }
+    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = "image/svg+xml")
+    public ResponseEntity badgeCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) throws IOException {
+        new InputStreamResource(new ReplacingInputStream(testSvg.getInputStream(), "aa", "bb"));
+        return ResponseEntity.ok(new InputStreamResource(testSvg.getInputStream()));
+    }
 
     @ResponseBody
     @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = MediaType.APPLICATION_JSON_VALUE)
