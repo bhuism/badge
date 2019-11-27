@@ -5,7 +5,7 @@ steps:
     args: ['-B', 'install', 'jib:build']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
-      - 'SHORT_SHA=SHORT_SHA'
+      - 'SHORT_SHA=$SHORT_SHA'
 # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['beta', 'run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west1', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '256Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
