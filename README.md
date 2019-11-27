@@ -23,7 +23,7 @@ when the commit_sha is not known (outside your app) the commit_sha can be retrei
 
 https://badge.odee.net/github/sha/{user}/{repo}/{branch}?actuator_url={actuator_url}
 
-Shieldsio Example:
+ShieldsIo Example:
 
 https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
@@ -34,4 +34,6 @@ https://badge.odee.net/github/sha/bhuism/citaten/master/683ae55b512bc1c303d7157f
 Endpoint URL Example for actuator:
 
 https://badge.odee.net/github/actuator/bhuism/badge/master?label=latest&actuator_url=https://badge.odee.net/actuator/info
+
+
 
