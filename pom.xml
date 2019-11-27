@@ -140,11 +140,13 @@
                             </arg>
                         </args>
                         <jvmFlags>
-                            <jvmFlag>-server</jvmFlag>
                             <jvmFlag>-Duser.timezone=Europe/Amsterdam</jvmFlag>
                             <jvmFlag>-noverify</jvmFlag>
                             <jvmFlag>-Xshare:auto</jvmFlag>
                             <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
+                            <jvmFlag>-XX:TieredStopAtLevel=1</jvmFlag>
+                            <jvmFlag>-Dspring.main.lazy-initialization=true</jvmFlag>
+                            <jvmFlag>-Djava.net.preferIPv4Stack=true</jvmFlag>
                         </jvmFlags>
                         <mainClass>nl.appsource.latest.badge.BadgeApplication</mainClass>
                         <ports>
