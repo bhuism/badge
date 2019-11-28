@@ -1,7 +1,7 @@
 # GIT Badge Service
 
 [![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Fhealth)](https://badge.odee.net/)
-[![Version badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Factuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo)](https://badge.odee.net)
+[![Version badge](https://badge.odee.net/github/actuator/bhuism/badge/master?actuator_url=https://badge.odee.net/actuator/info)](https://badge.odee.net)
 [![Build Status](https://travis-ci.com/bhuism/badge.svg?branch=master)](https://travis-ci.com/bhuism/badge)
 [![Open Issues](https://img.shields.io/github/issues/bhuism/badge.svg)](https://github.com/bhuism/badge/issues)
 [![License](https://img.shields.io/github/license/bhuism/badge.svg?color=4c1)](https://github.com/bhuism/badge/blob/master/LICENSE)
@@ -29,7 +29,7 @@ https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factu
 
 Endpoint URL Example for commit_sha:
 
-https://badge.odee.net/github/sha/bhuism/citaten/master/683ae55b512bc1c303d7157f1e43e58197fcf925?label=latest
+https://badge.odee.net/github/sha/bhuism/citaten/master/683ae55b512bc1c303d7157f1e43e58197fcf925
 
 Endpoint URL Example for actuator:
 
