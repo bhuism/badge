@@ -70,9 +70,23 @@ public class BadgeController {
         return ResponseEntity.ok("{\"status\":\"UP\"}");
     }
 
-    @ResponseBody
+    @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
+    public ResponseEntity badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) throws IOException {
+
+        if (log.isDebugEnabled()) {
+            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
+        }
+
+        final ShieldsIoResponse shieldsIoResponse = this.shieldsIoActuator(owner, repo, branch, actuator_url, label);
+        final String image = createImageFromShieldsIo(shieldsIoResponse);
+        return ResponseEntity.ok(image);
+
+    }
+
+
+        @ResponseBody
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ShieldsIoResponse actuatorShieldsIoJson(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) {
+    public ShieldsIoResponse shieldsIoActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
@@ -100,6 +114,11 @@ public class BadgeController {
         }
 
         final ShieldsIoResponse shieldsIoResponse = this.shieldsIoCommit_sha(owner, repo, branch, commit_sha, label);
+        final String image = createImageFromShieldsIo(shieldsIoResponse);
+        return ResponseEntity.ok(image);
+    }
+
+    private String createImageFromShieldsIo(final ShieldsIoResponse shieldsIoResponse) throws IOException {
 
         final String template = FileCopyUtils.copyToString(new InputStreamReader(templateSvg.getInputStream(), UTF_8));
 
@@ -132,9 +151,9 @@ public class BadgeController {
         properties.put("messageTextX", "" + ((leftWidth + rightWidth / 2.0) - 1) * 10);
         properties.put("messageTextLength", "" + (rightWidth - 10) * 10);
 
-        final String replaced = new PropertyPlaceholderHelper("${", "}", null, false).replacePlaceholders(template, properties);
+        final String image = new PropertyPlaceholderHelper("${", "}", null, false).replacePlaceholders(template, properties);
 
-        return ResponseEntity.ok(replaced);
+        return image;
     }
 
     @ResponseBody
