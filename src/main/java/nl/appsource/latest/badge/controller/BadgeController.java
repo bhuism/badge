@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -57,21 +58,25 @@ public class BadgeController {
     @Value("classpath:/template.svg")
     private Resource templateSvg;
 
-    @Value("classpath:/test.svg")
-    private Resource testSvg;
+    private String template;
+
+    @PostConstruct
+    private void postConstruct() throws IOException {
+        template = FileCopyUtils.copyToString(new InputStreamReader(templateSvg.getInputStream(), UTF_8));
+    }
 
     @GetMapping(value = "/actuator/info", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity info() throws IOException {
+    public ResponseEntity<InputStreamResource> info() throws IOException {
         return ResponseEntity.ok(new InputStreamResource(index.getInputStream()));
     }
 
     @GetMapping(value = "/actuator/health", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity health() {
+    public ResponseEntity<String> health() {
         return ResponseEntity.ok("{\"status\":\"UP\"}");
     }
 
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
-    public ResponseEntity badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) throws IOException {
+    public ResponseEntity<String> badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
@@ -85,7 +90,7 @@ public class BadgeController {
 
     @ResponseBody
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ShieldsIoResponse shieldsIoActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url", required = true) final String actuator_url, @RequestParam(name = "label", required = false) String label) {
+    public ShieldsIoResponse shieldsIoActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
@@ -106,7 +111,7 @@ public class BadgeController {
     }
 
     @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
-    public ResponseEntity badgeCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) throws IOException {
+    public ResponseEntity<String> badgeCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
@@ -115,16 +120,19 @@ public class BadgeController {
         final ShieldsIoResponse shieldsIoResponse = this.shieldsIoCommit_sha(owner, repo, branch, commit_sha, label);
         final String image = createImageFromShieldsIo(shieldsIoResponse);
         return ResponseEntity.ok(image);
+
     }
 
-    private String createImageFromShieldsIo(final ShieldsIoResponse shieldsIoResponse) throws IOException {
+    private String createImageFromShieldsIo(final ShieldsIoResponse shieldsIoResponse) {
+        return createImage(shieldsIoResponse.getLabel(), shieldsIoResponse.getMessage(), shieldsIoResponse.getLabelColor(), shieldsIoResponse.getIsError() ? "red" : shieldsIoResponse.getColor());
+    }
 
-        final String template = FileCopyUtils.copyToString(new InputStreamReader(templateSvg.getInputStream(), UTF_8));
+    private String createImage(final String labelText, final String messageText, final String labelColor, final String messageColor) {
 
         final Properties properties = new Properties();
 
-        final String labelText = shieldsIoResponse.getLabel();
-        final String messageText = shieldsIoResponse.getMessage();
+//        final String labelText = shieldsIoResponse.getLabel();
+//        final String messageText = shieldsIoResponse.getMessage();
 
         double leftTextWidth = Widths.getWidthOfString(labelText) / 10.0;
         double rightTextWidth = Widths.getWidthOfString(messageText) / 10.0;
@@ -142,17 +150,16 @@ public class BadgeController {
         properties.put("totalWidth", "" + totalWidth);
         properties.put("labelWidth", "" + leftWidth);
         properties.put("messageWidth", "" + rightWidth);
-        properties.put("labelBackgroudColor", shieldsIoResponse.getLabelColor());
-        properties.put("messageBackgroudColor", shieldsIoResponse.getIsError() ? "red" : shieldsIoResponse.getColor());
+        properties.put("labelBackgroudColor", labelColor);
+        properties.put("messageBackgroudColor", messageColor);
         properties.put("logoWidth", "" + logoWidth);
         properties.put("labelTextX", "" + (((leftWidth + logoWidth + logoPadding) / 2.0) + 1) * 10);
         properties.put("labelTextLength", "" + (leftWidth - (10 + logoWidth + logoPadding)) * 10);
         properties.put("messageTextX", "" + ((leftWidth + rightWidth / 2.0) - 1) * 10);
         properties.put("messageTextLength", "" + (rightWidth - 10) * 10);
 
-        final String image = new PropertyPlaceholderHelper("${", "}", null, false).replacePlaceholders(template, properties);
+        return new PropertyPlaceholderHelper("${", "}", null, false).replacePlaceholders(template, properties);
 
-        return image;
     }
 
     @ResponseBody
@@ -214,9 +221,7 @@ public class BadgeController {
 
             final List<GitHubResponse> gitHubResponse = Arrays.asList(gitHubResponseEntity.getBody());
 
-            if (gitHubResponse.stream().anyMatch(g -> {
-                return g.getName().equals(branch);
-            })) {
+            if (gitHubResponse.stream().anyMatch(g -> g.getName().equals(branch))) {
                 shieldsIoResponse.setLabel("latest");
                 shieldsIoResponse.setColor("#97ca00");
             } else {
