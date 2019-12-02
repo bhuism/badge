@@ -17,6 +17,6 @@ steps:
     args:
       - '--bucket=gs://m2cache'
       - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
-      - '--path=.m2/repository'
+      - '--path=~/.m2'
     waitFor:
       - build
