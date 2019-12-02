@@ -6,9 +6,6 @@ steps:
     args:
       - '--bucket=gs://m2cache'
       - '--key=dotm2'
-    volumes:
-      - path: '/root/.m2'
-        name: 'm2_cache'
   # Build and push with JIB
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
@@ -16,9 +13,7 @@ steps:
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
-    volumes:
-      - path: '/root/.m2'
-        name: 'm2_cache'
+      - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/maven/.m2'
     waitFor:
       - restore_cache
   # Deploy
@@ -33,9 +28,6 @@ steps:
     args:
       - '--bucket=gs://m2cache'
       - '--key=dotm2'
-      - '--path=/root/.m2'
-    volumes:
-      - path: '/root/.m2'
-        name: 'm2_cache'
+      - '--path=/workspace/maven/.m2'
     waitFor:
       - build
