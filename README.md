@@ -13,6 +13,10 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=code_smells)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 
+Badge is an image generator showing if you deploy is latest or not:
+
+<img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}"></img>
+
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
 
 When the commit_sha is known (in your app) use for shieldsio endoint:
@@ -27,13 +31,12 @@ ShieldsIo Example:
 
 https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
-Endpoint URL Example for commit_sha:
+ShieldsIo Endpoint URL Example for commit_sha:
 
 https://badge.odee.net/github/sha/bhuism/citaten/master/683ae55b512bc1c303d7157f1e43e58197fcf925
 
-Endpoint URL Example for actuator:
+ShieldsIo Endpoint URL Example for actuator:
 
 https://badge.odee.net/github/actuator/bhuism/badge/master?label=latest&actuator_url=https://badge.odee.net/actuator/info
-
 
 
