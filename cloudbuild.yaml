@@ -1,11 +1,22 @@
 options:
 steps:
-# Build and push with JIB
+  # Build and push with JIB
   - name: 'gcr.io/cloud-builders/mvn'
+    id: build
     args: ['-B', 'install', 'jib:build']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
   # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
+    id: deploy
     args: ['beta', 'run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west1', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '256Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
+
+  # Save Cache
+  - name: 'gcr.io/$PROJECT_ID/save_cache'
+    args:
+      - '--bucket=gs://m2cache'
+      - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
+      - '--path=.m2/repository'
+    waitFor:
+      - build
