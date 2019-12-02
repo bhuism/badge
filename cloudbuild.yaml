@@ -39,5 +39,3 @@ steps:
         name: 'm2_cache'
     waitFor:
       - build
-substitutions:
-
