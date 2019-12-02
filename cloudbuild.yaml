@@ -12,7 +12,7 @@ steps:
   # Build and push with JIB
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
-    args: ['-B', 'help:effective-settings', 'install', 'jib:build']
+    args: ['-B', 'install', 'jib:build']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
