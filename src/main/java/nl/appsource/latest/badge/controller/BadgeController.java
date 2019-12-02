@@ -131,9 +131,6 @@ public class BadgeController {
 
         final Properties properties = new Properties();
 
-//        final String labelText = shieldsIoResponse.getLabel();
-//        final String messageText = shieldsIoResponse.getMessage();
-
         double leftTextWidth = Widths.getWidthOfString(labelText) / 10.0;
         double rightTextWidth = Widths.getWidthOfString(messageText) / 10.0;
 
@@ -223,7 +220,7 @@ public class BadgeController {
 
             if (gitHubResponse.stream().anyMatch(g -> g.getName().equals(branch))) {
                 shieldsIoResponse.setLabel("latest");
-                shieldsIoResponse.setColor("#97ca00");
+                shieldsIoResponse.setColor("#4c1");
             } else {
                 shieldsIoResponse.setLabel("outdated");
                 shieldsIoResponse.setColor("orange");
