@@ -32,7 +32,7 @@ steps:
     waitFor:
       - build
   - name: gcr.io/cloud-builders/gsutil
-    args: ['-m', 'cp', '-r', '/workspace/maven/repository', 'gs://m2cachev2/repository.zip']
+    args: ['-m', 'rsync', '-r', '/workspace/maven/repository', 'gs://m2cachev2']
     waitFor:
       - build
 
