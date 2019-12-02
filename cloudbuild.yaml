@@ -13,7 +13,7 @@ steps:
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
-      - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/maven/.m2'
+      - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/maven/repository'
     waitFor:
       - restore_cache
   # Deploy
@@ -28,6 +28,6 @@ steps:
     args:
       - '--bucket=gs://m2cache'
       - '--key=dotm2'
-      - '--path=/workspace/maven/.m2'
+      - '--path=/workspace/maven/repository'
     waitFor:
       - build
