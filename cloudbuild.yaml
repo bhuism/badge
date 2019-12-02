@@ -7,7 +7,7 @@ steps:
       - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
   - name: 'gcr.io/cloud-builders/mvn'
     id: test
-    args: ['mvn', 'help:evaluate', '-Dexpression=settings.localRepository']
+    args: ['-B', 'help:evaluate', '-Dexpression=settings.localRepository']
   # Build and push with JIB
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
