@@ -1,6 +1,7 @@
 options:
 steps:
   - name: 'gcr.io/$PROJECT_ID/restore_cache'
+    id: restore_cache
     args:
       - '--bucket=gs://$_CACHE_BUCKET/'
       - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
@@ -18,6 +19,7 @@ steps:
 
   # Save Cache
   - name: 'gcr.io/$PROJECT_ID/save_cache'
+    id: save_cache
     args:
       - '--bucket=gs://$_CACHE_BUCKET/'
       - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
