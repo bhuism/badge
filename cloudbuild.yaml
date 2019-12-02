@@ -7,7 +7,7 @@ steps:
       - '--bucket=gs://$_CACHE_BUCKET/'
       - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
     volumes:
-      - path: '.m2'
+      - path: '~/.m2'
         name: 'm2_cache'
   # Build and push with JIB
   - name: 'gcr.io/cloud-builders/mvn'
@@ -17,7 +17,7 @@ steps:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
     volumes:
-      - path: '.m2'
+      - path: '~/.m2'
         name: 'm2_cache'
     waitFor:
       - restore_cache
@@ -33,9 +33,9 @@ steps:
     args:
       - '--bucket=gs://$_CACHE_BUCKET/'
       - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
-      - '--path=/root/.m2/'
+      - '--path=~/.m2/'
     volumes:
-      - path: '.m2'
+      - path: '~/.m2'
         name: 'm2_cache'
     waitFor:
       - build
