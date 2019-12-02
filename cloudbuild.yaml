@@ -1,5 +1,4 @@
 options:
-  machineType: 'N1_HIGHCPU_8'
 steps:
 # Build and push with JIB
   - name: maven:3.6.0-jdk-11-slim
