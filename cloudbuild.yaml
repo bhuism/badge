@@ -1,5 +1,9 @@
 options:
 steps:
+  - name: 'gcr.io/$PROJECT_ID/restore_cache'
+    args:
+      - '--bucket=gs://$CACHE_BUCKET/'
+      - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
   # Build and push with JIB
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
@@ -15,8 +19,11 @@ steps:
   # Save Cache
   - name: 'gcr.io/$PROJECT_ID/save_cache'
     args:
-      - '--bucket=gs://m2cache'
+      - '--bucket=gs://$CACHE_BUCKET/'
       - '--key=checksum-$( checksum pom.xml )-$( checksum cloudbuild.yaml )'
       - '--path=~/.m2'
     waitFor:
       - build
+substitutions:
+  CACHE_BUCKET: save_cache
+
