@@ -1,4 +1,8 @@
 options:
+artifacts:
+  objects:
+    location: 'gs://gs://m2cachev2/'
+    paths: ['/workspace/maven/repository']
 steps:
   # Restore Cache
   - name: 'eu.gcr.io/$PROJECT_ID/restore_cache'
@@ -16,10 +20,6 @@ steps:
       - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/maven/repository'
     waitFor:
       - restore_cache
-    artifacts:
-      objects:
-        location: 'gs://gs://m2cachev2/'
-        paths: ['/workspace/maven/repository']
     # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy
