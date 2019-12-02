@@ -1,7 +1,7 @@
 options:
 artifacts:
   objects:
-    location: 'gs://gs://m2cachev2/'
+    location: 'gs://m2cachev2'
     paths: ['/workspace/maven/repository']
 steps:
   # Restore Cache
