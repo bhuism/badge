@@ -1,7 +1,7 @@
 options:
 steps:
   # Restore Cache
-  - name: 'gcr.io/$PROJECT_ID/restore_cache'
+  - name: 'eu.gcr.io/$PROJECT_ID/restore_cache'
     id: restore_cache
     args:
       - '--bucket=gs://m2cache'
@@ -10,7 +10,7 @@ steps:
       - path: '/root/.m2'
         name: 'm2_cache'
   # Build and push with JIB
-  - name: 'gcr.io/cloud-builders/mvn'
+  - name: 'eu.gcr.io/cloud-builders/mvn'
     id: build
     args: ['-B', 'install', 'jib:build']
     env:
@@ -22,13 +22,13 @@ steps:
     waitFor:
       - restore_cache
   # Deploy
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: 'eu.gcr.io/cloud-builders/gcloud'
     id: deploy
     args: ['beta', 'run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west1', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '256Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
     waitFor:
       - build
   # Save Cache
-  - name: 'gcr.io/$PROJECT_ID/save_cache'
+  - name: 'eu.gcr.io/$PROJECT_ID/save_cache'
     id: save_cache
     args:
       - '--bucket=gs://m2cache'
