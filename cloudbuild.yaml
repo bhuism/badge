@@ -16,7 +16,11 @@ steps:
       - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/maven/repository'
     waitFor:
       - restore_cache
-  # Deploy
+    artifacts:
+      objects:
+        location: 'gs://gs://m2cachev2/'
+        paths: ['/workspace/maven/repository']
+    # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy
     args: ['beta', 'run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west1', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '256Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
