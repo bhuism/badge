@@ -13,6 +13,8 @@ steps:
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
+    waitFor:
+      - restore_cache
   # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy
