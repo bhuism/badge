@@ -1,14 +1,10 @@
-options:
 steps:
-#  # Restore Cache
-#  - name: 'eu.gcr.io/$PROJECT_ID/restore_cache'
-#    id: restore_cache
-#    args:
-#      - '--bucket=gs://m2cache'
-#      - '--key=dotm2'
-  - name: gcr.io/cloud-builders/gsutil
+  # Restore Cache
+  - name: 'eu.gcr.io/$PROJECT_ID/restore_cache'
     id: restore_cache
-    args: ['-m', 'rsync', '-r', 'gs://m2cachev2', '/workspace/maven/repository']
+    args:
+      - '--bucket=gs://m2cache'
+      - '--key=dotm2'
   # Build and push with JIB
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
@@ -34,8 +30,3 @@ steps:
       - '--path=/workspace/maven/repository'
     waitFor:
       - build
-  - name: gcr.io/cloud-builders/gsutil
-    args: ['-m', 'rsync', '-r', '/workspace/maven/repository', 'gs://m2cachev2/maven/repository']
-    waitFor:
-      - build
-
