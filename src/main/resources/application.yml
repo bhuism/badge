@@ -10,5 +10,7 @@ server:
   servlet:
     session:
       timeout: 0
-
+spring:
+  main:
+    lazy-initialization: true
 
