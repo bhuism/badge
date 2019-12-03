@@ -7,13 +7,14 @@ import nl.appsource.latest.badge.expected.GitHub;
 import nl.appsource.latest.badge.model.shieldsio.ShieldsIoResponse;
 import nl.appsource.latest.badge.output.ShieldsIo;
 import nl.appsource.latest.badge.output.Svg;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Controller
 @Slf4j
@@ -50,7 +51,6 @@ public class BadgeController {
         }
 
         try {
-
             final String commit_sha = actuator.getCommitSha(actuator_url);
             final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
             final String image = svg.create(badgeStatus);
@@ -62,7 +62,7 @@ public class BadgeController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = APPLICATION_JSON_VALUE)
     public ShieldsIoResponse shieldsIoGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
@@ -78,7 +78,7 @@ public class BadgeController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", produces = APPLICATION_JSON_VALUE)
     public ShieldsIoResponse shieldsIoActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
