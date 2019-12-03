@@ -2,6 +2,7 @@ package nl.appsource.latest.badge.expected;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.appsource.latest.badge.controller.BadgeException;
 import nl.appsource.latest.badge.controller.BadgeStatus;
 import nl.appsource.latest.badge.model.github.GitHubResponse;
 import org.springframework.http.HttpEntity;
@@ -19,9 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static nl.appsource.latest.badge.controller.BadgeStatus.ERROR;
-import static nl.appsource.latest.badge.controller.BadgeStatus.LATEST;
-import static nl.appsource.latest.badge.controller.BadgeStatus.OUTDATED;
+import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
+import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
+import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class GitHub {
 
     private final RestTemplate restTemplate;
 
-    public BadgeStatus getLatestStatus(final String owner, final String repo, final String branch, final String commit_sha) {
+    public BadgeStatus getLatestStatus(final String owner, final String repo, final String branch, final String commit_sha, final String labelText) throws BadgeException {
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
@@ -53,18 +54,19 @@ public class GitHub {
             final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(headers), GitHubResponse[].class, vars);
             if (gitHubResponseEntity.getBody() != null && gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
                 final List<GitHubResponse> gitHubResponse = Arrays.asList(gitHubResponseEntity.getBody());
+                final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
                 if (gitHubResponse.stream().anyMatch(g -> g.getName().equals(branch))) {
-                    return LATEST;
+                    return new BadgeStatus(LATEST, labelText, commit_sha_short);
                 } else {
-                    return OUTDATED;
+                    return new BadgeStatus(OUTDATED, labelText, commit_sha_short);
                 }
             } else {
-                return ERROR;
+                return new BadgeStatus(ERROR, "github", gitHubResponseEntity.getStatusCode().getReasonPhrase());
             }
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             log.error("github", e);
-            return ERROR;
+            throw new BadgeException(new BadgeStatus(ERROR, "github", e.getLocalizedMessage()));
         }
     }
 

@@ -32,10 +32,13 @@ public class BadgeController {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
         }
 
-        final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
-        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
-        final String image = svg.create(badgeStatus, commit_sha_short, label);
-        return ResponseEntity.ok(image);
+        try {
+            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            final String image = svg.create(badgeStatus);
+            return ResponseEntity.ok(image);
+        } catch (final BadgeException badgeException) {
+            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+        }
 
     }
 
@@ -46,12 +49,15 @@ public class BadgeController {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
         }
 
-        final String commit_sha = actuator.getCommitSha(actuator_url);
-        final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
-        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
-        final String image = svg.create(badgeStatus, commit_sha_short, label);
+        try {
 
-        return ResponseEntity.ok(image);
+            final String commit_sha = actuator.getCommitSha(actuator_url);
+            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            final String image = svg.create(badgeStatus);
+            return ResponseEntity.ok(image);
+        } catch (final BadgeException badgeException) {
+            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+        }
 
     }
 
@@ -63,9 +69,12 @@ public class BadgeController {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
         }
 
-        final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
-        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
-        return shieldsIo.create(status, commit_sha_short, label);
+        try {
+            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            return shieldsIo.create(status);
+        } catch (final BadgeException badgeException) {
+            return shieldsIo.create(badgeException.getBadgeStatus());
+        }
     }
 
     @ResponseBody
@@ -76,10 +85,13 @@ public class BadgeController {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
         }
 
-        final String commit_sha = actuator.getCommitSha(actuator_url);
-        final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
-        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
-        return shieldsIo.create(status, commit_sha_short, label);
+        try {
+            final String commit_sha = actuator.getCommitSha(actuator_url);
+            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            return shieldsIo.create(status);
+        } catch (final BadgeException badgeException) {
+            return shieldsIo.create(badgeException.getBadgeStatus());
+        }
 
     }
 

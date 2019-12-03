@@ -1,6 +1,5 @@
 package nl.appsource.latest.badge.output;
 
-import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 import nl.appsource.latest.badge.controller.BadgeStatus;
 import nl.appsource.latest.badge.lib.Widths;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,8 +29,8 @@ public class Svg implements Output<String> {
         template = FileCopyUtils.copyToString(new InputStreamReader(templateSvg.getInputStream(), UTF_8));
     }
 
-    public String create(final BadgeStatus badgeStatus, final String message, final String label) {
-        return createImage(StringUtils.hasText(label) ? label : badgeStatus.getLabelText(), message, badgeStatus.getLabelColor(), badgeStatus.getMessageColor());
+    public String create(final BadgeStatus badgeStatus) {
+        return createImage(StringUtils.hasText(badgeStatus.getLabelText()) ? badgeStatus.getLabelText() : badgeStatus.getStatus().getLabelText(), badgeStatus.getMessageText(), badgeStatus.getStatus().getLabelColor(), badgeStatus.getStatus().getMessageColor());
     }
 
     private String createImage(final String labelText, final String messageText, final String labelColor, final String messageColor) {

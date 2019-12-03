@@ -6,14 +6,30 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum BadgeStatus {
+public class BadgeStatus {
 
-    ERROR("error", "#555", "red"),
-    OUTDATED("outdated", "#555", "orange"),
-    LATEST("latest", "#555", "#4c1");
+    @Getter
+    @RequiredArgsConstructor
+    public enum Status {
 
+        ERROR("error", "#555", "red"),
+        OUTDATED("outdated", "#555", "orange"),
+        LATEST("latest", "#555", "#4c1");
+
+        private final String labelText;
+        private final String labelColor;
+        private final String messageColor;
+
+    }
+
+    private final Status status;
     private final String labelText;
-    private final String labelColor;
-    private final String messageColor;
+    private final String messageText;
+
+    public BadgeStatus(final Status status, final String messageText) {
+        this.status = status;
+        this.labelText = null;
+        this.messageText = messageText;
+    }
 
 }
