@@ -23,7 +23,7 @@ Usage
 -----
 
 ```
-&lt;img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg" &gt;&lt;/img&gt;
+<img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg"></img>
 ```
 
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
