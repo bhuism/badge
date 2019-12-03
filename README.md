@@ -2,7 +2,7 @@
 
 ![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
 [![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Fhealth)](https://badge.odee.net/)
-[![Version badge](https://badge.odee.net/github/actuator/bhuism/badge/master?actuator_url=https://badge.odee.net/actuator/info)](https://badge.odee.net)
+[![Version badge](https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?actuator_url=https://badge.odee.net/actuator/info)](https://badge.odee.net)
 [![Build Status](https://travis-ci.com/bhuism/badge.svg?branch=master)](https://travis-ci.com/bhuism/badge)
 [![Open Issues](https://img.shields.io/github/issues/bhuism/badge.svg)](https://github.com/bhuism/badge/issues)
 [![License](https://img.shields.io/github/license/bhuism/badge.svg?color=4c1)](https://github.com/bhuism/badge/blob/master/LICENSE)
@@ -22,17 +22,17 @@ https://badge.odee.net/ is an image generator showing if you deploy is latest or
 Usage
 -----
 
-&lt;img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}" &gt;&lt;/img&gt;
+&lt;img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg" &gt;&lt;/img&gt;
 
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
 
 When the commit_sha is known (in your app) use for shieldsio endoint:
 
-https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}
+https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg
 
 when the commit_sha is not known (outside your app) the commit_sha can be retreived with the spring info actuator:
 
-https://badge.odee.net/github/sha/{user}/{repo}/{branch}?actuator_url={actuator_url}
+https://badge.odee.net/github/sha/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}
 
 ShieldsIo Example:
 
