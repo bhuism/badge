@@ -40,8 +40,6 @@ public class GitHub {
 
     public BadgeStatus getLatestStatus(final String owner, final String repo, final String branch, final String commit_sha) {
 
-        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
-
         final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
 

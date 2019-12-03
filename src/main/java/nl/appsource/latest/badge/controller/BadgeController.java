@@ -68,8 +68,6 @@ public class BadgeController {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
         }
 
-        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
-
         final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
         final String image = createImageFromBadgeStatus(badgeStatus, commit_sha, label);
         return ResponseEntity.ok(image);
