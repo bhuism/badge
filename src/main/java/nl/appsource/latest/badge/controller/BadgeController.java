@@ -25,7 +25,7 @@ public class BadgeController {
     private final Svg svg;
     private final ShieldsIo shieldsIo;
 
-    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
+    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", produces = {"image/svg+xml"})
     public ResponseEntity<String> badgeGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
@@ -42,7 +42,7 @@ public class BadgeController {
 
     }
 
-    @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}/badge.svg", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
+    @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}/badge.svg", produces = {"image/svg+xml"})
     public ResponseEntity<String> badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
         if (log.isDebugEnabled()) {
