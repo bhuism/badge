@@ -2,17 +2,13 @@ package nl.appsource.latest.badge.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.appsource.latest.badge.client.Actuator;
+import nl.appsource.latest.badge.client.GitHub;
 import nl.appsource.latest.badge.lib.Widths;
-import nl.appsource.latest.badge.model.actuator.Info;
-import nl.appsource.latest.badge.model.github.GitHubResponse;
 import nl.appsource.latest.badge.model.shieldsio.ShieldsIoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,34 +19,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static nl.appsource.latest.badge.controller.BadgeStatus.ERROR;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class BadgeController {
 
-    private static final String OWNER = "owner";
-    private static final String REPO = "repo";
-    private static final String COMMIT_SHA = "commit_sha";
-
-    private static final String GIT_BRANCHES_WHERE_HEAD_URL = "https://api.github.com/repos/{" + OWNER + "}/{" + REPO + "}/commits/{" + COMMIT_SHA + "}/branches-where-head";
-
-    private static final MediaType GITHUB_PREVIEW_MEDIATYPE = MediaType.valueOf("application/vnd.github.groot-preview+json");
-
-    private final RestTemplate restTemplate;
 
     @Value("classpath:/info.json")
     private Resource index;
@@ -59,6 +41,10 @@ public class BadgeController {
     private Resource templateSvg;
 
     private String template;
+
+    private final GitHub gitHub;
+
+    private final Actuator actuator;
 
     @PostConstruct
     private void postConstruct() throws IOException {
@@ -75,6 +61,21 @@ public class BadgeController {
         return ResponseEntity.ok("{\"status\":\"UP\"}");
     }
 
+    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
+    public ResponseEntity<String> badgeGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
+        }
+
+        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
+
+        final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+        final String image = createImageFromBadgeStatus(badgeStatus, commit_sha, label);
+        return ResponseEntity.ok(image);
+
+    }
+
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
     public ResponseEntity<String> badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url, @RequestParam(name = "label", required = false) String label) {
 
@@ -82,10 +83,25 @@ public class BadgeController {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
         }
 
-        final ShieldsIoResponse shieldsIoResponse = this.shieldsIoActuator(owner, repo, branch, actuator_url, label);
-        final String image = createImageFromShieldsIo(shieldsIoResponse);
+        final String commit_sha = actuator.getCommitSha(actuator_url);
+        final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+        final String image = createImageFromBadgeStatus(badgeStatus, commit_sha, label);
+
         return ResponseEntity.ok(image);
 
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ShieldsIoResponse shieldsIoGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
+        }
+
+        final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
+        return calcSieldIoResponse(status, commit_sha_short, label);
     }
 
     @ResponseBody
@@ -96,35 +112,31 @@ public class BadgeController {
             log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
         }
 
-        try {
-            final String commit_sha = getCommitShaFromActuatorUrl(actuator_url);
-            return calcSieldIoResponse(owner, repo, branch, commit_sha, label);
-        } catch (Exception e) {
-            log.info("", e);
-            final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
-            shieldsIoResponse.setLabel("exception:");
-            shieldsIoResponse.setMessage(e.getMessage());
-            shieldsIoResponse.setColor("red");
-            return shieldsIoResponse;
-        }
+        final String commit_sha = actuator.getCommitSha(actuator_url);
+        final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
+        return calcSieldIoResponse(status, commit_sha_short, label);
 
     }
 
-    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", consumes = MediaType.ALL_VALUE, produces = {"image/svg+xml"})
-    public ResponseEntity<String> badgeCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
-
-        if (log.isDebugEnabled()) {
-            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
-        }
-
-        final ShieldsIoResponse shieldsIoResponse = this.shieldsIoCommit_sha(owner, repo, branch, commit_sha, label);
-        final String image = createImageFromShieldsIo(shieldsIoResponse);
-        return ResponseEntity.ok(image);
-
+    private String createImageFromBadgeStatus(final BadgeStatus badgeStatus, final String message, final String label) {
+        return createImage(StringUtils.hasText(label) ? label : badgeStatus.getLabelText(), message, badgeStatus.getLabelColor(), badgeStatus.getMessageColor());
     }
 
-    private String createImageFromShieldsIo(final ShieldsIoResponse shieldsIoResponse) {
-        return createImage(shieldsIoResponse.getLabel(), shieldsIoResponse.getMessage(), shieldsIoResponse.getLabelColor(), shieldsIoResponse.getIsError() ? "red" : shieldsIoResponse.getColor());
+    private ShieldsIoResponse calcSieldIoResponse(final BadgeStatus status, final String message, final String label) {
+
+        final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
+
+        shieldsIoResponse.setMessage(message);
+        shieldsIoResponse.setLabel(StringUtils.hasText(label) ? label : status.getLabelText());
+        shieldsIoResponse.setLabelColor(status.getLabelColor());
+        shieldsIoResponse.setColor(status.getMessageColor());
+        shieldsIoResponse.setIsError(ERROR.equals(status));
+
+        //shieldsIoResponse.setMessage(gitHubResponseEntity.getStatusCode().getReasonPhrase());
+
+        return shieldsIoResponse;
+
     }
 
     private String createImage(final String labelText, final String messageText, final String labelColor, final String messageColor) {
@@ -158,87 +170,4 @@ public class BadgeController {
         return new PropertyPlaceholderHelper("${", "}", null, false).replacePlaceholders(template, properties);
 
     }
-
-    @ResponseBody
-    @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ShieldsIoResponse shieldsIoCommit_sha(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
-
-        if (log.isDebugEnabled()) {
-            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
-        }
-
-        try {
-            return calcSieldIoResponse(owner, repo, branch, commit_sha, label);
-        } catch (Exception e) {
-            log.info("", e);
-            final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
-            shieldsIoResponse.setLabel("exception:");
-            shieldsIoResponse.setMessage(e.getMessage());
-            shieldsIoResponse.setColor("red");
-            return shieldsIoResponse;
-        }
-
-    }
-
-    private String getCommitShaFromActuatorUrl(final String actuator_url) {
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        final ResponseEntity<Info> info = restTemplate.exchange(actuator_url, HttpMethod.GET, new HttpEntity<>(headers), Info.class);
-
-        if (info.getStatusCode().equals(HttpStatus.OK)) {
-            return info.getBody().getGit().getCommit().getId();
-        } else {
-            return info.getStatusCode().name();
-        }
-
-    }
-
-    private ShieldsIoResponse calcSieldIoResponse(final String owner, final String repo, final String branch, final String commit_sha, final String label) {
-
-        final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
-
-        final String commit_sha_short = commit_sha.substring(0, Math.min(commit_sha.length(), 7));
-
-        shieldsIoResponse.setMessage(commit_sha_short);
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
-
-        final Map<String, String> vars = new HashMap<>();
-
-        vars.put(OWNER, owner);
-        vars.put(REPO, repo);
-        vars.put(COMMIT_SHA, commit_sha);
-
-        final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(headers), GitHubResponse[].class, vars);
-
-        if (gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
-
-            final List<GitHubResponse> gitHubResponse = Arrays.asList(gitHubResponseEntity.getBody());
-
-            if (gitHubResponse.stream().anyMatch(g -> g.getName().equals(branch))) {
-                shieldsIoResponse.setLabel("latest");
-                shieldsIoResponse.setColor("#4c1");
-            } else {
-                shieldsIoResponse.setLabel("outdated");
-                shieldsIoResponse.setColor("orange");
-            }
-
-        } else {
-            shieldsIoResponse.setLabel("github:");
-            shieldsIoResponse.setMessage(gitHubResponseEntity.getStatusCode().getReasonPhrase());
-            shieldsIoResponse.setColor("red");
-            shieldsIoResponse.setIsError(true);
-        }
-
-        if (StringUtils.hasText(label)) {
-            shieldsIoResponse.setLabel(label);
-        }
-
-        return shieldsIoResponse;
-
-    }
-
 }
