@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
         ServletWebServerFactoryAutoConfiguration.class,
         WebMvcAutoConfiguration.class,
 })
-@ComponentScan(basePackageClasses = BadgeApplication.class)
+@ComponentScan(basePackageClasses = BadgeApplication.class, lazyInit = true)
 public class BadgeApplication {
 
     @Bean
