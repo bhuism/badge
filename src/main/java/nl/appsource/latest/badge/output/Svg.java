@@ -5,6 +5,7 @@ import nl.appsource.latest.badge.controller.BadgeStatus;
 import nl.appsource.latest.badge.lib.Widths;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.PropertyPlaceholderHelper;
 import org.springframework.util.StringUtils;
@@ -16,7 +17,7 @@ import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@JsonSerializableSchema
+@Service
 public class Svg implements Output<String> {
 
     private String template;
