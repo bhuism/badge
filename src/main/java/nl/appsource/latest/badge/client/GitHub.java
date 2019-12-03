@@ -51,7 +51,7 @@ public class GitHub {
 
         try {
             final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(headers), GitHubResponse[].class, vars);
-            if (gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
+            if (gitHubResponseEntity.getBody() != null && gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
                 final List<GitHubResponse> gitHubResponse = Arrays.asList(gitHubResponseEntity.getBody());
                 if (gitHubResponse.stream().anyMatch(g -> g.getName().equals(branch))) {
                     return LATEST;
