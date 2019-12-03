@@ -1,5 +1,6 @@
 # GIT Badge Service
 
+![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
 [![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Fhealth)](https://badge.odee.net/)
 [![Version badge](https://badge.odee.net/github/actuator/bhuism/badge/master?actuator_url=https://badge.odee.net/actuator/info)](https://badge.odee.net)
 [![Build Status](https://travis-ci.com/bhuism/badge.svg?branch=master)](https://travis-ci.com/bhuism/badge)
@@ -13,7 +14,13 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=code_smells)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 
+Description
+-----------
+
 https://badge.odee.net/ is an image generator showing if you deploy is latest or not:
+
+Usage
+-----
 
 &lt;img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}" &gt;&lt;/img&gt;
 
