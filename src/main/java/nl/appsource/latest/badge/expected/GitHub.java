@@ -1,4 +1,4 @@
-package nl.appsource.latest.badge.client;
+package nl.appsource.latest.badge.expected;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
