@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static nl.appsource.latest.badge.lib.Widths.getWidthOfString;
 
 @Service
 public class Svg implements Output<String> {
@@ -37,14 +38,11 @@ public class Svg implements Output<String> {
 
         final Properties properties = new Properties();
 
-        double leftTextWidth = Widths.getWidthOfString(labelText) / 10.0;
-        double rightTextWidth = Widths.getWidthOfString(messageText) / 10.0;
-
-        double leftWidth = leftTextWidth + 10 + 14 + 3;
-        double rightWidth = rightTextWidth + 10;
-
+        final double leftTextWidth = getWidthOfString(labelText) / 10.0;
+        final double rightTextWidth = getWidthOfString(messageText) / 10.0;
+        final double leftWidth = leftTextWidth + 10 + 14 + 3;
+        final double rightWidth = rightTextWidth + 10;
         final double totalWidth = leftWidth + rightWidth;
-
         final int logoWidth = 14;
         final int logoPadding = 3;
 
