@@ -34,11 +34,6 @@ import static org.springframework.boot.SpringApplication.run;
 @ComponentScan(basePackageClasses = BadgeApplication.class)
 public class BadgeApplication {
 
-    public static void main(String[] args) {
-        log.debug("Hi!");
-        run(BadgeApplication.class, args);
-    }
-
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
@@ -55,6 +50,10 @@ public class BadgeApplication {
             http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         }
 
+    }
+
+    public static void main(String[] args) {
+        run(BadgeApplication.class, args);
     }
 
 }

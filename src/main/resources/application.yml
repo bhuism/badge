@@ -12,6 +12,7 @@ server:
 spring:
   main:
     lazy-initialization: true
+    banner-mode: log
   cloud:
     gcp:
       logging:
