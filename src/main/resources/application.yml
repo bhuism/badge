@@ -12,3 +12,12 @@ server:
 spring:
   main:
     lazy-initialization: true
+  cloud:
+    gcp:
+      logging:
+        enabled: false
+      trace:
+        enabled: false
+badge:
+  github:
+    cacheExpireTimeoutSeconds: 60

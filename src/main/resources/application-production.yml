@@ -1,3 +1,10 @@
 management:
   endpoints:
     enabled-by-default: false
+spring:
+  cloud:
+    gcp:
+      logging:
+        enabled: true
+      trace:
+        enabled: true
