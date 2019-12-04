@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <springProfile name="!production">
+    <springProfile name="production">
         <include resource="org/springframework/cloud/gcp/logging/logback-json-appender.xml"/>
 
         <root level="INFO">
@@ -9,7 +9,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="production">
+    <springProfile name="!production">
         <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
         <logger name="nl.appsource" level="DEBUG" />
