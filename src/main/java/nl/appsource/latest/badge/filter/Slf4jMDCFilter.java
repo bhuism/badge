@@ -1,7 +1,6 @@
 package nl.appsource.latest.badge.filter;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.slf4j.MDC;
 import org.springframework.util.StringUtils;
@@ -16,32 +15,28 @@ import java.util.function.Supplier;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Slf4jMDCFilter extends OncePerRequestFilter {
 
     private final static String MDCTOKENKEY = "Slf4jMDCFilter.UUID";
 
-    private final String responseHeader;
-    private final String requestHeader;
+    public static final String RESPONSEHEADERKEY = "X-Badge-Request-Token";
 
     public static Supplier<String> TOKEN = () -> MDC.get(MDCTOKENKEY);
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain) throws java.io.IOException, ServletException {
         try {
-            final String token;
-            if (!StringUtils.isEmpty(requestHeader) && !StringUtils.isEmpty(request.getHeader(requestHeader))) {
-                token = request.getHeader(requestHeader);
-            } else {
-                token = UUID.randomUUID().toString().toUpperCase().replace("-", "");
-            }
+
+            final String token = UUID.randomUUID().toString().toLowerCase().replace("-", "");
 
             Thread.currentThread().setName(token);
 
             MDC.put(MDCTOKENKEY, token);
-            if (!StringUtils.isEmpty(responseHeader)) {
-                response.addHeader(responseHeader, token);
+
+            if (!StringUtils.isEmpty(RESPONSEHEADERKEY)) {
+                response.addHeader(RESPONSEHEADERKEY, token);
             }
+
             chain.doFilter(request, response);
         } finally {
             MDC.remove(MDCTOKENKEY);

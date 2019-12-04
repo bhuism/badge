@@ -49,18 +49,12 @@ public class BadgeApplication {
     }
 
     @Configuration
-    @ConfigurationProperties(prefix = "config.slf4jfilter")
     public static class Slf4jMDCFilterConfiguration {
-
-        public static final String DEFAULT_RESPONSE_TOKEN_HEADER = "X-Badge-Request-Token";
-
-        private String responseHeader = DEFAULT_RESPONSE_TOKEN_HEADER;
-        private String requestHeader = null;
 
         @Bean
         public FilterRegistrationBean servletRegistrationBean() {
             final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-            final Slf4jMDCFilter log4jMDCFilterFilter = new Slf4jMDCFilter(responseHeader, requestHeader);
+            final Slf4jMDCFilter log4jMDCFilterFilter = new Slf4jMDCFilter();
             registrationBean.setFilter(log4jMDCFilterFilter);
             registrationBean.setOrder(2);
             return registrationBean;
