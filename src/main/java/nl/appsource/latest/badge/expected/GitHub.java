@@ -123,7 +123,7 @@ public class GitHub {
 
             final HttpHeaders h = gitHubResponseEntity.getHeaders();
 
-            log.info("Github: /repos/" + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(h));
+            log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(h));
 
             if (gitHubResponseEntity.getBody() != null && gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
