@@ -3,9 +3,6 @@ management:
     web:
       exposure:
         include: '*'
-logging:
-  level:
-    root: info
 server:
   servlet:
     session:

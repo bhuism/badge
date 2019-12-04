@@ -1,5 +1,6 @@
 package nl.appsource.latest.badge;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
@@ -30,6 +31,7 @@ import static org.springframework.boot.SpringApplication.run;
         GcpContextAutoConfiguration.class
 })
 @ComponentScan(basePackageClasses = BadgeApplication.class)
+@Slf4j
 public class BadgeApplication {
 
     @Bean
@@ -51,6 +53,7 @@ public class BadgeApplication {
     }
 
     public static void main(String[] args) {
+        log.debug("Hi!");
         run(BadgeApplication.class, args);
     }
 
