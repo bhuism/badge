@@ -42,7 +42,7 @@ public class Actuator {
 
         } catch (Exception e) {
             log.error("actuator: " + actuator_url, e);
-            throw new BadgeException(new BadgeStatus(ERROR, "actuator", e.getLocalizedMessage()));
+            throw new BadgeException(new BadgeStatus(ERROR, "actuator:" + e.getLocalizedMessage()));
         }
 
     }

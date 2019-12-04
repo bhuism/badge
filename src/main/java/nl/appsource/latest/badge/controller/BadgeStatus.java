@@ -23,13 +23,6 @@ public class BadgeStatus {
     }
 
     private final Status status;
-    private final String labelText;
     private final String messageText;
-
-    public BadgeStatus(final Status status, final String messageText) {
-        this.status = status;
-        this.labelText = null;
-        this.messageText = messageText;
-    }
 
 }

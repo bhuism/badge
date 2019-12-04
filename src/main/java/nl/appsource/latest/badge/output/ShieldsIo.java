@@ -15,7 +15,7 @@ public class ShieldsIo implements Output<ShieldsIoResponse> {
         final ShieldsIoResponse shieldsIoResponse = new ShieldsIoResponse();
 
         shieldsIoResponse.setMessage(status.getMessageText());
-        shieldsIoResponse.setLabel(StringUtils.hasText(status.getLabelText()) ? status.getLabelText() : status.getStatus().getLabelText());
+        shieldsIoResponse.setLabel(status.getStatus().getLabelText());
         shieldsIoResponse.setLabelColor(status.getStatus().getLabelColor());
         shieldsIoResponse.setColor(status.getStatus().getMessageColor());
         shieldsIoResponse.setIsError(ERROR.equals(status.getStatus()));

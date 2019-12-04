@@ -27,14 +27,14 @@ public class BadgeController {
     private final ShieldsIo shieldsIo;
 
     @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
-    public ResponseEntity<String> badgeGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
+    public ResponseEntity<String> badgeGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha) {
 
         if (log.isDebugEnabled()) {
-            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
+            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha);
         }
 
         try {
-            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
             final String image = svg.create(badgeStatus);
             return ResponseEntity.ok(image);
         } catch (final BadgeException badgeException) {
@@ -44,15 +44,15 @@ public class BadgeController {
     }
 
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
-    public ResponseEntity<String> badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url, @RequestParam(name = "label", required = false) String label) {
+    public ResponseEntity<String> badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url) {
 
         if (log.isDebugEnabled()) {
-            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
+            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url);
         }
 
         try {
             final String commit_sha = actuator.getCommitSha(actuator_url);
-            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
             final String image = svg.create(badgeStatus);
             return ResponseEntity.ok(image);
         } catch (final BadgeException badgeException) {
@@ -63,14 +63,14 @@ public class BadgeController {
 
     @ResponseBody
     @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}", produces = APPLICATION_JSON_VALUE)
-    public ShieldsIoResponse shieldsIoGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha, @RequestParam(name = "label", required = false) String label) {
+    public ShieldsIoResponse shieldsIoGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha) {
 
         if (log.isDebugEnabled()) {
-            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha + ", label=" + label);
+            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", commit_sha=" + commit_sha);
         }
 
         try {
-            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
             return shieldsIo.create(status);
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());
@@ -79,15 +79,15 @@ public class BadgeController {
 
     @ResponseBody
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}", produces = APPLICATION_JSON_VALUE)
-    public ShieldsIoResponse shieldsIoActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url, @RequestParam(name = "label", required = false) String label) {
+    public ShieldsIoResponse shieldsIoActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url) {
 
         if (log.isDebugEnabled()) {
-            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url + ", label=" + label);
+            log.debug("owner=" + owner + ", repo=" + repo + ", branch=" + branch + ", actuator_url=" + actuator_url);
         }
 
         try {
             final String commit_sha = actuator.getCommitSha(actuator_url);
-            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha, label);
+            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
             return shieldsIo.create(status);
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());

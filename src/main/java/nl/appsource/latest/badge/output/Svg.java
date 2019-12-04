@@ -1,13 +1,11 @@
 package nl.appsource.latest.badge.output;
 
 import nl.appsource.latest.badge.controller.BadgeStatus;
-import nl.appsource.latest.badge.lib.Widths;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.PropertyPlaceholderHelper;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -31,10 +29,10 @@ public class Svg implements Output<String> {
     }
 
     public String create(final BadgeStatus badgeStatus) {
-        return createImage(StringUtils.hasText(badgeStatus.getLabelText()) ? badgeStatus.getLabelText() : badgeStatus.getStatus().getLabelText(), badgeStatus.getMessageText(), badgeStatus.getStatus().getLabelColor(), badgeStatus.getStatus().getMessageColor());
+        return createSvgImage(badgeStatus.getStatus().getLabelText(), badgeStatus.getMessageText(), badgeStatus.getStatus().getLabelColor(), badgeStatus.getStatus().getMessageColor());
     }
 
-    private String createImage(final String labelText, final String messageText, final String labelColor, final String messageColor) {
+    private String createSvgImage(final String labelText, final String messageText, final String labelColor, final String messageColor) {
 
         final Properties properties = new Properties();
 

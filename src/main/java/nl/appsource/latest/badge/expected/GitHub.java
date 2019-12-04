@@ -2,7 +2,10 @@ package nl.appsource.latest.badge.expected;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.controller.BadgeException;
 import nl.appsource.latest.badge.controller.BadgeStatus;
@@ -21,7 +24,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,7 +49,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @ConfigurationProperties(prefix = "badge.github")
 public class GitHub {
 
-    private int cacheExpireTimeout = 60;
+    @Getter
+    @Setter
+    private int cacheExpireTimeoutSeconds;
 
     private static final String OWNER = "owner";
     private static final String REPO = "repo";
@@ -61,15 +65,14 @@ public class GitHub {
     private static final String REMAINING = "X-RateLimit-Remaining";
     private static final String RESET = "X-RateLimit-Reset";
 
-    private Cache<String, Status> cache;
+    private Cache<String, BadgeStatus> cache;
 
     @PostConstruct
     public void postConstruct() {
         cache = CacheBuilder.newBuilder()
                 .maximumSize(1000)
-                .expireAfterWrite(cacheExpireTimeout, TimeUnit.SECONDS)
-                .build()
-        ;
+                .expireAfterWrite(cacheExpireTimeoutSeconds, TimeUnit.SECONDS)
+                .build();
     }
 
     private final RestTemplate restTemplate;
@@ -84,21 +87,19 @@ public class GitHub {
     final Function<HttpHeaders, String> safeHeadersPrint = (responseHeaders) ->
             Stream.of(LIMIT, REMAINING, RESET).map(key -> safeHeaderPrint.apply(responseHeaders, key)).collect(joining(", "));
 
-    public BadgeStatus getLatestStatus(final String owner, final String repo, final String branch, final String commit_sha, final String labelText) throws BadgeException {
+    public BadgeStatus getLatestStatus(final String owner, final String repo, final String branch, final String commit_sha) throws BadgeException {
 
-        final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 7));
-
-        final Status cacheValue = cache.getIfPresent(owner + "/" + repo + "/" + commit_sha);
+        final BadgeStatus cacheValue = cache.getIfPresent(owner + "/" + repo + "/" + commit_sha);
 
         if (cacheValue != null) {
-            return new BadgeStatus(cacheValue, labelText, commit_sha_short);
+            return cacheValue;
         } else {
-            return callGutHub(owner, repo, branch, commit_sha, labelText);
+            return callGutHub(owner, repo, branch, commit_sha);
         }
 
     }
 
-    private BadgeStatus callGutHub(final String owner, final String repo, final String branch, final String commit_sha, final String labelText) throws BadgeException {
+    private BadgeStatus callGutHub(final String owner, final String repo, final String branch, final String commit_sha) throws BadgeException {
 
         try {
 
@@ -117,41 +118,45 @@ public class GitHub {
             vars.put(REPO, repo);
             vars.put(COMMIT_SHA, commit_sha);
 
-            final long msec = System.currentTimeMillis();
+            final long startTime = System.currentTimeMillis();
 
             final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(headers), GitHubResponse[].class, vars);
 
-            final long duration = Math.abs(System.currentTimeMillis() - msec);
+            final long duration = Math.abs(System.currentTimeMillis() - startTime);
 
             final HttpHeaders h = gitHubResponseEntity.getHeaders();
 
-            log.info("Github: /repos/" + owner + "/" + repo + "/" + branch + "/" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(h));
+            log.info("Github: /repos/" + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(h));
 
             if (gitHubResponseEntity.getBody() != null && gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
                 final List<GitHubResponse> gitHubResponse = asList(gitHubResponseEntity.getBody());
                 final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 7));
 
+                final BadgeStatus badgeStatus;
+
                 if (gitHubResponse.stream().anyMatch(g -> g.getName().equals(branch))) {
-                    cache.put(owner + "/" + repo + "/" + commit_sha, LATEST);
-                    return new BadgeStatus(LATEST, labelText, commit_sha_short);
+                    badgeStatus = new BadgeStatus(LATEST, commit_sha_short);
                 } else {
-                    cache.put(owner + "/" + repo + "/" + commit_sha, OUTDATED);
-                    return new BadgeStatus(OUTDATED, labelText, commit_sha_short);
+                    badgeStatus = new BadgeStatus(OUTDATED, commit_sha_short);
                 }
+
+                cache.put(owner + "/" + repo + "/" + commit_sha, badgeStatus);
+                return badgeStatus;
+
             } else {
-                return new BadgeStatus(ERROR, "github", gitHubResponseEntity.getStatusCode().getReasonPhrase());
+                return new BadgeStatus(ERROR, gitHubResponseEntity.getStatusCode().getReasonPhrase());
             }
         } catch (final HttpClientErrorException.Forbidden f) {
             final HttpHeaders h = f.getResponseHeaders();
             log.warn("Got rate limited by github: " + f.getLocalizedMessage() + ", " + safeHeadersPrint.apply(h));
-            throw new BadgeException(new BadgeStatus(ERROR, "github", f.getStatusText()));
+            throw new BadgeException(new BadgeStatus(ERROR, "github:" + f.getStatusText()));
         } catch (final HttpClientErrorException f) {
             log.error("Github: " + f.getLocalizedMessage());
-            throw new BadgeException(new BadgeStatus(ERROR, "github", f.getStatusText()));
+            throw new BadgeException(new BadgeStatus(ERROR, "github:" + f.getStatusText()));
         } catch (final Exception e) {
             log.error("Github", e);
-            throw new BadgeException(new BadgeStatus(ERROR, "github", e.getLocalizedMessage()));
+            throw new BadgeException(new BadgeStatus(ERROR, "github:" + e.getLocalizedMessage()));
         }
 
     }
