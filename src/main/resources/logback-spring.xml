@@ -3,6 +3,9 @@
 
     <springProfile name="production">
         <include resource="org/springframework/cloud/gcp/logging/logback-json-appender.xml"/>
+
+        <logger name="nl.appsource" level="DEBUG" />
+
         <root level="INFO">
             <appender-ref ref="CONSOLE_JSON"/>
         </root>
