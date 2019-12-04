@@ -1,10 +1,17 @@
 package nl.appsource.latest.badge;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.gcp.autoconfigure.core.GcpContextAutoConfiguration;
+import org.springframework.cloud.gcp.autoconfigure.logging.StackdriverLoggingAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,8 +22,22 @@ import org.springframework.web.client.RestTemplate;
 import static org.springframework.boot.SpringApplication.run;
 
 @Slf4j
-@SpringBootApplication
+@Configuration
+@Import({
+        DispatcherServletAutoConfiguration.class,
+        RestTemplateAutoConfiguration.class,
+        ServletWebServerFactoryAutoConfiguration.class,
+        WebMvcAutoConfiguration.class,
+        StackdriverLoggingAutoConfiguration.class,
+        GcpContextAutoConfiguration.class
+})
+@ComponentScan(basePackageClasses = BadgeApplication.class)
 public class BadgeApplication {
+
+    public static void main(String[] args) {
+        log.debug("Hi!");
+        run(BadgeApplication.class, args);
+    }
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -34,11 +55,6 @@ public class BadgeApplication {
             http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         }
 
-    }
-
-    public static void main(String[] args) {
-        log.debug("Hi!");
-        run(BadgeApplication.class, args);
     }
 
 }
