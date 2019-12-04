@@ -2,14 +2,12 @@ package nl.appsource.latest.badge.expected;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.controller.BadgeException;
 import nl.appsource.latest.badge.controller.BadgeStatus;
-import nl.appsource.latest.badge.controller.BadgeStatus.Status;
 import nl.appsource.latest.badge.model.github.GitHubResponse;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpEntity;
@@ -78,11 +76,10 @@ public class GitHub {
     private final RestTemplate restTemplate;
 
     final BiFunction<HttpHeaders, String, String> safeHeaderPrint = (responseHeaders, key) ->
-            key + "=" +
-                    Optional.ofNullable(responseHeaders.get(key))
-                            .map(Collection::stream)
-                            .flatMap(Stream::findFirst)
-                            .orElse(null);
+            key + "=" + Optional.ofNullable(responseHeaders.get(key))
+                    .map(Collection::stream)
+                    .flatMap(Stream::findFirst)
+                    .orElse(null);
 
     final Function<HttpHeaders, String> safeHeadersPrint = (responseHeaders) ->
             Stream.of(LIMIT, REMAINING, RESET).map(key -> safeHeaderPrint.apply(responseHeaders, key)).collect(joining(", "));
