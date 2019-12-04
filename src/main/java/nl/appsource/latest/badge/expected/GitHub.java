@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
 @RequiredArgsConstructor
@@ -69,7 +70,7 @@ public class GitHub {
         final String token = System.getenv("GITHUB_TOKEN");
 
         if (StringUtils.hasText(token)) {
-            headers.add(HttpHeaders.AUTHORIZATION, "token " + token);
+            headers.add(AUTHORIZATION, "token " + token);
         }
 
         final Map<String, String> vars = new HashMap<>();
