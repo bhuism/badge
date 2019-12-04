@@ -5,7 +5,7 @@ steps:
     args:
       - '--bucket=gs://m2cache'
       - '--key=dotm2'
-  # Build and push with JIB
+  # Build and push image
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
     args: ['-B', 'install', 'jib:build']
