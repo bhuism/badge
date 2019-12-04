@@ -10,6 +10,8 @@ server:
   servlet:
     session:
       timeout: 0
+  compression:
+    enabled: true
 spring:
   main:
     lazy-initialization: true
