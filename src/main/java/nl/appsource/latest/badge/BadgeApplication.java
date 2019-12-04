@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactor
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
         ServletWebServerFactoryAutoConfiguration.class,
         WebMvcAutoConfiguration.class,
 })
-@ComponentScan(basePackageClasses = BadgeApplication.class, lazyInit = true)
 public class BadgeApplication {
 
     @Bean
