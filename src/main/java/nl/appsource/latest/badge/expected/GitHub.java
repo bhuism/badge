@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.joining;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
@@ -60,7 +61,7 @@ public class GitHub {
                             .orElse(null);
 
     final Function<HttpHeaders, String> safeHeadersPrint = (responseHeaders) ->
-            Stream.of(LIMIT, REMAINING, RESET).map(key -> safeHeaderPrint.apply(responseHeaders, key)).collect(Collectors.joining(", "));
+            Stream.of(LIMIT, REMAINING, RESET).map(key -> safeHeaderPrint.apply(responseHeaders, key)).collect(joining(", "));
 
     public BadgeStatus getLatestStatus(final String owner, final String repo, final String branch, final String commit_sha, final String labelText) throws BadgeException {
 
