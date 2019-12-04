@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -63,7 +64,15 @@ public class GitHub {
             } else {
                 return new BadgeStatus(ERROR, "github", gitHubResponseEntity.getStatusCode().getReasonPhrase());
             }
-
+        } catch (final HttpClientErrorException.Forbidden f) {
+            final String limit = "" + f.getResponseHeaders().get("X-RateLimit-Limit");
+            final String remaining = "" + f.getResponseHeaders().get("X-RateLimit-Remaining");
+            final String reset = "" + f.getResponseHeaders().get("X-RateLimit-Reset");
+            log.warn("Got rate limited by github: " + f.getLocalizedMessage() + ", limit=" + limit + ", remaining=" + remaining + ", reset=" + reset);
+            throw new BadgeException(new BadgeStatus(ERROR, "github", f.getStatusText()));
+        } catch (final HttpClientErrorException f ) {
+            log.error("github: " + f.getLocalizedMessage());
+            throw new BadgeException(new BadgeStatus(ERROR, "github", f.getStatusText()));
         } catch (final Exception e) {
             log.error("github", e);
             throw new BadgeException(new BadgeStatus(ERROR, "github", e.getLocalizedMessage()));
