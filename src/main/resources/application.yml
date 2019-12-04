@@ -15,9 +15,3 @@ server:
 spring:
   main:
     lazy-initialization: true
-  cloud:
-    gcp:
-      trace:
-        enabled: false
-      logging:
-        enabled: false

@@ -1,11 +1,3 @@
 management:
   endpoints:
     enabled-by-default: false
-spring:
-  cloud:
-    gcp:
-      trace:
-        enabled: true
-      logging:
-        enabled: true
-      project-id: badge
