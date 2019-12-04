@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoC
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.gcp.autoconfigure.core.GcpContextAutoConfiguration;
 import org.springframework.cloud.gcp.autoconfigure.logging.StackdriverLoggingAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,6 +27,7 @@ import static org.springframework.boot.SpringApplication.run;
         ServletWebServerFactoryAutoConfiguration.class,
         WebMvcAutoConfiguration.class,
         StackdriverLoggingAutoConfiguration.class,
+        GcpContextAutoConfiguration.class
 })
 @ComponentScan(basePackageClasses = BadgeApplication.class)
 public class BadgeApplication {
