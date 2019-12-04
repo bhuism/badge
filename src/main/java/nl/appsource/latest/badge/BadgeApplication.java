@@ -20,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.boot.SpringApplication.run;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Slf4j
 @Configuration
@@ -47,7 +48,7 @@ public class BadgeApplication {
         protected void configure(HttpSecurity http) throws Exception {
             http.csrf(AbstractHttpConfigurer::disable);
             http.authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll());
-            http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(STATELESS));
         }
 
     }
