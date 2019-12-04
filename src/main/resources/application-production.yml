@@ -8,3 +8,4 @@ spring:
         enabled: true
       logging:
         enabled: true
+      project-id: badge
