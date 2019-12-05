@@ -42,7 +42,7 @@ Don't forget to urlencode the actualtor_url request parameter.
 
 example:
 
-https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?label=latest&actuator_url=https://badge.odee.net/actuator/info
+https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?actuator_url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
 ShieldsIo endpoint Example:
 
