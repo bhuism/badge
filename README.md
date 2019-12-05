@@ -17,7 +17,7 @@
 Description
 -----------
 
-https://badge.odee.net/ is an image generator showing if you deploy is latest or not:
+https://badge.odee.net/ is a flexible badge image generator showing if you deploy is latest or not.
 
 Usage
 -----
@@ -26,23 +26,27 @@ Usage
 <img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg"></img>
 ```
 
-When the commit_sha is known (in your app) use for shieldsio endoint:
+When the commit_sha is known (in your app) use:
 
 ```
-https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg
+<img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg"></img>
 ```
 
 when the commit_sha is not known (outside your app) the commit_sha can be retreived with the spring info actuator:
 
 ```
-https://badge.odee.net/github/sha/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}
+<img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}"></img>
 ```
 
-ShieldsIo Example:
+Don't forget to urlencode the actualtor_url request parameter.
 
+example:
+
+https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?label=latest&actuator_url=https://badge.odee.net/actuator/info
+
+ShieldsIo endpoint Example:
 
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
-
 
 ```
 https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
