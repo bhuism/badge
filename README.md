@@ -1,4 +1,4 @@
-# GIT Badge Service
+# Deploy status Badge Service
 
 ![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
 [![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Fhealth)](https://badge.odee.net/)
