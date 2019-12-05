@@ -55,7 +55,7 @@ https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factu
 ShieldsIo Endpoint URL Example for commit_sha:
 
 ```
-https://badge.odee.net/github/sha/bhuism/citaten/master/683ae55b512bc1c303d7157f1e43e58197fcf925
+https://badge.odee.net/github/sha/bhuism/badge/master/29d4e9731a09f535a230570a5be96c5c91e7a7ec
 ```
 
 ShieldsIo Endpoint URL Example for actuator:
