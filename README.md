@@ -22,25 +22,25 @@ https://badge.odee.net/ is a flexible badge image generator showing if you deplo
 Usage
 -----
 
-```
-<img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg"></img>
-```
-
-When the commit_sha is known (in your app) use:
+When the git commit_sha is known (in your app) use:
 
 ```
 <img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg"></img>
 ```
 
-when the commit_sha is not known (outside your app) the commit_sha can be retreived with the spring info actuator:
+Example:
+
+https://badge.odee.net/github/sha/bhuism/badge/master/29d4e9731a09f535a230570a5be96c5c91e7a7ec/badge.svg
+
+When the commit_sha is not known (outside your app) the commit_sha can be retreived with the spring info actuator:
 
 ```
 <img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}"></img>
 ```
 
-Don't forget to urlencode the actualtor_url request parameter.
+(Don't forget to urlencode the actualtor_url request parameter)
 
-example:
+Example:
 
 https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?actuator_url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
