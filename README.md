@@ -22,7 +22,7 @@ https://badge.odee.net/ is a flexible badge image generator showing if you deplo
 Usage
 -----
 
-When the git commit_sha is known (in your app) use:
+When the current deployed git commit_sha is known, you can generate this link in your app:
 
 ```
 <img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}/badge.svg"></img>
