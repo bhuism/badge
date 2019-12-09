@@ -76,6 +76,7 @@ public class GitHub {
     private final RestTemplate restTemplate;
 
     final BiFunction<HttpHeaders, String, String> safeHeaderPrint = (responseHeaders, key) ->
+            responseHeaders == null ? null :
             key + "=" + Optional.ofNullable(responseHeaders.get(key))
                     .map(Collection::stream)
                     .flatMap(Stream::findFirst)
@@ -98,15 +99,19 @@ public class GitHub {
 
     private BadgeStatus callGutHub(final String owner, final String repo, final String branch, final String commit_sha) throws BadgeException {
 
+        Long duration = null;
+
+        HttpHeaders responseHeaders = null;
+
         try {
 
-            final HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
+            final HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
 
             final String token = System.getenv("GITHUB_TOKEN");
 
             if (StringUtils.hasText(token)) {
-                headers.add(AUTHORIZATION, "token " + token);
+                requestHeaders.add(AUTHORIZATION, "token " + token);
             }
 
             final Map<String, String> vars = new HashMap<>();
@@ -117,13 +122,10 @@ public class GitHub {
 
             final long startTime = System.currentTimeMillis();
 
-            final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(headers), GitHubResponse[].class, vars);
+            final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), GitHubResponse[].class, vars);
 
-            final long duration = Math.abs(System.currentTimeMillis() - startTime);
-
-            final HttpHeaders h = gitHubResponseEntity.getHeaders();
-
-            log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(h));
+            duration = Math.abs(System.currentTimeMillis() - startTime);
+            responseHeaders = gitHubResponseEntity.getHeaders();
 
             if (gitHubResponseEntity.getBody() != null && gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
@@ -154,6 +156,8 @@ public class GitHub {
         } catch (final Exception e) {
             log.error("Github", e);
             throw new BadgeException(new BadgeStatus(ERROR, "github:" + e.getLocalizedMessage()));
+        } finally {
+            log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(responseHeaders));
         }
 
     }
