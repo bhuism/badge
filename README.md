@@ -45,6 +45,14 @@ Example:
 
 https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?actuator_url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
+GitLab Example:
+
+```
+<img src="https://badge.odee.net/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg"></img>
+```
+
+http://127.0.0.1:8080/gitlab/sha/12289803/master/14021d07/badge.svg
+
 ShieldsIo endpoint Example:
 
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
