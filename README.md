@@ -58,7 +58,7 @@ ShieldsIo endpoint Example:
 [Shields endpoint api](https://shields.io/endpoint) for showing if your app is latest or not.
 
 ```
-https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
+https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Factuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 ```
 
 You can also have ShieldsIo generate the image with this endpoint for https://shields.io/endpoint :
@@ -74,10 +74,10 @@ https://badge.odee.net/github/sha/bhuism/badge/master/29d4e9731a09f535a230570a5b
 ShieldsIo Endpoint URL Example for actuator:
 
 ```
-https://badge.odee.net/github/sha/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}
+https://badge.odee.net/github/sha/{user}/{repo}/{branch}?actuator_url={actuator_url}
 ```
 
 Example:
 
-https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Flabel%3Dlatest%26actuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
+https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Factuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
 
