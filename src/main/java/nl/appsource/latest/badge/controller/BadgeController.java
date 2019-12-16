@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.actual.Actuator;
 import nl.appsource.latest.badge.expected.GitHub;
+import nl.appsource.latest.badge.expected.GitLab;
 import nl.appsource.latest.badge.model.shieldsio.ShieldsIoResponse;
 import nl.appsource.latest.badge.output.ShieldsIo;
 import nl.appsource.latest.badge.output.Svg;
@@ -22,15 +23,29 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class BadgeController {
 
     private final GitHub gitHub;
+    private final GitLab gitLab;
     private final Actuator actuator;
     private final Svg svg;
     private final ShieldsIo shieldsIo;
+
+    @GetMapping(value = "/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
+    public ResponseEntity<String> badgeGitLab(@PathVariable("id") final String id, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha) {
+
+        try {
+            final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
+            final String image = svg.create(badgeStatus);
+            return ResponseEntity.ok(image);
+        } catch (final BadgeException badgeException) {
+            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+        }
+
+    }
 
     @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
     public ResponseEntity<String> badgeGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha) {
 
         try {
-            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+            final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
             final String image = svg.create(badgeStatus);
             return ResponseEntity.ok(image);
         } catch (final BadgeException badgeException) {
@@ -44,7 +59,7 @@ public class BadgeController {
 
         try {
             final String commit_sha = actuator.getCommitSha(actuator_url);
-            final BadgeStatus badgeStatus = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+            final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
             final String image = svg.create(badgeStatus);
             return ResponseEntity.ok(image);
         } catch (final BadgeException badgeException) {
@@ -58,7 +73,7 @@ public class BadgeController {
     public ShieldsIoResponse shieldsIoGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha) {
 
         try {
-            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+            final BadgeStatus status = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
             return shieldsIo.create(status);
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());
@@ -71,7 +86,7 @@ public class BadgeController {
 
         try {
             final String commit_sha = actuator.getCommitSha(actuator_url);
-            final BadgeStatus status = gitHub.getLatestStatus(owner, repo, branch, commit_sha);
+            final BadgeStatus status = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
             return shieldsIo.create(status);
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());
