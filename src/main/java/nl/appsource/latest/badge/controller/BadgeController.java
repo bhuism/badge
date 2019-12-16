@@ -41,6 +41,21 @@ public class BadgeController {
 
     }
 
+    @GetMapping(value = "/gitlab/actuator/{id}/{branch}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
+    public ResponseEntity<String> badgeGitLabActuator(@PathVariable("id") final String id, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url) {
+
+        try {
+            final String commit_sha = actuator.getCommitSha(actuator_url);
+            final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
+            final String image = svg.create(badgeStatus);
+            return ResponseEntity.ok(image);
+        } catch (final BadgeException badgeException) {
+            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+        }
+
+    }
+
+
     @GetMapping(value = "/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
     public ResponseEntity<String> badgeGitHub(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha) {
 
@@ -55,7 +70,7 @@ public class BadgeController {
     }
 
     @GetMapping(value = "/github/actuator/{owner}/{repo}/{branch}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
-    public ResponseEntity<String> badgeActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url) {
+    public ResponseEntity<String> badgeGitHubActuator(@PathVariable("owner") final String owner, @PathVariable("repo") final String repo, @PathVariable("branch") final String branch, @RequestParam(value = "actuator_url") final String actuator_url) {
 
         try {
             final String commit_sha = actuator.getCommitSha(actuator_url);
