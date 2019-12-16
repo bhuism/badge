@@ -74,7 +74,7 @@ https://badge.odee.net/github/sha/bhuism/badge/master/29d4e9731a09f535a230570a5b
 ShieldsIo Endpoint URL Example for actuator:
 
 ```
-https://badge.odee.net/github/sha/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}
+https://badge.odee.net/github/sha/{user}/{repo}/{branch}?actuator_url={actuator_url}
 ```
 
 Example:
