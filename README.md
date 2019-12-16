@@ -51,7 +51,7 @@ GitLab Example:
 <img src="https://badge.odee.net/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg"></img>
 ```
 
-http://127.0.0.1:8080/gitlab/sha/12289803/master/14021d07/badge.svg
+https://badge.odee.net/gitlab/sha/12289803/master/14021d07/badge.svg
 
 ShieldsIo endpoint Example:
 
