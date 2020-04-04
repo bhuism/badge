@@ -15,6 +15,12 @@ steps:
       - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/maven/repository'
     waitFor:
       - restore_cache
+    # Deploy
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: deploy
+    args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '512Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
+    waitFor:
+      - build
   # Save Cache
   - name: 'eu.gcr.io/$PROJECT_ID/save_cache'
     id: save_cache
