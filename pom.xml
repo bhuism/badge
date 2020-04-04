@@ -103,6 +103,12 @@
             <version>0.38</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.10.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -149,7 +155,9 @@
                     <container>
                         <args>
                             <arg>--spring.profiles.active=production</arg>
-                            <arg>--spring.config.location=/app/resources/application.yml,/app/resources/application-production.yml</arg>
+                            <arg>
+                                --spring.config.location=/app/resources/application.yml,/app/resources/application-production.yml
+                            </arg>
                         </args>
                         <jvmFlags>
                             <jvmFlag>-Duser.timezone=Europe/Amsterdam</jvmFlag>
