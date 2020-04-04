@@ -1,6 +1,7 @@
 package nl.appsource.latest.badge;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
@@ -31,7 +32,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
         StackdriverLoggingAutoConfiguration.class,
         GcpContextAutoConfiguration.class
 })
-@ComponentScan(basePackageClasses = BadgeApplication.class)
+@SpringBootApplication
 public class BadgeApplication {
 
     @Bean
