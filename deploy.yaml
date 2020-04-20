@@ -1,10 +1,4 @@
 steps:
-  # Restore Cache
-  - name: 'eu.gcr.io/$PROJECT_ID/restore_cache'
-    id: restore_cache
-    args:
-      - '--bucket=gs://m2cache'
-      - '--key=dotm2'
   # Build and push image
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
@@ -13,20 +7,7 @@ steps:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
       - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/maven/repository'
-    waitFor:
-      - restore_cache
     # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy
     args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '512Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
-    waitFor:
-      - build
-  # Save Cache
-  - name: 'eu.gcr.io/$PROJECT_ID/save_cache'
-    id: save_cache
-    args:
-      - '--bucket=gs://m2cache'
-      - '--key=dotm2'
-      - '--path=/workspace/maven/repository'
-    waitFor:
-      - build
