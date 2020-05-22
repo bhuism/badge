@@ -6,6 +6,9 @@ steps:
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
+    #push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'eu.gcr.io/badge-260212/badge']
   # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy
