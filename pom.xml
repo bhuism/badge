@@ -112,6 +112,7 @@
     </dependencies>
 
     <build>
+        <finalName>bagde</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
