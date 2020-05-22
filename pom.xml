@@ -139,53 +139,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>2.3.0</version>
-                <configuration>
-                    <from>
-                        <image>openjdk:11-jre-slim</image>
-                    </from>
-                    <to>
-                        <image>eu.gcr.io/badge-260212/badge</image>
-                        <tags>
-                            <tag>latest</tag>
-                            <tag>${env.COMMIT_SHA}</tag>
-                        </tags>
-                    </to>
-                    <container>
-                        <args>
-                            <arg>--spring.profiles.active=production</arg>
-                            <arg>
-                                --spring.config.location=/app/resources/application.yml,/app/resources/application-production.yml
-                            </arg>
-                        </args>
-                        <jvmFlags>
-                            <jvmFlag>-Duser.timezone=Europe/Amsterdam</jvmFlag>
-                            <jvmFlag>-noverify</jvmFlag>
-                            <jvmFlag>-Xshare:auto</jvmFlag>
-                            <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
-                            <jvmFlag>-XX:TieredStopAtLevel=1</jvmFlag>
-                            <jvmFlag>-Dspring.main.lazy-initialization=true</jvmFlag>
-                        </jvmFlags>
-                        <mainClass>nl.appsource.latest.badge.BadgeApplication</mainClass>
-                        <ports>
-                            <port>8080</port>
-                        </ports>
-                    </container>
-                    <allowInsecureRegistries>true</allowInsecureRegistries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>build-and-push-docker-image</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
