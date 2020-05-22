@@ -1,6 +1,6 @@
 steps:
   # Build and push image
-  - name: 'eu.gcr.io/cloud-builders/mvn'
+  - name: 'gcr.io/cloud-builders/mvn'
     id: build
     args: ['-B', 'install', 'spring-boot:build-info', 'spring-boot:build-image']
     env:
