@@ -1,15 +1,15 @@
 steps:
   # Build and push image
-  - name: 'gcr.io/cloud-builders/mvn'
+  - name: 'eu.gcr.io/cloud-builders/mvn'
     id: build
     args: ['-B', 'install', 'spring-boot:build-info', 'spring-boot:build-image']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
     #push
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: 'eu.gcr.io/cloud-builders/docker'
     args: ['push', 'eu.gcr.io/badge-260212/badge']
   # Deploy
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: 'eu.gcr.io/cloud-builders/gcloud'
     id: deploy
     args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '512Mi', '--timeout', '30s', '--allow-unauthenticated', '--async']
