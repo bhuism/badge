@@ -6,7 +6,8 @@ steps:
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
-    #push
+      - 'GITHUB_TOKEN=$_GITHUB_TOKEN'
+  #push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'eu.gcr.io/badge-260212/badge']
   # Deploy
