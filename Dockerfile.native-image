@@ -1,8 +1,9 @@
 FROM oracle/graalvm-ce:20.1.0-java11
 RUN \
-    gu install native-image \
-    curl -s "https://get.sdkman.io" | bash; \
-    source "$HOME/.sdkman/bin/sdkman-init.sh"; \
-    sdk install maven;
+	yum install -y unzip zip ;\
+	gu install native-image ;\
+	curl -s "https://get.sdkman.io" | bash; \
+	source "$HOME/.sdkman/bin/sdkman-init.sh"; \
+	sdk install maven;
 
 
