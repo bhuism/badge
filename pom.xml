@@ -121,15 +121,6 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>info.json</include>
-                    <include>banner.txt</include>
-                    <include>static/index.html</include>
-                </includes>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
             </resource>
         </resources>
         <extensions>

@@ -1,0 +1,4 @@
+badge:
+  github:
+    token: @env.GITHUB_TOKEN@
+    cacheExpireTimeoutSeconds: 15

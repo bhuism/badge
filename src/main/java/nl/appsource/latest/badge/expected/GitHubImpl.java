@@ -45,12 +45,13 @@ public class GitHubImpl implements GitHub {
     @Setter
     private int cacheExpireTimeoutSeconds;
 
+    @Getter
+    @Setter
+    private String token;
+
     private static final String OWNER = "owner";
     private static final String REPO = "repo";
     private static final String COMMIT_SHA = "commit_sha";
-
-    private static final String GIT_BRANCHES_WHERE_HEAD_URL = "https://api.github.com/repos/{" + OWNER + "}/{" + REPO + "}/commits/{" + COMMIT_SHA + "}/branches-where-head";
-
     private static final String GITHUB_PREVIEW_MEDIATYPE_VALUE = "application/vnd.github.groot-preview+json";
 
     private static final String LIMIT = "X-RateLimit-Limit";
@@ -104,10 +105,8 @@ public class GitHubImpl implements GitHub {
 
         try {
 
-            final String token = System.getenv("GITHUB_TOKEN");
-
             if (StringUtils.isEmpty(token)) {
-                log.warn("Empty GITHUB_TOKEN");
+                log.error("Empty GITHUB_TOKEN");
             }
 
             final long startTime = System.currentTimeMillis();
@@ -126,6 +125,8 @@ public class GitHubImpl implements GitHub {
                     .block();
 
             duration = Math.abs(System.currentTimeMillis() - startTime);
+
+            responseHeaders = clientResponse.headers().asHttpHeaders();
 
             if (clientResponse.statusCode().equals(OK)) {
 
