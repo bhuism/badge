@@ -10,7 +10,7 @@ cp -R META-INF BOOT-INF/classes
 
 LIBPATH=`find BOOT-INF/lib | tr '\n' ':'`
 
-native-image --verbose -cp BOOT-INF/classes:$LIBPATH
+native-image -cp BOOT-INF/classes:$LIBPATH
 
 cd ..
 mv ./native-image/badge .
