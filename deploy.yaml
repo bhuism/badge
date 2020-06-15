@@ -1,7 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/badge-260212/native-image', '-f', 'Dockerfile.native-image', '.']
-  images: ['gcr.io/badge-260212/native-image']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/badge-260212/native-image']
 
   - name: 'gcr.io/cloud-builders/mvn'
     args: ['-B', 'package']
