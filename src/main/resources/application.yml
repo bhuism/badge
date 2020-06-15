@@ -1,24 +1,20 @@
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
 server:
-  servlet:
-    session:
-      timeout: 0
   compression:
     enabled: true
 spring:
-  main:
-    lazy-initialization: true
-    banner-mode: log
   cloud:
     gcp:
       logging:
         enabled: false
       trace:
         enabled: false
+  mvc:
+    servlet:
+      load-on-startup: 1
 badge:
   github:
     cacheExpireTimeoutSeconds: 60
+logging:
+  level:
+    ROOT: info
+    org.apache: warn

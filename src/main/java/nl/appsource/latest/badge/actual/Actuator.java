@@ -5,14 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.controller.BadgeException;
 import nl.appsource.latest.badge.controller.BadgeStatus;
 import nl.appsource.latest.badge.model.actuator.Info;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Collections;
 
@@ -23,8 +19,6 @@ import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
 @Slf4j
 public class Actuator {
 
-    private final RestTemplate restTemplate;
-
     public String getCommitSha(final String actuator_url) throws BadgeException {
 
         final HttpHeaders headers = new HttpHeaders();
@@ -32,13 +26,16 @@ public class Actuator {
 
         try {
 
-            final ResponseEntity<Info> info = restTemplate.exchange(actuator_url, HttpMethod.GET, new HttpEntity<>(headers), Info.class);
+            final Info info = WebClient.builder()
+                    .baseUrl(actuator_url)
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .build()
+                    .get()
+                    .retrieve()
+                    .bodyToMono(Info.class)
+                    .block();
 
-            if (info.getStatusCode().equals(HttpStatus.OK)) {
-                return info.getBody().getGit().getCommit().getId();
-            } else {
-                return info.getStatusCode().getReasonPhrase();
-            }
+            return info.getGit().getCommit().getId();
 
         } catch (Exception e) {
             log.error("actuator: " + actuator_url, e);

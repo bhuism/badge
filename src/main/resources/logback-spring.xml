@@ -2,18 +2,15 @@
 <configuration>
 
     <springProfile name="production">
-        <include resource="org/springframework/cloud/gcp/logging/logback-json-appender.xml"/>
-
+        <include resource="org/springframework/boot/logging/logback/base.xml"/>
         <root level="INFO">
-            <appender-ref ref="CONSOLE_JSON"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
 
     <springProfile name="!production">
         <include resource="org/springframework/boot/logging/logback/base.xml"/>
-
-        <logger name="nl.appsource" level="DEBUG" />
-
+        <logger name="nl.appsource" level="DEBUG"/>
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>

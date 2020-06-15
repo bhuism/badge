@@ -10,7 +10,6 @@ import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
 
-
 @Slf4j
 @Service
 public class FixedImpl implements Fixed {
