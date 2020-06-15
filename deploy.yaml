@@ -1,16 +1,23 @@
 steps:
-  # Build and push image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/badge-260212/native-image', '-f', 'Dockerfile.native-image' '.']
+    images: ['gcr.io/badge-260212/native-image']
+
   - name: 'gcr.io/cloud-builders/mvn'
-    id: build
-    args: ['-B', 'install', 'spring-boot:build-info', 'spring-boot:build-image']
+    args: ['-B', 'package']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
       - 'GITHUB_TOKEN=$_GITHUB_TOKEN'
-  #push
+
+  - name: 'gcr.io/badge-260212/native-image'
+    args: ['target/badge.jar', 'nl.appsource.latest.badge.BadgeApplication']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/badge-260212/badge', '.']
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'eu.gcr.io/badge-260212/badge']
-  # Deploy
+
   - name: 'gcr.io/cloud-builders/gcloud'
-    id: deploy
     args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '768Mi', '--timeout', '60s', '--allow-unauthenticated']
