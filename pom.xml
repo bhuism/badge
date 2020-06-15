@@ -152,7 +152,7 @@
             <id>native</id>
             <properties>
                 <graalvm.version>20.1.0</graalvm.version>
-                <spring-graalvm-native.version>0.7.0</spring-graalvm-native.version>
+                <spring-graalvm-native.version>0.7.1</spring-graalvm-native.version>
             </properties>
             <dependencies>
                 <dependency>
