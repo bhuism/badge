@@ -20,21 +20,8 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
         <start-class>nl.appsource.latest.badge.BadgeApplication</start-class>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <distributionManagement>
         <snapshotRepository>
@@ -63,11 +50,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-indexer</artifactId>
         </dependency>
 
         <dependency>
@@ -104,13 +86,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.11.0</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -190,6 +165,15 @@
             </properties>
             <dependencies>
                 <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context-indexer</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-configuration-processor</artifactId>
+                    <optional>true</optional>
+                </dependency>
+                <dependency>
                     <groupId>org.graalvm.nativeimage</groupId>
                     <artifactId>graal-hotspot-library</artifactId>
                     <version>${graalvm.version}</version>
@@ -218,6 +202,7 @@
                                 -H:IncludeResources=.*\.svg$
                                 -H:IncludeResources=.*\.txt$
                                 -H:IncludeResources=.*\.json$
+                                --static
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
                             </buildArgs>
