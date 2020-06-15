@@ -13,7 +13,7 @@ steps:
       - 'GITHUB_TOKEN=$_GITHUB_TOKEN'
 
   - name: 'gcr.io/badge-260212/native-image'
-    args: ['target/badge.jar', 'nl.appsource.latest.badge.BadgeApplication']
+    args: ['native-image', 'target/badge.jar', 'nl.appsource.latest.badge.BadgeApplication']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/badge-260212/badge', '.']
