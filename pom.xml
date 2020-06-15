@@ -180,33 +180,6 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.graalvm.nativeimage</groupId>
-                        <artifactId>native-image-maven-plugin</artifactId>
-                        <version>20.1.0</version>
-                        <configuration>
-                            <buildArgs>
-                                -Dspring.profiles.active=production
-                                -Dspring.native.verbose=true
-                                -Dspring.native.remove-jmx-support=true
-                                --enable-https
-                                -H:Name=badge
-                                -H:IncludeResources=.*\.svg$
-                                -H:IncludeResources=.*\.txt$
-                                -H:IncludeResources=.*\.json$
-                                --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
-                                --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
-                            </buildArgs>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>native-image</goal>
-                                </goals>
-                                <phase>package</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                     </plugin>
