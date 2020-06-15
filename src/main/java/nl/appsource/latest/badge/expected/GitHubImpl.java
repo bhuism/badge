@@ -12,6 +12,7 @@ import nl.appsource.latest.badge.model.github.GitHubResponse;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -104,6 +105,10 @@ public class GitHubImpl implements GitHub {
         try {
 
             final String token = System.getenv("GITHUB_TOKEN");
+
+            if (StringUtils.isEmpty(token)) {
+                log.warn("Empty GITHUB_TOKEN");
+            }
 
             final long startTime = System.currentTimeMillis();
 
