@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/badge-260212/native-image', '-f', 'Dockerfile.native-image', '.']
+    args: ['build', '-t', 'eu.gcr.io/badge-260212/native-image', '-f', 'Dockerfile.native-image', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/badge-260212/native-image']
+    args: ['push', 'eu.gcr.io/badge-260212/native-image']
 
   - name: 'gcr.io/cloud-builders/mvn'
     args: ['-B', '-P', 'native', 'package']
@@ -12,11 +12,11 @@ steps:
       - 'SHORT_SHA=$SHORT_SHA'
       - 'GITHUB_TOKEN=$_GITHUB_TOKEN'
 
-  - name: 'gcr.io/badge-260212/native-image'
+  - name: 'eu.gcr.io/badge-260212/native-image'
     args: ['./build.sh']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/badge-260212/badge', '.']
+    args: ['build', '-t', 'eu.gcr.io/badge-260212/badge', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'eu.gcr.io/badge-260212/badge']
