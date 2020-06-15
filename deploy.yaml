@@ -12,4 +12,4 @@ steps:
   # Deploy
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy
-    args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '512Mi', '--timeout', '60s', '--allow-unauthenticated']
+    args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '768Mi', '--timeout', '60s', '--allow-unauthenticated']
