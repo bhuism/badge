@@ -193,7 +193,6 @@
                                 -H:IncludeResources=.*\.svg$
                                 -H:IncludeResources=.*\.txt$
                                 -H:IncludeResources=.*\.json$
-                                --static
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
                             </buildArgs>
