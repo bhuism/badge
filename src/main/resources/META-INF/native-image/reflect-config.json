@@ -486,6 +486,26 @@
   "methods":[{"name":"getBadgeStatus","parameterTypes":["java.lang.String","java.lang.String","java.lang.String"] }]
 },
 {
+  "name":"nl.appsource.latest.badge.model.actuator.Info",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true
+},
+{
+  "name":"nl.appsource.latest.badge.model.actuator.Info$Git",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true,
+  "allPublicConstructors":true
+},
+{
+  "name":"nl.appsource.latest.badge.model.actuator.Info$Git$Commit",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true,
+  "allPublicConstructors":true
+},
+{
   "name":"nl.appsource.latest.badge.model.github.GitHubResponse",
   "allDeclaredFields":true,
   "allDeclaredMethods":true,
@@ -2792,6 +2812,10 @@
 },
 {
   "name":"org.springframework.web.bind.annotation.RequestMethod[]"
+},
+{
+  "name":"org.springframework.web.bind.annotation.RequestParam",
+  "allDeclaredMethods":true
 },
 {
   "name":"org.springframework.web.bind.annotation.ResponseBody",

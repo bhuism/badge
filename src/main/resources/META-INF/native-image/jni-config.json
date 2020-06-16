@@ -11,5 +11,9 @@
 },
 {
   "name":"java.lang.NoSuchMethodError"
+},
+{
+  "name":"org.springframework.boot.loader.JarLauncher",
+  "methods":[{"name":"main","parameterTypes":["java.lang.String[]"] }]
 }
 ]
