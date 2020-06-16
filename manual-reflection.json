@@ -1,0 +1,44 @@
+[
+  {
+    "name": "nl.appsource.latest.badge.model.ShieldsIoResponse",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.model.actuator.Info",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.model.actuator.Info$Git",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.model.actuator.Info$Git$Commit",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.model.github.GitHubResponse",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.model.github.GitHubResponse$Commit",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.model.github.GitHubResponse[]"
+  }
+]

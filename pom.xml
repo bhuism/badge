@@ -182,10 +182,11 @@
                                 -H:IncludeResources=.*\.svg$
                                 -H:IncludeResources=.*\.txt$
                                 -H:IncludeResources=.*\.json$
+                                -H:ReflectionConfigurationResources=manual-reflection.json
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
-                                --initialize-at-build-time=nl.appsource.latest.badge.model
                             </buildArgs>
+                            <skip>false</skip>
                         </configuration>
                         <executions>
                             <execution>
