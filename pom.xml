@@ -178,7 +178,7 @@
                     <plugin>
                         <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
-                        <version>20.0.0</version>
+                        <version>20.1.0</version>
                         <configuration>
                             <buildArgs>
                                 -Dspring.graal.mode=initialization-only -Dspring.graal.dump-config=/tmp/computed-reflect-config.json -Dspring.graal.verbose=true -Dspring.graal.skip-logback=true
