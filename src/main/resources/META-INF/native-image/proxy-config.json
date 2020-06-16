@@ -1,6 +1,5 @@
 [
   ["org.springframework.boot.context.properties.ConfigurationProperties","org.springframework.core.annotation.SynthesizedAnnotation"],
-  ["org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication","org.springframework.core.annotation.SynthesizedAnnotation"],
   ["org.springframework.web.bind.annotation.PathVariable","org.springframework.core.annotation.SynthesizedAnnotation"],
   ["org.springframework.web.bind.annotation.RequestMapping","org.springframework.core.annotation.SynthesizedAnnotation"],
   ["org.springframework.web.bind.annotation.RequestParam","org.springframework.core.annotation.SynthesizedAnnotation"]
