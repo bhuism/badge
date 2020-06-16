@@ -1,7 +1,5 @@
 package nl.appsource.latest.badge.expected;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -28,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -64,22 +62,30 @@ public class GitHubImpl implements GitHub {
     private static final String REMAINING = "X-RateLimit-Remaining";
     private static final String RESET = "X-RateLimit-Reset";
 
-    private Cache<String, BadgeStatus> cache;
+    public interface MyCache<K, V> {
 
-    public synchronized Cache<String, BadgeStatus> getCache() {
+        V getIfPresent(K key);
 
-        if (cache == null) {
-
-            cache = CacheBuilder.newBuilder()
-                    .maximumSize(1000)
-                    .expireAfterWrite(cacheExpireTimeoutSeconds, TimeUnit.SECONDS)
-                    .build();
-
-        }
-
-        return cache;
+        void put(K key, V value);
 
     }
+
+    @Getter
+    private MyCache<String, BadgeStatus> cache = new MyCache<String, BadgeStatus>() {
+
+        private final ConcurrentHashMap<String, BadgeStatus> _cache = new ConcurrentHashMap<>();
+
+        @Override
+        public BadgeStatus getIfPresent(final String key) {
+            return _cache.get(key);
+        }
+
+        @Override
+        public void put(final String key, final BadgeStatus value) {
+            _cache.put(key, value);
+        }
+
+    };
 
     private final RestTemplate restTemplate;
 

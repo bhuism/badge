@@ -9,6 +9,7 @@ import nl.appsource.latest.badge.expected.GitLab;
 import nl.appsource.latest.badge.model.shieldsio.ShieldsIoResponse;
 import nl.appsource.latest.badge.output.ShieldsIo;
 import nl.appsource.latest.badge.output.Svg;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,15 +31,26 @@ public class BadgeController {
     private final Svg svg;
     private final ShieldsIo shieldsIo;
 
+    private static class DoNotCache {
+        public static ResponseEntity<String> ok(String image) {
+            return ResponseEntity.ok()
+                    .headers((header) -> {
+                        header.set(HttpHeaders.EXPIRES, "0");
+                        header.setPragma("no-cache");
+                        header.setCacheControl("no-cache, no-store, max-age=0, must-revalidate");
+                    }).body(image);
+        }
+    }
+
     @GetMapping(value = "/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg", produces = {"image/svg+xml;charset=utf-8"})
     public ResponseEntity<String> badgeGitLab(@PathVariable("id") final String id, @PathVariable("branch") final String branch, @PathVariable("commit_sha") final String commit_sha) {
 
         try {
             final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
             final String image = svg.create(badgeStatus);
-            return ResponseEntity.ok(image);
+            return DoNotCache.ok(image);
         } catch (final BadgeException badgeException) {
-            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+            return DoNotCache.ok(svg.create(badgeException.getBadgeStatus()));
         }
 
     }
@@ -50,9 +62,9 @@ public class BadgeController {
             final String commit_sha = actuator.getCommitSha(actuator_url);
             final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
             final String image = svg.create(badgeStatus);
-            return ResponseEntity.ok(image);
+            return DoNotCache.ok(image);
         } catch (final BadgeException badgeException) {
-            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+            return DoNotCache.ok(svg.create(badgeException.getBadgeStatus()));
         }
 
     }
@@ -64,9 +76,9 @@ public class BadgeController {
         try {
             final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
             final String image = svg.create(badgeStatus);
-            return ResponseEntity.ok(image);
+            return DoNotCache.ok(image);
         } catch (final BadgeException badgeException) {
-            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+            return DoNotCache.ok(svg.create(badgeException.getBadgeStatus()));
         }
 
     }
@@ -78,9 +90,9 @@ public class BadgeController {
             final String commit_sha = actuator.getCommitSha(actuator_url);
             final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
             final String image = svg.create(badgeStatus);
-            return ResponseEntity.ok(image);
+            return DoNotCache.ok(image);
         } catch (final BadgeException badgeException) {
-            return ResponseEntity.ok(svg.create(badgeException.getBadgeStatus()));
+            return DoNotCache.ok(svg.create(badgeException.getBadgeStatus()));
         }
 
     }
