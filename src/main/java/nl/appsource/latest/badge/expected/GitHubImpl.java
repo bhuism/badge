@@ -10,15 +10,23 @@ import nl.appsource.latest.badge.controller.BadgeException;
 import nl.appsource.latest.badge.controller.BadgeStatus;
 import nl.appsource.latest.badge.model.github.GitHubResponse;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -26,14 +34,11 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.Math.min;
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
-import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.OK;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +57,8 @@ public class GitHubImpl implements GitHub {
     private static final String OWNER = "owner";
     private static final String REPO = "repo";
     private static final String COMMIT_SHA = "commit_sha";
-    private static final String GITHUB_PREVIEW_MEDIATYPE_VALUE = "application/vnd.github.groot-preview+json";
+    private static final String GIT_BRANCHES_WHERE_HEAD_URL = "https://api.github.com/repos/{" + OWNER + "}/{" + REPO + "}/commits/{" + COMMIT_SHA + "}/branches-where-head";
+    private static final MediaType GITHUB_PREVIEW_MEDIATYPE = MediaType.valueOf("application/vnd.github.groot-preview+json");
 
     private static final String LIMIT = "X-RateLimit-Limit";
     private static final String REMAINING = "X-RateLimit-Remaining";
@@ -74,6 +80,8 @@ public class GitHubImpl implements GitHub {
         return cache;
 
     }
+
+    private final RestTemplate restTemplate;
 
     final BiFunction<HttpHeaders, String, String> safeHeaderPrint = (responseHeaders, key) ->
             responseHeaders == null ? null :
@@ -105,32 +113,35 @@ public class GitHubImpl implements GitHub {
 
         try {
 
-            if (StringUtils.isEmpty(token)) {
+            final HttpHeaders requestHeaders = new HttpHeaders();
+
+            requestHeaders.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
+
+            if (StringUtils.hasText(token)) {
+                requestHeaders.add(AUTHORIZATION, "token " + token);
+            } else {
                 log.error("Empty GITHUB_TOKEN");
             }
 
+            final Map<String, String> vars = new HashMap<>();
+
+            vars.put(OWNER, owner);
+            vars.put(REPO, repo);
+            vars.put(COMMIT_SHA, commit_sha);
+
+
             final long startTime = System.currentTimeMillis();
 
-            final ClientResponse clientResponse = WebClient
-                    .builder()
-                    .baseUrl("https://api.github.com/repos")
-                    .defaultHeader(AUTHORIZATION, "token " + token)
-                    .defaultHeader(ACCEPT, GITHUB_PREVIEW_MEDIATYPE_VALUE)
-                    .build()
-                    .get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/{" + OWNER + "}/{" + REPO + "}/commits/{" + COMMIT_SHA + "}/branches-where-head")
-                            .build(owner, repo, commit_sha))
-                    .exchange()
-                    .block();
+            final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), GitHubResponse[].class, vars);
 
             duration = Math.abs(System.currentTimeMillis() - startTime);
 
-            responseHeaders = clientResponse.headers().asHttpHeaders();
+            responseHeaders = gitHubResponseEntity.getHeaders();
 
-            if (clientResponse.statusCode().equals(OK)) {
+            if (gitHubResponseEntity.getBody() != null && gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
-                final List<GitHubResponse> gitHubResponse = asList(clientResponse.bodyToMono(GitHubResponse[].class).block());
+                final List<GitHubResponse> gitHubResponse = Arrays.asList(gitHubResponseEntity.getBody());
+
                 final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 7));
                 final BadgeStatus badgeStatus;
 
@@ -144,7 +155,7 @@ public class GitHubImpl implements GitHub {
                 return badgeStatus;
 
             } else {
-                return new BadgeStatus(ERROR, clientResponse.statusCode().getReasonPhrase());
+                return new BadgeStatus(ERROR, gitHubResponseEntity.getStatusCode().getReasonPhrase());
             }
         } catch (final HttpClientErrorException.Forbidden f) {
             final HttpHeaders h = f.getResponseHeaders();

@@ -5,20 +5,23 @@ import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.controller.BadgeException;
 import nl.appsource.latest.badge.controller.BadgeStatus;
 import nl.appsource.latest.badge.model.gitlab.GitLabResponse;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Math.min;
 import static java.util.Arrays.asList;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
-import static org.springframework.http.HttpHeaders.ACCEPT;
-import static org.springframework.http.HttpStatus.OK;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,8 @@ public class GitLabImpl implements GitLab {
     private static final String REF_NAME = "ref_name";
 
     private static final String GITLAB_BRANCHES_WHERE_HEAD_URL = "https://gitlab.com/api/v4/projects/{" + ID + "}/repository/commits?ref_name={" + REF_NAME + "}&per_page=1";
+
+    private final RestTemplate restTemplate;
 
     @Override
     public BadgeStatus getBadgeStatus(final String id, final String branch, final String commit_sha) throws BadgeException {
@@ -41,27 +46,23 @@ public class GitLabImpl implements GitLab {
 
         try {
 
+            final HttpHeaders requestHeaders = new HttpHeaders();
+
+            final Map<String, String> vars = new HashMap<>();
+
+            vars.put(ID, id);
+            vars.put(REF_NAME, branch);
+
             final long startTime = System.currentTimeMillis();
 
-            final ClientResponse clientResponse = WebClient
-                    .builder()
-                    .baseUrl("https://gitlab.com/api/v4/projects")
-                    .defaultHeader(ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                    .build()
-                    .get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/{" + ID + "}/repository/commits")
-                            .queryParam("ref_name", branch)
-                            .queryParam("per_page", 1)
-                            .build(id))
-                    .exchange()
-                    .block();
+            final ResponseEntity<GitLabResponse[]> gitLabResponseEntity = restTemplate.exchange(GITLAB_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), GitLabResponse[].class, vars);
+
 
             duration = Math.abs(System.currentTimeMillis() - startTime);
 
-            if (clientResponse.statusCode().equals(OK)) {
+            if (gitLabResponseEntity.getBody() != null && gitLabResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
-                final List<GitLabResponse> gitLabResponse = asList(clientResponse.bodyToMono(GitLabResponse[].class).block());
+                final List<GitLabResponse> gitLabResponse = asList(gitLabResponseEntity.getBody());
 
                 final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 8));
 
@@ -80,7 +81,7 @@ public class GitLabImpl implements GitLab {
                 return badgeStatus;
 
             } else {
-                return new BadgeStatus(ERROR, clientResponse.statusCode().getReasonPhrase());
+                return new BadgeStatus(ERROR, gitLabResponseEntity.getStatusCode().getReasonPhrase());
             }
         } catch (final Exception e) {
             log.error("Gitlab", e);
