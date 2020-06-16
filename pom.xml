@@ -179,6 +179,20 @@
                         <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
                         <version>${graalvm.version}</version>
+                        <configuration>
+                            <buildArgs>
+                                -Dspring.profiles.active=production
+                                -Dspring.native.verbose=true
+                                -Dspring.native.remove-jmx-support=true
+                                --enable-https
+                                -H:Name=badge
+                                -H:IncludeResources=.*\.svg$
+                                -H:IncludeResources=.*\.txt$
+                                -H:IncludeResources=.*\.json$
+                                --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
+                                --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
+                            </buildArgs>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>

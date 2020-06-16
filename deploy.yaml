@@ -1,11 +1,8 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'eu.gcr.io/badge-260212/native-image', '-f', 'Dockerfile.native-image', '.']
+    args: ['build', '-t', 'native-image', '-f', 'Dockerfile.native-image', '.']
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'eu.gcr.io/badge-260212/native-image']
-
-  - name: 'eu.gcr.io/badge-260212/native-image'
+  - name: 'native-image'
     args: ['mvn', '-B', '-P', 'native', 'package']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
@@ -22,5 +19,5 @@ steps:
     args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '768Mi', '--timeout', '60s', '--allow-unauthenticated']
 
 
-options:
-  machineType: 'N1_HIGHCPU_32'
+#options:
+#  machineType: 'N1_HIGHCPU_32'
