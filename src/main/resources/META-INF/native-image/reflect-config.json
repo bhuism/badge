@@ -59,25 +59,6 @@
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"com.fasterxml.jackson.annotation.JacksonAnnotation",
-  "allDeclaredMethods":true
-},
-{
-  "name":"com.fasterxml.jackson.annotation.JsonIgnoreProperties",
-  "allDeclaredMethods":true
-},
-{
-  "name":"com.fasterxml.jackson.annotation.JsonInclude",
-  "allDeclaredMethods":true
-},
-{
-  "name":"com.fasterxml.jackson.annotation.JsonInclude$Include"
-},
-{
-  "name":"com.fasterxml.jackson.annotation.JsonProperty",
-  "allDeclaredMethods":true
-},
-{
   "name":"com.fasterxml.jackson.core.JsonGenerator"
 },
 {
@@ -609,12 +590,6 @@
   ]
 },
 {
-  "name":"org.apache.catalina.servlets.DefaultServlet",
-  "allDeclaredFields":true,
-  "allDeclaredMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"org.apache.catalina.startup.Tomcat"
 },
 {
@@ -735,6 +710,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"org.springframework.boot.NativePropertiesListener",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"org.springframework.boot.SpringBootConfiguration",
   "allDeclaredMethods":true
 },
@@ -798,12 +777,6 @@
 },
 {
   "name":"org.springframework.boot.autoconfigure.aop.AopAutoConfiguration",
-  "allDeclaredFields":true,
-  "allDeclaredMethods":true,
-  "allDeclaredConstructors":true
-},
-{
-  "name":"org.springframework.boot.autoconfigure.aop.AopAutoConfiguration$ClassProxyingConfiguration",
   "allDeclaredFields":true,
   "allDeclaredMethods":true,
   "allDeclaredConstructors":true
@@ -1157,6 +1130,12 @@
 },
 {
   "name":"org.springframework.boot.autoconfigure.web.ServerProperties",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true
+},
+{
+  "name":"org.springframework.boot.autoconfigure.web.ServerProperties$Servlet",
   "allDeclaredFields":true,
   "allDeclaredMethods":true,
   "allDeclaredConstructors":true

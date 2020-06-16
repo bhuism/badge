@@ -3,7 +3,7 @@ steps:
     args: ['build', '-t', 'native-image', '-f', 'Dockerfile.native-image', '.']
 
   - name: 'native-image'
-    args: ['mvn', '-B', '-P', 'native', 'package']
+    args: ['mvn', '-B', '-P', 'native', 'package', 'org.graalvm.nativeimage:native-image-maven-plugin:native-image']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'

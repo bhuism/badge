@@ -193,14 +193,6 @@
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
                             </buildArgs>
                         </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>native-image</goal>
-                                </goals>
-                                <phase>package</phase>
-                            </execution>
-                        </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
