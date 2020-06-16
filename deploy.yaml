@@ -6,7 +6,7 @@ steps:
     args: ['push', 'eu.gcr.io/badge-260212/native-image']
 
   - name: 'eu.gcr.io/badge-260212/native-image'
-    args: ['-B', '-P', 'native', 'package']
+    args: ['mvn', '-B', '-P', 'native', 'package']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
