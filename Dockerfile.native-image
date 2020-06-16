@@ -3,7 +3,7 @@ FROM oracle/graalvm-ce:20.1.0-java11
 ENV MAVEN_VERSION=3.6.3
 
 RUN \
-    gu install native-image; \
+    gu install -n native-image; \
     curl --progress-bar -L -o /tmp/maven.tar.gz https://www-us.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz; \
     tar xf /tmp/maven.tar.gz -C /opt; \
     rm -f /tmp/maven.tar.gz; \
