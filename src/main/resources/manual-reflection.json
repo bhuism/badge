@@ -3,13 +3,15 @@
     "name": "nl.appsource.latest.badge.model.ShieldsIoResponse",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
-    "allDeclaredConstructors": true
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
   },
   {
     "name": "nl.appsource.latest.badge.model.actuator.Info",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
-    "allDeclaredConstructors": true
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
   },
   {
     "name": "nl.appsource.latest.badge.model.actuator.Info$Git",
@@ -29,7 +31,8 @@
     "name": "nl.appsource.latest.badge.model.github.GitHubResponse",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
-    "allDeclaredConstructors": true
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
   },
   {
     "name": "nl.appsource.latest.badge.model.github.GitHubResponse$Commit",

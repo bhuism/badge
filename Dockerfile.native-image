@@ -1,6 +1,6 @@
 FROM oracle/graalvm-ce:20.1.0-java11
 
-ENV MAVEN_VERSION=3.6.3
+ARG MAVEN_VERSION=3.6.3
 
 RUN \
     gu install -n native-image; \
