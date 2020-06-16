@@ -40,8 +40,5 @@
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true,
     "allPublicConstructors": true
-  },
-  {
-    "name": "nl.appsource.latest.badge.model.github.GitHubResponse[]"
   }
 ]
