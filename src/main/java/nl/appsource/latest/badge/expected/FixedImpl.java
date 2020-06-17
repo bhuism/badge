@@ -3,7 +3,6 @@ package nl.appsource.latest.badge.expected;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.latest.badge.controller.BadgeException;
 import nl.appsource.latest.badge.controller.BadgeStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.ERROR;
@@ -11,7 +10,6 @@ import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
 
 @Slf4j
-@Service
 public class FixedImpl implements Fixed {
 
     @Override

@@ -14,7 +14,6 @@ spring:
 badge:
   github:
     cacheExpireTimeoutSeconds: 60
-    token: @env.GITHUB_TOKEN@
 logging:
   level:
     ROOT: info
