@@ -1,17 +1,48 @@
 [
   {
-    "name": "nl.appsource.latest.badge.model.ShieldsIoResponse",
-    "allDeclaredFields": true,
-    "allDeclaredMethods": true,
-    "allDeclaredConstructors": true,
+    "name": "org.springframework.web.client.RestTemplate",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.BadgeApplication",
+    "methods": [
+      {
+        "name": "main",
+        "parameterTypes": [
+          "java.lang.String[]"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "nl.appsource.latest.badge.actual.Actuator",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.controller.ActuatorController",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.controller.BadgeController",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.expected.FixedImpl",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.expected.GitHubImpl",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.expected.GitLabImpl",
     "allPublicConstructors": true
   },
   {
     "name": "nl.appsource.latest.badge.model.actuator.Info",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
-    "allDeclaredConstructors": true,
-    "allPublicConstructors": true
+    "allDeclaredConstructors": true
   },
   {
     "name": "nl.appsource.latest.badge.model.actuator.Info$Git",
@@ -31,14 +62,24 @@
     "name": "nl.appsource.latest.badge.model.github.GitHubResponse",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
-    "allDeclaredConstructors": true,
-    "allPublicConstructors": true
+    "allDeclaredConstructors": true
   },
   {
     "name": "nl.appsource.latest.badge.model.github.GitHubResponse$Commit",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.model.github.GitHubResponse[]"
+  },
+  {
+    "name": "nl.appsource.latest.badge.output.ShieldsIo",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "nl.appsource.latest.badge.output.Svg",
     "allPublicConstructors": true
   }
 ]
