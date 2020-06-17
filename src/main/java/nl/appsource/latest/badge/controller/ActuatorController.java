@@ -1,13 +1,22 @@
 package nl.appsource.latest.badge.controller;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.springframework.util.FileCopyUtils;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class ActuatorController {
 
-    private Resource info = new ClassPathResource("/info.json");
+    private final String info;
 
-    public Resource info() {
+    public ActuatorController() throws IOException {
+        info = FileCopyUtils.copyToString(new InputStreamReader(new ClassPathResource("/info.json").getInputStream(), UTF_8));
+    }
+
+    public String info() {
         return info;
     }
 

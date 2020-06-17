@@ -16,7 +16,7 @@ import static nl.appsource.latest.badge.lib.Widths.getWidthOfString;
 @Service
 public class Svg implements Output<String> {
 
-    private String template;
+    private final String template;
 
     public Svg() throws IOException {
         template = FileCopyUtils.copyToString(new InputStreamReader(new ClassPathResource("/template.svg").getInputStream(), UTF_8));
