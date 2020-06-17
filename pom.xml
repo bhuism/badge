@@ -164,11 +164,7 @@
                             <buildArgs>
                                 -Dspring.profiles.active=production
                                 -Dspring.native.mode=functional
-                                -Dspring.native.verbose=true
                                 -Dspring.native.remove-jmx-support=true
-                                -Dspring.native.remove-yaml-support=true
-                                -Dspring.native.remove-xml-support=true
-                                -Dspring.native.remove-spel-support=true
                                 --enable-https
                                 -H:Name=badge
                                 -H:IncludeResources=.*\.svg$
