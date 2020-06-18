@@ -2,7 +2,6 @@ package nl.appsource.latest.badge.output;
 
 import nl.appsource.latest.badge.controller.BadgeStatus;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.PropertyPlaceholderHelper;
 
@@ -13,7 +12,6 @@ import java.util.Properties;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static nl.appsource.latest.badge.lib.Widths.getWidthOfString;
 
-@Service
 public class Svg implements Output<String> {
 
     private final String template;
