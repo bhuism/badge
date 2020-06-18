@@ -1,8 +1,8 @@
 # Deploy status Badge Service
 
-![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
-[![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Fhealth)](https://badge.odee.net/)
 [![Version badge](https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?actuator_url=https://badge.odee.net/actuator/info)](https://badge.odee.net)
+[![Renovate](https://badges.renovateapi.com/github/bhuism/badge)](https://renovate.whitesourcesoftware.com/)
+[![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Fhealth)](https://badge.odee.net/)
 [![Open Issues](https://img.shields.io/github/issues/bhuism/badge.svg)](https://github.com/bhuism/badge/issues)
 [![License](https://img.shields.io/github/license/bhuism/badge.svg?color=4c1)](https://github.com/bhuism/badge/blob/master/LICENSE)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5ae2a1bef066937ec493/maintainability)](https://codeclimate.com/github/bhuism/badge/maintainability)
@@ -12,7 +12,6 @@
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=bugs)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=code_smells)](https://sonarcloud.io/dashboard?id=bhuism_badge)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=bhuism_badge&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=bhuism_badge)
-[![Renovate](https://badges.renovateapi.com/github/bhuism/badge)](https://renovate.whitesourcesoftware.com/)
 
 Description
 -----------
