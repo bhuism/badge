@@ -19,11 +19,11 @@
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.controller.ActuatorController",
+    "name": "nl.appsource.latest.badge.controller.ActuatorControllerImpl",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.controller.BadgeController",
+    "name": "nl.appsource.latest.badge.controller.BadgeControllerImpl",
     "allPublicConstructors": true
   },
   {

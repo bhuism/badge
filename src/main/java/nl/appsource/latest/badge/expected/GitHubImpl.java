@@ -14,7 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -38,9 +38,9 @@ import static nl.appsource.latest.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.latest.badge.controller.BadgeStatus.Status.OUTDATED;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@Component
+@RequiredArgsConstructor
 @ConfigurationProperties(prefix = "badge.github")
 public class GitHubImpl implements GitHub {
 
@@ -71,7 +71,7 @@ public class GitHubImpl implements GitHub {
     }
 
     @Getter
-    private MyCache<String, BadgeStatus> cache = new MyCache<String, BadgeStatus>() {
+    private final MyCache<String, BadgeStatus> cache = new MyCache<>() {
 
         private final ConcurrentHashMap<String, BadgeStatus> _cache = new ConcurrentHashMap<>();
 

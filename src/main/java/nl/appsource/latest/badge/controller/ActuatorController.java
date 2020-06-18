@@ -1,27 +1,9 @@
 package nl.appsource.latest.badge.controller;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.FileCopyUtils;
+public interface ActuatorController {
 
-import java.io.IOException;
-import java.io.InputStreamReader;
+    String info();
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-public class ActuatorController {
-
-    private final String info;
-
-    public ActuatorController() throws IOException {
-        info = FileCopyUtils.copyToString(new InputStreamReader(new ClassPathResource("/info.json").getInputStream(), UTF_8));
-    }
-
-    public String info() {
-        return info;
-    }
-
-    public String health() {
-        return "{\"status\":\"UP\"}";
-    }
+    String health();
 
 }
