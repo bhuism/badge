@@ -1,9 +1,6 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'native-image', '-f', 'Dockerfile.native-image', '.']
-
-  - name: 'native-image'
-    args: ['mvn', '-B', '-Pnative', 'clean', 'package']
+  - name: 'springci/spring-graalvm-native:master-java11'
+    args: ['mvn', '-B', '-Pnative', 'package']
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
