@@ -20,7 +20,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <start-class>nl.appsource.latest.badge.BadgeApplication</start-class>
+        <start-class>nl.appsource.badge.BadgeApplication</start-class>
     </properties>
 
     <distributionManagement>

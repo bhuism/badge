@@ -4,7 +4,7 @@
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.BadgeApplication",
+    "name": "nl.appsource.badge.BadgeApplication",
     "methods": [
       {
         "name": "main",
@@ -15,71 +15,71 @@
     ]
   },
   {
-    "name": "nl.appsource.latest.badge.actual.Actuator",
+    "name": "nl.appsource.badge.actual.Actuator",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.controller.ActuatorControllerImpl",
+    "name": "nl.appsource.badge.controller.ActuatorControllerImpl",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.controller.BadgeControllerImpl",
+    "name": "nl.appsource.badge.controller.BadgeControllerImpl",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.expected.FixedImpl",
+    "name": "nl.appsource.badge.expected.FixedImpl",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.expected.GitHubImpl",
+    "name": "nl.appsource.badge.expected.GitHubImpl",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.expected.GitLabImpl",
+    "name": "nl.appsource.badge.expected.GitLabImpl",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.model.actuator.Info",
+    "name": "nl.appsource.badge.model.actuator.Info",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.model.actuator.Info$Git",
+    "name": "nl.appsource.badge.model.actuator.Info$Git",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true,
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.model.actuator.Info$Git$Commit",
+    "name": "nl.appsource.badge.model.actuator.Info$Git$Commit",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true,
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.model.github.GitHubResponse",
+    "name": "nl.appsource.badge.model.github.GitHubResponse",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.model.github.GitHubResponse$Commit",
+    "name": "nl.appsource.badge.model.github.GitHubResponse$Commit",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true,
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.model.github.GitHubResponse[]"
+    "name": "nl.appsource.badge.model.github.GitHubResponse[]"
   },
   {
-    "name": "nl.appsource.latest.badge.output.ShieldsIo",
+    "name": "nl.appsource.badge.output.ShieldsIo",
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.latest.badge.output.Svg",
+    "name": "nl.appsource.badge.output.Svg",
     "allPublicConstructors": true
   }
 ]

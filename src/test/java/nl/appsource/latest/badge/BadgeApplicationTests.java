@@ -1,4 +1,4 @@
-package nl.appsource.latest.badge;
+package nl.appsource.badge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
