@@ -1,16 +1,6 @@
 server:
   compression:
     enabled: true
-spring:
-  cloud:
-    gcp:
-      logging:
-        enabled: false
-      trace:
-        enabled: false
-  mvc:
-    servlet:
-      load-on-startup: 1
 badge:
   github:
     cacheExpireTimeoutSeconds: 60
