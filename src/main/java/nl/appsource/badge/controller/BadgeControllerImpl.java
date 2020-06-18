@@ -26,8 +26,7 @@ public class BadgeControllerImpl implements BadgeController {
 
         try {
             final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
-            final String image = svg.create(badgeStatus);
-            return image;
+            return svg.create(badgeStatus);
         } catch (final BadgeException badgeException) {
             return svg.create(badgeException.getBadgeStatus());
         }
@@ -40,8 +39,7 @@ public class BadgeControllerImpl implements BadgeController {
         try {
             final String commit_sha = actuator.getCommitSha(actuator_url);
             final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
-            final String image = svg.create(badgeStatus);
-            return image;
+            return svg.create(badgeStatus);
         } catch (final BadgeException badgeException) {
             return svg.create(badgeException.getBadgeStatus());
         }
@@ -54,8 +52,7 @@ public class BadgeControllerImpl implements BadgeController {
 
         try {
             final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
-            final String image = svg.create(badgeStatus);
-            return image;
+            return svg.create(badgeStatus);
         } catch (final BadgeException badgeException) {
             return svg.create(badgeException.getBadgeStatus());
         }
@@ -68,8 +65,7 @@ public class BadgeControllerImpl implements BadgeController {
         try {
             final String commit_sha = actuator.getCommitSha(actuator_url);
             final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
-            final String image = svg.create(badgeStatus);
-            return image;
+            return svg.create(badgeStatus);
         } catch (final BadgeException badgeException) {
             return svg.create(badgeException.getBadgeStatus());
         }

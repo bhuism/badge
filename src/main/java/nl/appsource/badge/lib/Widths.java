@@ -7,12 +7,10 @@ import static java.util.Arrays.asList;
 
 public class Widths {
 
-    public static final int getWidthOfString(final String text) {
+    public static int getWidthOfString(final String text) {
         return (int) text.chars()
-                .filter(Objects::nonNull)
                 .map(x -> x >= 0 && x <= 255 ? x : 32)
                 .mapToDouble(simpleWidths::get)
-                .filter(Objects::nonNull)
                 .sum()
                 ;
     }

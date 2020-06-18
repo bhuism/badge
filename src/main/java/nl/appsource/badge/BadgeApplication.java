@@ -39,7 +39,7 @@ public class BadgeApplication {
 
     private static final Supplier<ServerResponse.BodyBuilder> NOCACHES = () -> ok().headers(NOCACHE_HEADERS);
 
-    public static JafuApplication app = webApplication(
+    public static final JafuApplication app = webApplication(
             a -> a.beans(b -> b
                     .bean(RestTemplate.class)
                     .bean(Actuator.class)
