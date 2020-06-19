@@ -1,5 +1,3 @@
-FROM debian:buster-slim
-COPY target/badge /app/badge
-RUN chmod +x /app/badge
-EXPOSE 8080
-ENTRYPOINT [ "/app/badge" ]
+FROM scratch
+COPY target/badge /badge
+ENTRYPOINT [ "/badge", "-Djava.io.tmpdir=/", "-Dspring.profiles.active=production" ]

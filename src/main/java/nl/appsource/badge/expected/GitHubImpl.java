@@ -2,12 +2,11 @@ package nl.appsource.badge.expected;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.badge.controller.BadgeException;
 import nl.appsource.badge.controller.BadgeStatus;
 import nl.appsource.badge.model.github.GitHubResponse;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,16 +39,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@ConfigurationProperties(prefix = "badge.github")
 public class GitHubImpl implements GitHub {
-
-    @Getter
-    @Setter
-    private int cacheExpireTimeoutSeconds;
-
-    @Getter
-    @Setter
-    private String token;
 
     private static final String OWNER = "owner";
     private static final String REPO = "repo";
@@ -62,6 +52,8 @@ public class GitHubImpl implements GitHub {
     private static final String RESET = "X-RateLimit-Reset";
 
     private final RestTemplate restTemplate;
+
+    private final Environment environment;
 
     @Getter
     private final MyCache<String, BadgeStatus> cache = new MyCacheImpl<>();
@@ -100,6 +92,8 @@ public class GitHubImpl implements GitHub {
             final HttpHeaders requestHeaders = new HttpHeaders();
 
             requestHeaders.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
+
+            final String token = System.getenv("GITHUB_TOKEN");
 
             if (StringUtils.hasText(token)) {
                 requestHeaders.add(AUTHORIZATION, "token " + token);
