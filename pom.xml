@@ -161,6 +161,9 @@
                             <buildArgs>
                                 -Dspring.profiles.active=production
                                 -Dspring.native.mode=functional
+                                -Dspring.native.remove-yaml-support=true
+                                -Dspring.native.remove-xml-support=true
+                                -Dspring.native.remove-spel-support=true
                                 -Dspring.native.remove-jmx-support=true
                                 -H:Name=badge
                                 -H:IncludeResources=.*\.svg$
