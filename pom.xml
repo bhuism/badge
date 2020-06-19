@@ -141,7 +141,6 @@
             <id>native</id>
             <properties>
                 <graalvm.version>20.1.0</graalvm.version>
-                <spring-graalvm-native.version>0.7.1</spring-graalvm-native.version>
                 <skipNative>false</skipNative>
             </properties>
             <dependencies>
@@ -156,7 +155,7 @@
                 <dependency>
                     <groupId>org.springframework.experimental</groupId>
                     <artifactId>spring-graalvm-native</artifactId>
-                    <version>${spring-graalvm-native.version}</version>
+                    <version>0.7.1</version>
                 </dependency>
             </dependencies>
             <build>
@@ -170,15 +169,25 @@
                                 -Dspring.profiles.active=production
                                 -Dspring.native.mode=functional
                                 -Dspring.native.remove-jmx-support=true
-                                --enable-https
                                 -H:Name=badge
                                 -H:IncludeResources=.*\.svg$
                                 -H:IncludeResources=.*\.txt$
                                 -H:IncludeResources=.*\.json$
                                 -H:ReflectionConfigurationResources=manual-reflection.json
+                                -H:UseMuslC=${project.build.directory}/bundle/
+                                --enable-https
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
+                                --native-image-info
+                                --static
+                                --install-exit-handlers
+                                --no-fallback
                             </buildArgs>
+
+<!--
+                                - -static
+                                -H:UseMuslC=${project.build.directory}/bundle/
+-->
                             <skip>${skipNative}</skip>
                         </configuration>
                         <executions>

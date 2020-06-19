@@ -1,6 +1,6 @@
 {
   "git": {
-    "branch": "@env.COMMIT_SHA@",
+    "branch": "@env.BRANCH_NAME@",
     "commit": {
       "id": "@env.SHORT_SHA@",
       "time": "@maven.build.timestamp@"

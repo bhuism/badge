@@ -1,10 +1,9 @@
 steps:
-  - name: 'springci/spring-graalvm-native:master-java11'
-    args: ['mvn', '-B', '-Pnative', 'package']
+  - name: 'oracle/graalvm-ce:20.1.0-java11'
+    args: ['./build.sh']
     env:
-      - 'COMMIT_SHA=$COMMIT_SHA'
+      - 'BRANCH_NAME=$BRANCH_NAME'
       - 'SHORT_SHA=$SHORT_SHA'
-      - 'GITHUB_TOKEN=$_GITHUB_TOKEN'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'eu.gcr.io/badge-260212/badge', '.']
@@ -13,7 +12,8 @@ steps:
     args: ['push', 'eu.gcr.io/badge-260212/badge']
 
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '120Mi', '--timeout', '60s', '--allow-unauthenticated']
+    args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--set-env-vars=GITHUB_TOKEN=$_GITHUB_TOKEN','--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '120Mi', '--timeout', '60s', '--allow-unauthenticated']
 
 options:
-  machineType: 'N1_HIGHCPU_32'
+  machineType: 'N1_HIGHCPU_8'
+
