@@ -176,11 +176,6 @@
                                 --install-exit-handlers
                                 --no-fallback
                             </buildArgs>
-
-<!--
-                                - -static
-                                -H:UseMuslC=${project.build.directory}/bundle/
--->
                             <skip>${skipNative}</skip>
                         </configuration>
                         <executions>
