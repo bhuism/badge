@@ -2,8 +2,10 @@ steps:
   - name: 'oracle/graalvm-ce:20.1.0-java11'
     args: ['./build.sh']
     env:
-      - 'BRANCH_NAME=$BRANCH_NAME'
+      - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
+      - 'BRANCH_NAME=$BRANCH_NAME'
+      - 'NATIVEPROFILE=$_NATIVEPROFILE'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'eu.gcr.io/badge-260212/badge', '.']
