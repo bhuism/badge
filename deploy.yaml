@@ -5,6 +5,7 @@ steps:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
       - 'BRANCH_NAME=$BRANCH_NAME'
+      - 'MAVEN_OPTS=$_MAVEN_OPTS'
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'eu.gcr.io/badge-260212/badge', '.']

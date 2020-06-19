@@ -17,4 +17,4 @@ export PATH=$PATH:/opt/maven/bin
 
 curl -L -o target/musl.tar.gz https://github.com/gradinac/musl-bundle-example/releases/download/v1.0/musl.tar.gz && tar -xzf target/musl.tar.gz -C target
 
-mvn -B -DskipTests -Pnative package
+mvn -B -DskipTests package
