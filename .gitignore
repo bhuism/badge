@@ -33,3 +33,5 @@ build/
 
 .mvn
 google-key.json
+/run.sh
+/submit.sh

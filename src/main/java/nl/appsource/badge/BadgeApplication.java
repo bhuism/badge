@@ -1,5 +1,6 @@
 package nl.appsource.badge;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.badge.actual.Actuator;
 import nl.appsource.badge.controller.ActuatorController;
@@ -11,16 +12,22 @@ import nl.appsource.badge.expected.GitHubImpl;
 import nl.appsource.badge.expected.GitLabImpl;
 import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.fu.jafu.JafuApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.core.ParameterizedTypeReference.forType;
 import static org.springframework.fu.jafu.Jafu.webApplication;
 import static org.springframework.fu.jafu.webmvc.WebMvcServerDsl.webMvc;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -39,8 +46,21 @@ public class BadgeApplication {
 
     private static final Supplier<ServerResponse.BodyBuilder> NOCACHES = () -> ok().headers(NOCACHE_HEADERS);
 
+    @RequiredArgsConstructor
+    private static class RouterCall {
+        public final String pattern;
+        public final MediaType contentType;
+        public final Function<ServerRequest, Object> handlerFunction;
+    }
+
     public static final JafuApplication app = webApplication(
+
             a -> a.beans(b -> b
+                    .bean(CommandLineRunner.class, () -> arguments -> {
+                        System.out.println("jafu running!");
+
+
+                    })
                     .bean(RestTemplate.class)
                     .bean(Actuator.class)
                     .bean(GitHubImpl.class)
@@ -58,54 +78,23 @@ public class BadgeApplication {
                                                 final BadgeController badgeController = s.ref(BadgeController.class);
                                                 final ActuatorController actuatorController = s.ref(ActuatorController.class);
 
-                                                router
+                                                final List<RouterCall> calls = Arrays.asList(
+                                                        new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
+                                                        new RouterCall("/gitlab/actuator/{id}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())),
+                                                        new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
+                                                        new RouterCall("/github/actuator/{owner}/{repo}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
+                                                        new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}", APPLICATION_JSON, (r) -> badgeController.shieldsIoGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
+                                                        new RouterCall("/fixed/actuator/{latest}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
+                                                        new RouterCall("/github/actuator/{owner}/{repo}/{branch}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
+                                                        new RouterCall("/actuator/info", APPLICATION_JSON, (r) -> actuatorController.info()),
+                                                        new RouterCall("/actuator/health", APPLICATION_JSON, (r) -> actuatorController.health())
+                                                );
 
-                                                        .GET("/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(IMAGE_SVGXML)
-                                                                        .body(badgeController.badgeGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha")))
-                                                        )
+                                                calls.stream().forEach(rc -> {
+                                                    router.GET(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r), forType(String.class)));
+                                                    router.HEAD(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).build());
+                                                });
 
-                                                        .GET("/gitlab/actuator/{id}/{branch}/badge.svg",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(IMAGE_SVGXML)
-                                                                        .body(badgeController.badgeGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())))
-
-                                                        .GET("/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(IMAGE_SVGXML)
-                                                                        .body(badgeController.badgeGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))))
-
-
-                                                        .GET("/github/actuator/{owner}/{repo}/{branch}/badge.svg",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(IMAGE_SVGXML)
-                                                                        .body(badgeController.badgeGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())))
-
-                                                        .GET("/github/sha/{owner}/{repo}/{branch}/{commit_sha}",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(APPLICATION_JSON)
-                                                                        .body(badgeController.shieldsIoGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))))
-
-                                                        .GET("/github/actuator/{owner}/{repo}/{branch}",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(APPLICATION_JSON)
-                                                                        .body(badgeController.shieldsIoActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())))
-
-                                                        .GET("/fixed/actuator/{latest}",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(APPLICATION_JSON)
-                                                                        .body(badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())))
-
-
-                                                        .GET("/actuator/info",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(APPLICATION_JSON)
-                                                                        .body(actuatorController.info()))
-                                                        .GET("/actuator/health",
-                                                                (r) -> NOCACHES.get()
-                                                                        .contentType(APPLICATION_JSON)
-                                                                        .body(actuatorController.health()));
                                             }
                                     )
                                     .converters(c -> c
@@ -118,7 +107,10 @@ public class BadgeApplication {
     );
 
     public static void main(String[] args) {
+
+
         app.run(args);
+
     }
 
 }
