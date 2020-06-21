@@ -20,12 +20,12 @@ import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 import static org.springframework.fu.jafu.Jafu.webApplication;
 import static org.springframework.fu.jafu.webmvc.WebMvcServerDsl.webMvc;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -71,7 +71,7 @@ public class BadgeApplication {
                                         final BadgeController badgeController = s.ref(BadgeController.class);
                                         final ActuatorController actuatorController = s.ref(ActuatorController.class);
 
-                                        final List<RouterCall> calls = Arrays.asList(
+                                        asList(
                                                 new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
                                                 new RouterCall("/gitlab/actuator/{id}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())),
                                                 new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
@@ -81,9 +81,7 @@ public class BadgeApplication {
                                                 new RouterCall("/github/actuator/{owner}/{repo}/{branch}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
                                                 new RouterCall("/actuator/info", APPLICATION_JSON, (r) -> actuatorController.info()),
                                                 new RouterCall("/actuator/health", APPLICATION_JSON, (r) -> actuatorController.health())
-                                        );
-
-                                        calls.forEach(rc -> {
+                                        ).forEach(rc -> {
                                             router.GET(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
                                             router.HEAD(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).build());
                                         });
