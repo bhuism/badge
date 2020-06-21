@@ -81,5 +81,19 @@
   {
     "name": "nl.appsource.badge.output.Svg",
     "allPublicConstructors": true
+  },
+  {
+    "name": "ch.qos.logback.core.Appender",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "org.springframework.boot.logging.logback.LogbackLoggingSystem",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
   }
 ]

@@ -99,8 +99,6 @@ public class BadgeApplication {
     );
 
     public static void main(String[] args) {
-
-
         app.run(args);
 
     }
