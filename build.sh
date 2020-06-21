@@ -1,7 +1,5 @@
 #!/bin/sh
 
-env
-
 rm -Rf target
 mkdir target
 
