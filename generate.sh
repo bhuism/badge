@@ -1,6 +1,8 @@
 #!/bin/sh
 
-sudo rm -Rf target
+sudo rm -Rf target src/main/resources/META-INF/native-image
+
+mkdir -p src/main/resources/META-INF/native-image
 
 docker run -it --rm \
     --volume $(pwd):/build \
