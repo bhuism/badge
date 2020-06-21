@@ -12,6 +12,7 @@ import nl.appsource.badge.expected.GitHubImpl;
 import nl.appsource.badge.expected.GitLabImpl;
 import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.fu.jafu.JafuApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -95,6 +95,7 @@ public class BadgeApplication {
                             )
 
                     ))
+                    .logging(loggingDsl -> loggingDsl.level(LogLevel.INFO))
     );
 
     public static void main(String[] args) {
