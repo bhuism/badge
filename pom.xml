@@ -196,6 +196,12 @@
                                 --enable-https
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
+                                --initialize-at-build-time=com.google.gson.internal.bind.TypeAdapters
+                                --initialize-at-build-time=com.google.gson.Gson
+                                --initialize-at-build-time=org.springframework.cloud.gcp.logging.StackdriverJsonLayout
+                                --initialize-at-build-time=com.google.gson.internal.Excluder
+                                --initialize-at-build-time=com.google.gson.internal.JavaVersion
+                                --initialize-at-build-time=com.google.gson.internal.reflect.ReflectionAccessor
                                 --native-image-info
                                 --static
                                 --install-exit-handlers
