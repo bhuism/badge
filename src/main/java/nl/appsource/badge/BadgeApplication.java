@@ -26,7 +26,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.springframework.core.ParameterizedTypeReference.forType;
 import static org.springframework.fu.jafu.Jafu.webApplication;
 import static org.springframework.fu.jafu.webmvc.WebMvcServerDsl.webMvc;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -85,7 +84,7 @@ public class BadgeApplication {
                                         );
 
                                         calls.forEach(rc -> {
-                                            router.GET(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r), forType(String.class)));
+                                            router.GET(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
                                             router.HEAD(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).build());
                                         });
 
