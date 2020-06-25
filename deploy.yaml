@@ -8,13 +8,13 @@ steps:
       - "NATIVEPROFILE=$_NATIVEPROFILE"
 
   - name: "gcr.io/cloud-builders/docker"
-    args: ["login", "--username", "bhuism", "--password", "$_DOCKERHUBPASSWORD"]
-
-  - name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", 'eu.gcr.io/badge-260212/badge:latest', "-t", "bhuism/badge:latest", "."]
 
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", 'eu.gcr.io/badge-260212/badge:latest']
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["login", "--username", "bhuism", "--password", "$_DOCKERHUBPASSWORD"]
 
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "bhuism/badge:latest"]
