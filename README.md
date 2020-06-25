@@ -16,7 +16,9 @@
 Description
 -----------
 
-https://badge.odee.net/ is a flexible badge image generator showing if your deployed app is latest or not. Docker image availlable at https://hub.docker.com/r/bhuism/badge , just:
+https://badge.odee.net/ is a flexible badge image generator showing if your deployed app is latest or not.
+
+Docker image availlable at https://hub.docker.com/r/bhuism/badge, just:
 
 ```
 docker run -p 8080:8080 bhuism/badge
