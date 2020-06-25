@@ -59,6 +59,12 @@
     "allPublicConstructors": true
   },
   {
+    "name": "nl.appsource.badge.model.gitlab.nl.appsource.badge.model.gitlab.GitLabResponse",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
     "name": "nl.appsource.badge.model.github.GitHubResponse",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
