@@ -30,8 +30,5 @@ build/
 ### VS Code ###
 .vscode/
 
-
 .mvn
 google-key.json
-/run.sh
-/submit.sh
