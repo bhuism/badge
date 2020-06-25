@@ -159,17 +159,14 @@
                         <version>${graalvm.version}</version>
                         <configuration>
                             <buildArgs>
-                                -Dspring.profiles.active=production
                                 -Dspring.native.mode=functional
                                 -Dspring.native.remove-yaml-support=true
                                 -Dspring.native.remove-xml-support=true
                                 -Dspring.native.remove-spel-support=true
                                 -Dspring.native.remove-jmx-support=true
                                 -H:Name=badge
-                                -H:IncludeResources=.*\.svg$
-                                -H:IncludeResources=.*\.txt$
-                                -H:IncludeResources=.*\.json$
                                 -H:ReflectionConfigurationResources=manual-reflection.json
+                                -H:ResourceConfigurationFiles=classes/resource-config.json
                                 -H:+TraceClassInitialization
                                 -H:UseMuslC=${project.build.directory}/bundle/
                                 --enable-https

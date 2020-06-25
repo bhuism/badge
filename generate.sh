@@ -10,6 +10,4 @@ docker run -it --rm \
     --volume "$HOME"/.m2:/root/.m2 \
     -p 8080:8080 \
     oracle/graalvm-ce:20.1.0-java11 \
-    bash -c './build.sh ; $JAVA_HOME/bin/java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image -jar target/badge.jar'
-
-
+    bash -c './build.sh ; $JAVA_HOME/bin/java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image -Dspring.profiles.active=production -jar target/badge.jar'

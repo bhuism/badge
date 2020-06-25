@@ -95,5 +95,9 @@
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true,
     "allPublicConstructors": true
+  },
+  {
+    "name": "org.springframework.boot.NativePropertiesListener",
+    "allPublicConstructors": true
   }
 ]

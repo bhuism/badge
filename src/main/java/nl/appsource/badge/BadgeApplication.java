@@ -12,13 +12,18 @@ import nl.appsource.badge.expected.GitHubImpl;
 import nl.appsource.badge.expected.GitLabImpl;
 import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.fu.jafu.JafuApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -96,9 +101,15 @@ public class BadgeApplication {
                     ))
     );
 
-    public static void main(String[] args) {
-        app.run(args);
+    public static void main(String[] args) throws IOException {
 
+        final ClassLoader defaultClassLoader = ClassUtils.getDefaultClassLoader();
+        final Resource resource = new DefaultResourceLoader(defaultClassLoader).getResource("banner.txt");
+        final String banner = StreamUtils.copyToString(resource.getInputStream(), UTF_8);
+
+        System.out.println(banner);
+
+        app.run(args);
     }
 
 }
