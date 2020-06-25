@@ -18,9 +18,8 @@ steps:
 
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
-    args: ["-c", "docker login --username=bhuism --password=$DOCKERHUBPASSWORD"]
-    env:
-      - 'DOCKERHUBPASSWORD=$_DOCKERHUBPASSWORD'
+    args: ["-c", "docker login --username=bhuism --password=$_DOCKERHUBPASSWORD"]
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'bhuism/badge:latest']
 
