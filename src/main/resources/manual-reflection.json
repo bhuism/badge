@@ -75,7 +75,7 @@
     "name": "nl.appsource.badge.model.github.GitHubResponse[]"
   },
   {
-    "name": "nl.appsource.badge.model.gitlab.nl.appsource.badge.model.gitlab.GitLabResponse",
+    "name": "nl.appsource.badge.model.gitlab.GitLabResponse",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true
