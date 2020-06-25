@@ -1,28 +1,26 @@
 steps:
-  - name: 'oracle/graalvm-ce:20.1.0-java11'
-    args: ['./build.sh']
+  - name: "oracle/graalvm-ce:20.1.0-java11"
+    args: ["./build.sh"]
     env:
-      - 'COMMIT_SHA=$COMMIT_SHA'
-      - 'SHORT_SHA=$SHORT_SHA'
-      - 'BRANCH_NAME=$BRANCH_NAME'
-      - 'NATIVEPROFILE=$_NATIVEPROFILE'
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'eu.gcr.io/badge-260212/badge', '.']
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'eu.gcr.io/badge-260212/badge']
-
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'badge', '--image', 'eu.gcr.io/badge-260212/badge:latest', '--set-env-vars=GITHUB_TOKEN=$_GITHUB_TOKEN','--region', 'europe-west4', '--platform', 'managed', '--concurrency', '80', '--max-instances', '10', '--memory', '80Mi', '--timeout', '60s', '--allow-unauthenticated']
+      - "COMMIT_SHA=$COMMIT_SHA"
+      - "SHORT_SHA=$SHORT_SHA"
+      - "BRANCH_NAME=$BRANCH_NAME"
+      - "NATIVEPROFILE=$_NATIVEPROFILE"
 
   - name: "gcr.io/cloud-builders/docker"
-    entrypoint: "bash"
-    args: ["-c", "docker login --username=bhuism --password=$_DOCKERHUBPASSWORD"]
+    args: ["build", "-t", 'eu.gcr.io/badge-260212/badge:latest', "-t", "bhuism/badge:latest", "."]
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'bhuism/badge:latest']
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", 'eu.gcr.io/badge-260212/badge:latest']
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["login", "--username", "bhuism", "--password", "$_DOCKERHUBPASSWORD"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "bhuism/badge:latest"]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["run", "deploy", "badge", "--image", 'eu.gcr.io/badge-260212/badge:latest', "--set-env-vars=GITHUB_TOKEN=$_GITHUB_TOKEN","--region", "europe-west4", "--platform", "managed", "--concurrency", "80", "--max-instances", "10", "--memory", "80Mi", "--timeout", "60s", "--allow-unauthenticated"]
 
 options:
-  machineType: 'N1_HIGHCPU_8'
-
+  machineType: "N1_HIGHCPU_8"
