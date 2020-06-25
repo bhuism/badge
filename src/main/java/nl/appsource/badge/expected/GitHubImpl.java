@@ -93,12 +93,10 @@ public class GitHubImpl implements GitHub {
 
             requestHeaders.setAccept(Collections.singletonList(GITHUB_PREVIEW_MEDIATYPE));
 
-            final String token = System.getenv("GITHUB_TOKEN");
+            final String token = getToken();
 
             if (StringUtils.hasText(token)) {
                 requestHeaders.add(AUTHORIZATION, "token " + token);
-            } else {
-                log.error("Empty GITHUB_TOKEN");
             }
 
             final Map<String, String> vars = new HashMap<>();
@@ -148,6 +146,18 @@ public class GitHubImpl implements GitHub {
         } finally {
             log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(responseHeaders));
         }
+
+    }
+
+    private String getToken() {
+
+        final String token = System.getenv("GITHUB_TOKEN");
+
+        if (StringUtils.isEmpty(token)) {
+            log.error("Empty GITHUB_TOKEN");
+        }
+
+        return token;
 
     }
 

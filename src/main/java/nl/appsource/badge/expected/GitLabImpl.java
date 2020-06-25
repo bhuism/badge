@@ -10,17 +10,20 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.util.Arrays.asList;
 import static nl.appsource.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.badge.controller.BadgeStatus.Status.OUTDATED;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,8 +31,6 @@ public class GitLabImpl implements GitLab {
 
     private static final String ID = "id";
     private static final String REF_NAME = "ref_name";
-
-    private static final String GITLAB_BRANCHES_WHERE_HEAD_URL = "https://gitlab.com/api/v4/projects/{" + ID + "}/repository/commits?ref_name={" + REF_NAME + "}&per_page=1";
 
     private final RestTemplate restTemplate;
 
@@ -40,23 +41,27 @@ public class GitLabImpl implements GitLab {
 
     private BadgeStatus callGitLab(final String id, final String branch, final String commit_sha) throws BadgeException {
 
-        Long duration = null;
+        final long startTime = System.currentTimeMillis();
 
         try {
 
             final HttpHeaders requestHeaders = new HttpHeaders();
+
+
+            final String token = getToken();
+
+            if (StringUtils.hasText(token)) {
+                log.info("Using token: " + token);
+                requestHeaders.add(AUTHORIZATION, "bearer " + token);
+            }
+
 
             final Map<String, String> vars = new HashMap<>();
 
             vars.put(ID, id);
             vars.put(REF_NAME, branch);
 
-            final long startTime = System.currentTimeMillis();
-
-            final ResponseEntity<GitLabResponse[]> gitLabResponseEntity = restTemplate.exchange(GITLAB_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), GitLabResponse[].class, vars);
-
-
-            duration = Math.abs(System.currentTimeMillis() - startTime);
+            final ResponseEntity<GitLabResponse[]> gitLabResponseEntity = restTemplate.exchange(getBranchesWhereHeadUrl(), HttpMethod.GET, new HttpEntity<>(requestHeaders), GitLabResponse[].class, vars);
 
             if (gitLabResponseEntity.getBody() != null && gitLabResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
 
@@ -85,8 +90,37 @@ public class GitLabImpl implements GitLab {
             log.error("Gitlab", e);
             throw new BadgeException(new BadgeStatus(ERROR, "Gitlab:" + e.getLocalizedMessage()));
         } finally {
-            log.info("Gitlab: " + id + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, ");
+            log.info("Gitlab: " + id + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec, ");
         }
+
+    }
+
+    private String getBranchesWhereHeadUrl() {
+        return getUrl() + "/projects/{" + ID + "}/repository/commits?ref_name={" + REF_NAME + "}&per_page=1";
+    }
+
+    private String getUrl() {
+
+        final String url = System.getenv("GITLAB_URL");
+
+        if (StringUtils.isEmpty(url)) {
+            return "https://gitlab.com/api/v4";
+        } else {
+            return url;
+        }
+
+    }
+
+
+    private String getToken() {
+
+        final String token = System.getenv("GITLAB_TOKEN");
+
+        if (StringUtils.isEmpty(token)) {
+            log.error("Empty GITLAB_TOKEN");
+        }
+
+        return token;
 
     }
 
