@@ -2,36 +2,49 @@ package nl.appsource.badge.expected;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class MyCacheImpl<K, V> implements MyCache<K, V> {
 
+    private final static long EXPIRED_IN_SECONDS = 15;
+
     private final ConcurrentHashMap<K, V> _cache = new ConcurrentHashMap<>();
-
-    public MyCacheImpl() {
-
-        new Thread(() -> {
-            try {
-                while (true) {
-                    Thread.sleep(60 * 1000);
-                    _cache.clear();
-                }
-            } catch (final InterruptedException e) {
-                log.error("", e);
-            }
-        }).start();
-
-    }
+    private final ConcurrentHashMap<K, Long> _timestamp = new ConcurrentHashMap<>();
 
     @Override
     public V getIfPresent(final K key) {
+        synchronized (this) {
+
+            final Long expired = System.currentTimeMillis() + (EXPIRED_IN_SECONDS * 1000);
+
+            _timestamp.keySet().removeAll(
+                    _timestamp
+                            .entrySet()
+                            .stream()
+                            .filter(e -> e.getValue() < expired)
+                            .map(Entry::getKey)
+                            .map(_cache::remove)
+                            .collect(Collectors.toSet()))
+            ;
+        }
         return _cache.get(key);
     }
 
     @Override
     public void put(final K key, final V value) {
-        _cache.put(key, value);
+        synchronized (this) {
+            _cache.put(key, value);
+            _timestamp.put(key, System.currentTimeMillis());
+        }
     }
 
+    @Override
+    public int size() {
+        synchronized (this) {
+            return _cache.size();
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package nl.appsource.badge.expected;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.badge.controller.BadgeException;
@@ -31,6 +30,7 @@ import java.util.stream.Stream;
 
 import static java.lang.Math.min;
 import static java.util.stream.Collectors.joining;
+import static nl.appsource.badge.BadgeApplication.cache;
 import static nl.appsource.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.badge.controller.BadgeStatus.Status.OUTDATED;
@@ -55,9 +55,6 @@ public class GitHubImpl implements GitHub {
 
     private final Environment environment;
 
-    @Getter
-    private final MyCache<String, BadgeStatus> cache = new MyCacheImpl<>();
-
     private final BiFunction<HttpHeaders, String, String> safeHeaderPrint = (responseHeaders, key) ->
             responseHeaders == null ? null :
                     key + "=" + Optional.ofNullable(responseHeaders.get(key))
@@ -71,7 +68,7 @@ public class GitHubImpl implements GitHub {
 
     public BadgeStatus getBadgeStatus(final String owner, final String repo, final String branch, final String commit_sha) throws BadgeException {
 
-        final BadgeStatus cacheValue = getCache().getIfPresent(owner + "/" + repo + "/" + commit_sha);
+        final BadgeStatus cacheValue = cache.getIfPresent(getKey(owner, repo, branch, commit_sha));
 
         if (cacheValue != null) {
             return cacheValue;
@@ -127,7 +124,7 @@ public class GitHubImpl implements GitHub {
                     badgeStatus = new BadgeStatus(OUTDATED, commit_sha_short);
                 }
 
-                getCache().put(owner + "/" + repo + "/" + commit_sha, badgeStatus);
+                cache.put(getKey(owner, repo, branch, commit_sha), badgeStatus);
                 return badgeStatus;
 
             } else {
@@ -147,6 +144,10 @@ public class GitHubImpl implements GitHub {
             log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(responseHeaders));
         }
 
+    }
+
+    private String getKey(final String owner, final String repo, final String branch, final String commit_sha) {
+        return owner + "/" + repo + "/" + branch + "/" + commit_sha;
     }
 
     private String getToken() {

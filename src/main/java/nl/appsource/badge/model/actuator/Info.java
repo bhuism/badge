@@ -15,7 +15,7 @@ public class Info {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class Git {
+    public static class Git {
 
         private String branch;
 
@@ -23,7 +23,7 @@ public class Info {
         @Getter
         @Setter
         @JsonIgnoreProperties(ignoreUnknown = true)
-        public class Commit {
+        public static class Commit {
 
             private String id;
             private String time;

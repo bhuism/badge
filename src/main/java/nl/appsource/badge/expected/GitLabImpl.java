@@ -20,6 +20,7 @@ import java.util.Map;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.util.Arrays.asList;
+import static nl.appsource.badge.BadgeApplication.cache;
 import static nl.appsource.badge.controller.BadgeStatus.Status.ERROR;
 import static nl.appsource.badge.controller.BadgeStatus.Status.LATEST;
 import static nl.appsource.badge.controller.BadgeStatus.Status.OUTDATED;
@@ -36,7 +37,16 @@ public class GitLabImpl implements GitLab {
 
     @Override
     public BadgeStatus getBadgeStatus(final String id, final String branch, final String commit_sha) throws BadgeException {
-        return callGitLab(id, branch, commit_sha);
+
+        final BadgeStatus cacheValue = cache.getIfPresent(getKey(id, branch, commit_sha));
+
+        if (cacheValue != null) {
+            return cacheValue;
+        } else {
+            return callGitLab(id, branch, commit_sha);
+        }
+
+
     }
 
     private BadgeStatus callGitLab(final String id, final String branch, final String commit_sha) throws BadgeException {
@@ -47,11 +57,9 @@ public class GitLabImpl implements GitLab {
 
             final HttpHeaders requestHeaders = new HttpHeaders();
 
-
             final String token = getToken();
 
             if (StringUtils.hasText(token)) {
-                log.info("Using token: " + token);
                 requestHeaders.add(AUTHORIZATION, "bearer " + token);
             }
 
@@ -81,6 +89,7 @@ public class GitLabImpl implements GitLab {
                     badgeStatus = new BadgeStatus(OUTDATED, commit_sha_short);
                 }
 
+                cache.put(getKey(id, branch, commit_sha), badgeStatus);
                 return badgeStatus;
 
             } else {
@@ -111,6 +120,9 @@ public class GitLabImpl implements GitLab {
 
     }
 
+    private String getKey(String id, String branch, String commit_sha) {
+        return id + "/" + branch + "/" + commit_sha;
+    }
 
     private String getToken() {
 

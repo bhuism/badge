@@ -18,7 +18,7 @@ public class GitHubResponse {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class Commit {
+    public static class Commit {
 
         private String sha;
         private String url;
