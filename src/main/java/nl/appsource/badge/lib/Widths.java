@@ -1,7 +1,6 @@
 package nl.appsource.badge.lib;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import static java.util.Arrays.asList;
 
@@ -15,7 +14,7 @@ public class Widths {
                 ;
     }
 
-    public static final ArrayList<Double> simpleWidths = new ArrayList<>(asList(
+    private static final ArrayList<Double> simpleWidths = new ArrayList<>(asList(
             null
             , null
             , null

@@ -7,9 +7,13 @@ import nl.appsource.badge.controller.ActuatorController;
 import nl.appsource.badge.controller.ActuatorControllerImpl;
 import nl.appsource.badge.controller.BadgeController;
 import nl.appsource.badge.controller.BadgeControllerImpl;
+import nl.appsource.badge.controller.BadgeStatus;
 import nl.appsource.badge.expected.FixedImpl;
 import nl.appsource.badge.expected.GitHubImpl;
 import nl.appsource.badge.expected.GitLabImpl;
+import nl.appsource.badge.expected.MyCache;
+import nl.appsource.badge.expected.MyCacheImpl;
+import nl.appsource.badge.model.actuator.Info;
 import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -39,6 +43,8 @@ import static org.springframework.web.servlet.function.ServerResponse.ok;
 public class BadgeApplication {
 
     private static final MediaType IMAGE_SVGXML = new MediaType("image", "svg+xml", UTF_8);
+
+    public static final MyCache<String, BadgeStatus> cache = new MyCacheImpl<>();
 
     private static final Consumer<HttpHeaders> NOCACHE_HEADERS = (header) -> {
         header.set(HttpHeaders.EXPIRES, "0");
@@ -84,7 +90,8 @@ public class BadgeApplication {
                                                 new RouterCall("/fixed/actuator/{latest}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
                                                 new RouterCall("/github/actuator/{owner}/{repo}/{branch}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
                                                 new RouterCall("/actuator/info", APPLICATION_JSON, (r) -> actuatorController.info()),
-                                                new RouterCall("/actuator/health", APPLICATION_JSON, (r) -> actuatorController.health())
+                                                new RouterCall("/actuator/health", APPLICATION_JSON, (r) -> actuatorController.health()),
+                                                new RouterCall("/actuator/cache", APPLICATION_JSON, (r) -> actuatorController.cache())
                                         ).forEach(rc -> {
                                             router.GET(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
                                             router.HEAD(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).build());
@@ -102,6 +109,8 @@ public class BadgeApplication {
     );
 
     public static void main(String[] args) throws IOException {
+
+        System.out.println("result: " + Info.Git.Commit.class.toString());
 
         final ClassLoader defaultClassLoader = ClassUtils.getDefaultClassLoader();
         final Resource resource = new DefaultResourceLoader(defaultClassLoader).getResource("banner.txt");

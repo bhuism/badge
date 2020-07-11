@@ -1,5 +1,6 @@
 package nl.appsource.badge.controller;
 
+import nl.appsource.badge.BadgeApplication;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 
@@ -24,6 +25,11 @@ public class ActuatorControllerImpl implements ActuatorController {
     @Override
     public String health() {
         return "{\"status\": \"UP\"}";
+    }
+
+    @Override
+    public String cache() {
+        return "{\"size\": " + BadgeApplication.cache.size() + "}";
     }
 
 }

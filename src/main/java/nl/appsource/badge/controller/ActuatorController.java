@@ -6,4 +6,6 @@ public interface ActuatorController {
 
     String health();
 
+    String cache();
+
 }
