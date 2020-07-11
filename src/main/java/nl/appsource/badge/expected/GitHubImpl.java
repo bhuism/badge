@@ -71,8 +71,10 @@ public class GitHubImpl implements GitHub {
         final BadgeStatus cacheValue = cache.getIfPresent(getKey(owner, repo, branch, commit_sha));
 
         if (cacheValue != null) {
+            log.info("Cache hit");
             return cacheValue;
         } else {
+            log.info("Cache miss");
             return callGitHub(owner, repo, branch, commit_sha);
         }
 

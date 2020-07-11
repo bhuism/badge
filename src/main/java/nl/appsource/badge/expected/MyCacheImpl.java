@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class MyCacheImpl<K, V> implements MyCache<K, V> {
@@ -16,20 +15,19 @@ public class MyCacheImpl<K, V> implements MyCache<K, V> {
 
     @Override
     public V getIfPresent(final K key) {
+
         synchronized (this) {
 
-            final Long expired = System.currentTimeMillis() + (EXPIRED_IN_SECONDS * 1000);
+            final Long expired = System.currentTimeMillis() - (EXPIRED_IN_SECONDS * 1000);
 
-            _timestamp.keySet().removeAll(
-                    _timestamp
-                            .entrySet()
-                            .stream()
-                            .filter(e -> e.getValue() < expired)
-                            .map(Entry::getKey)
-                            .map(_cache::remove)
-                            .collect(Collectors.toSet()))
-            ;
+            _timestamp
+                    .entrySet()
+                    .stream()
+                    .filter(e -> e.getValue() < expired)
+                    .map(Entry::getKey)
+                    .forEach(_cache::remove);
         }
+
         return _cache.get(key);
     }
 

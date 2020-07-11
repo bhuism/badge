@@ -41,8 +41,10 @@ public class GitLabImpl implements GitLab {
         final BadgeStatus cacheValue = cache.getIfPresent(getKey(id, branch, commit_sha));
 
         if (cacheValue != null) {
+            log.info("Cache hit");
             return cacheValue;
         } else {
+            log.info("Cache miss");
             return callGitLab(id, branch, commit_sha);
         }
 
