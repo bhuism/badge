@@ -68,19 +68,19 @@ public class GitHubImpl implements GitHub {
 
     public BadgeStatus getBadgeStatus(final String owner, final String repo, final String branch, final String commit_sha) throws BadgeException {
 
-        final BadgeStatus cacheValue = cache.getIfPresent(getKey(owner, repo, branch, commit_sha));
+        return cache.computeIfAbsent(getKey(owner, repo, branch, commit_sha),  (a) -> callGitHub(owner, repo, branch, commit_sha));
 
-        if (cacheValue != null) {
-            log.info("Cache hit");
-            return cacheValue;
-        } else {
-            log.info("Cache miss");
-            return callGitHub(owner, repo, branch, commit_sha);
-        }
+//        if (cacheValue != null) {
+//            log.info("Cache hit");
+//            return cacheValue;
+//        } else {
+//            log.info("Cache miss");
+//            return ;
+//        }
 
     }
 
-    private BadgeStatus callGitHub(final String owner, final String repo, final String branch, final String commit_sha) throws BadgeException {
+    private BadgeStatus callGitHub(final String owner, final String repo, final String branch, final String commit_sha) {
 
         Long duration = null;
 
@@ -126,7 +126,6 @@ public class GitHubImpl implements GitHub {
                     badgeStatus = new BadgeStatus(OUTDATED, commit_sha_short);
                 }
 
-                cache.put(getKey(owner, repo, branch, commit_sha), badgeStatus);
                 return badgeStatus;
 
             } else {
@@ -135,13 +134,13 @@ public class GitHubImpl implements GitHub {
         } catch (final HttpClientErrorException.Forbidden f) {
             final HttpHeaders h = f.getResponseHeaders();
             log.warn("Got rate limited by github: " + f.getLocalizedMessage() + ", " + safeHeadersPrint.apply(h));
-            throw new BadgeException(new BadgeStatus(ERROR, "Github:" + f.getStatusText()));
+            return new BadgeStatus(ERROR, "Github:" + f.getStatusText());
         } catch (final HttpClientErrorException f) {
             log.error("Github: " + f.getLocalizedMessage());
-            throw new BadgeException(new BadgeStatus(ERROR, "Github:" + f.getStatusText()));
+            return new BadgeStatus(ERROR, "Github:" + f.getStatusText());
         } catch (final Exception e) {
             log.error("Github", e);
-            throw new BadgeException(new BadgeStatus(ERROR, "Github:" + e.getLocalizedMessage()));
+            return new BadgeStatus(ERROR, "Github:" + e.getLocalizedMessage());
         } finally {
             log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(responseHeaders));
         }

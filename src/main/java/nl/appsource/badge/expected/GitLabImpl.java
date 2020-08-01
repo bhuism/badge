@@ -37,21 +37,10 @@ public class GitLabImpl implements GitLab {
 
     @Override
     public BadgeStatus getBadgeStatus(final String id, final String branch, final String commit_sha) throws BadgeException {
-
-        final BadgeStatus cacheValue = cache.getIfPresent(getKey(id, branch, commit_sha));
-
-        if (cacheValue != null) {
-            log.info("Cache hit");
-            return cacheValue;
-        } else {
-            log.info("Cache miss");
-            return callGitLab(id, branch, commit_sha);
-        }
-
-
+        return cache.computeIfAbsent(getKey(id, branch, commit_sha), (key) -> callGitLab(id, branch, commit_sha));
     }
 
-    private BadgeStatus callGitLab(final String id, final String branch, final String commit_sha) throws BadgeException {
+    private BadgeStatus callGitLab(final String id, final String branch, final String commit_sha) {
 
         final long startTime = System.currentTimeMillis();
 
@@ -82,16 +71,15 @@ public class GitLabImpl implements GitLab {
                 final BadgeStatus badgeStatus;
 
                 if (gitLabResponse
-                        .stream()
-                        .findFirst()
-                        .filter(commit -> commit_sha_short.equals(commit.getShort_id()))
-                        .isPresent()) {
+                    .stream()
+                    .findFirst()
+                    .filter(commit -> commit_sha_short.equals(commit.getShort_id()))
+                    .isPresent()) {
                     badgeStatus = new BadgeStatus(LATEST, commit_sha_short);
                 } else {
                     badgeStatus = new BadgeStatus(OUTDATED, commit_sha_short);
                 }
 
-                cache.put(getKey(id, branch, commit_sha), badgeStatus);
                 return badgeStatus;
 
             } else {
@@ -99,7 +87,7 @@ public class GitLabImpl implements GitLab {
             }
         } catch (final Exception e) {
             log.error("Gitlab", e);
-            throw new BadgeException(new BadgeStatus(ERROR, "Gitlab:" + e.getLocalizedMessage()));
+            return new BadgeStatus(ERROR, "Gitlab:" + e.getLocalizedMessage());
         } finally {
             log.info("Gitlab: " + id + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec, ");
         }

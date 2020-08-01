@@ -1,11 +1,11 @@
 package nl.appsource.badge.expected;
 
+import java.util.function.Function;
+
 public interface MyCache<K, V> {
 
-    V getIfPresent(K key);
+    V computeIfAbsent(final K key, final Function<? super K, ? extends V> valueSupplier);
 
-    void put(K key, V value);
-
-    int size();
+    long mappingCount();
 
 }
