@@ -56,19 +56,19 @@ public class GitHubImpl implements GitHub {
     private final Environment environment;
 
     private final BiFunction<HttpHeaders, String, String> safeHeaderPrint = (responseHeaders, key) ->
-            responseHeaders == null ? null :
-                    key + "=" + Optional.ofNullable(responseHeaders.get(key))
-                            .map(Collection::stream)
-                            .flatMap(Stream::findFirst)
-                            .orElse(null);
+        responseHeaders == null ? null :
+            key + "=" + Optional.ofNullable(responseHeaders.get(key))
+                .map(Collection::stream)
+                .flatMap(Stream::findFirst)
+                .orElse(null);
 
     private final Function<HttpHeaders, String> safeHeadersPrint = (responseHeaders) ->
-            Stream.of(LIMIT, REMAINING, RESET).map(key -> safeHeaderPrint.apply(responseHeaders, key)).collect(joining(", "));
+        Stream.of(LIMIT, REMAINING, RESET).map(key -> safeHeaderPrint.apply(responseHeaders, key)).collect(joining(", "));
 
 
     public BadgeStatus getBadgeStatus(final String owner, final String repo, final String branch, final String commit_sha) throws BadgeException {
 
-        return cache.computeIfAbsent(getKey(owner, repo, branch, commit_sha),  (a) -> callGitHub(owner, repo, branch, commit_sha));
+        return cache.computeIfAbsent(getKey(owner, repo, branch, commit_sha), (a) -> callGitHub(owner, repo, branch, commit_sha));
 
 //        if (cacheValue != null) {
 //            log.info("Cache hit");
