@@ -1,0 +1,39 @@
+<configuration>
+
+    <springProfile name="production">
+        <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <fieldNames>
+                    <timestamp>[ignore]</timestamp>
+                    <version>[ignore]</version>
+                    <logger>[ignore]</logger>
+                    <thread>[ignore]</thread>
+                    <level>[ignore]</level>
+                    <levelValue>[ignore]</levelValue>
+                </fieldNames>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+
+    </springProfile>
+
+    <springProfile name="!production">
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+
+    </springProfile>
+
+    <logger name="com.mkyong" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+
+</configuration>
+
+
