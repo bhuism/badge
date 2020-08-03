@@ -1,11 +1,13 @@
 package nl.appsource.badge.controller;
 
 import nl.appsource.badge.BadgeApplication;
+import nl.appsource.badge.expected.MyCache;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -28,9 +30,8 @@ public class ActuatorControllerImpl implements ActuatorController {
     }
 
     @Override
-    public String cache() {
-        BadgeApplication.cache.removeOldEntries();
-        return "{\"size\": " + BadgeApplication.cache.mappingCount() + "}";
+    public Map<?, ?> cache() {
+        return Map.of("cache", BadgeApplication.cache.getStats());
     }
 
 }
