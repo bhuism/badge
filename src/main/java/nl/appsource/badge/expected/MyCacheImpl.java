@@ -12,6 +12,8 @@ public class MyCacheImpl<K, V> implements MyCache<K, V> {
 
     private final static long EXPIRED_IN_SECONDS = 60;
 
+    private final static long STARTED = System.currentTimeMillis() / 1000;
+
     private long calls;
     private long misses;
 
@@ -33,12 +35,13 @@ public class MyCacheImpl<K, V> implements MyCache<K, V> {
         private final long hits;
         private final long misses;
         private final long size;
+        private final long started;
     }
 
     @Override
     public Stats getStats() {
         removeOldEntries();
-        return new StatsImpl(calls - misses, misses, _cache.mappingCount());
+        return new StatsImpl(calls - misses, misses, _cache.mappingCount(), STARTED);
     }
 
     @Override

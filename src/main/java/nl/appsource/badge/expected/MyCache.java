@@ -10,6 +10,8 @@ public interface MyCache<K, V> {
         long getMisses();
 
         long getSize();
+
+        long getStarted();
     }
 
     V computeIfAbsent(final K key, final Function<? super K, ? extends V> valueSupplier);
