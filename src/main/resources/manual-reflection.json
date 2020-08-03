@@ -52,6 +52,19 @@
     "allPublicConstructors": true
   },
   {
+    "name": "nl.appsource.badge.expected.MyCache",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "nl.appsource.badge.expected.MyCache$Stats",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
     "name": "nl.appsource.badge.model.actuator.Info$Git$Commit",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
