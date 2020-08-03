@@ -29,6 +29,7 @@ public class ActuatorControllerImpl implements ActuatorController {
 
     @Override
     public String cache() {
+        BadgeApplication.cache.removeOldEntries();
         return "{\"size\": " + BadgeApplication.cache.mappingCount() + "}";
     }
 

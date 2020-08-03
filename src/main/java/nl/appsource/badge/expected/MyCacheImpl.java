@@ -23,7 +23,8 @@ public class MyCacheImpl<K, V> implements MyCache<K, V> {
         return _cache.mappingCount();
     }
 
-    private void removeOldEntries() {
+    @Override
+    public void removeOldEntries() {
         final Long expired = System.currentTimeMillis() - (EXPIRED_IN_SECONDS * 1000);
 
         _cache

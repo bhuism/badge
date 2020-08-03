@@ -8,4 +8,6 @@ public interface MyCache<K, V> {
 
     long mappingCount();
 
+    void removeOldEntries();
+    
 }
