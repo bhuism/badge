@@ -3,12 +3,15 @@ package nl.appsource.badge.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.badge.actual.Actuator;
-import nl.appsource.badge.expected.Fixed;
 import nl.appsource.badge.expected.GitHub;
 import nl.appsource.badge.expected.GitLab;
+import nl.appsource.badge.expected.GitLab.GitLabKey;
 import nl.appsource.badge.model.shieldsio.ShieldsIoResponse;
 import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
+import org.springframework.util.StringUtils;
+
+import static nl.appsource.badge.BadgeApplication.cache;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,68 +19,63 @@ public class BadgeControllerImpl implements BadgeController {
 
     private final GitHub gitHub;
     private final GitLab gitLab;
-    private final Fixed fixed;
     private final Actuator actuator;
     private final Svg svg;
     private final ShieldsIo shieldsIo;
 
-    @Override
-    public String badgeGitLab(final String id, final String branch, final String commit_sha) {
+    @FunctionalInterface
+    interface CatchBadgeException {
+        String get() throws BadgeException;
+    }
 
+    private String runWithBadgeException(final CatchBadgeException supplier) {
         try {
-            final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
-            return svg.create(badgeStatus);
+            return supplier.get();
         } catch (final BadgeException badgeException) {
             return svg.create(badgeException.getBadgeStatus());
         }
+    }
 
+    @Override
+    public String badgeGitLab(final String id, final String branch, final String current) {
+        return runWithBadgeException(() -> {
+            final String latest = cache.computeIfAbsent(new GitLabKey(id, branch), gitLab);
+            return svg.create(calcBadeStatus(latest, current));
+        });
     }
 
     @Override
     public String badgeGitLabActuator(final String id, final String branch, final String actuator_url) {
-
-        try {
-            final String commit_sha = actuator.getCommitSha(actuator_url);
-            final BadgeStatus badgeStatus = gitLab.getBadgeStatus(id, branch, commit_sha);
-            return svg.create(badgeStatus);
-        } catch (final BadgeException badgeException) {
-            return svg.create(badgeException.getBadgeStatus());
-        }
-
+        return runWithBadgeException(() -> {
+            final String latest = cache.computeIfAbsent(new GitLabKey(id, branch), gitLab);
+            final String current = cache.computeIfAbsent(actuator_url, actuator);
+            return svg.create(calcBadeStatus(latest, current));
+        });
     }
 
 
     @Override
-    public String badgeGitHub(final String owner, final String repo, final String branch, final String commit_sha) {
-
-        try {
-            final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
-            return svg.create(badgeStatus);
-        } catch (final BadgeException badgeException) {
-            return svg.create(badgeException.getBadgeStatus());
-        }
-
+    public String badgeGitHub(final String owner, final String repo, final String branch, final String current) {
+        return runWithBadgeException(() -> {
+            final String latest = cache.computeIfAbsent(new GitHub.GitHubKey(owner, repo, branch), gitHub);
+            return svg.create(calcBadeStatus(latest, current));
+        });
     }
 
     @Override
     public String badgeGitHubActuator(final String owner, final String repo, final String branch, final String actuator_url) {
-
-        try {
-            final String commit_sha = actuator.getCommitSha(actuator_url);
-            final BadgeStatus badgeStatus = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
-            return svg.create(badgeStatus);
-        } catch (final BadgeException badgeException) {
-            return svg.create(badgeException.getBadgeStatus());
-        }
-
+        return runWithBadgeException(() -> {
+            final String latest = cache.computeIfAbsent(new GitHub.GitHubKey(owner, repo, branch), gitHub);
+            final String current = cache.computeIfAbsent(actuator_url, actuator);
+            return svg.create(calcBadeStatus(latest, current));
+        });
     }
 
     @Override
-    public ShieldsIoResponse shieldsIoGitHub(final String owner, final String repo, final String branch, final String commit_sha) {
-
+    public ShieldsIoResponse shieldsIoGitHub(final String owner, final String repo, final String branch, final String current) {
         try {
-            final BadgeStatus status = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
-            return shieldsIo.create(status);
+            final String latest = cache.computeIfAbsent(new GitHub.GitHubKey(owner, repo, branch), gitHub);
+            return shieldsIo.create(calcBadeStatus(latest, current));
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());
         }
@@ -85,28 +83,38 @@ public class BadgeControllerImpl implements BadgeController {
 
     @Override
     public ShieldsIoResponse shieldsIoActuator(final String owner, final String repo, final String branch, final String actuator_url) {
-
         try {
-            final String commit_sha = actuator.getCommitSha(actuator_url);
-            final BadgeStatus status = gitHub.getBadgeStatus(owner, repo, branch, commit_sha);
-            return shieldsIo.create(status);
+            final String latest = cache.computeIfAbsent(new GitHub.GitHubKey(owner, repo, branch), gitHub);
+            final String current = cache.computeIfAbsent(actuator_url, actuator);
+            return shieldsIo.create(calcBadeStatus(latest, current));
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());
         }
-
     }
 
     @Override
     public ShieldsIoResponse shieldsIoActuator(final String latest, final String actuator_url) {
-
         try {
-            final String actual = actuator.getCommitSha(actuator_url);
-            final BadgeStatus status = fixed.getBadgeStatus(latest, actual);
-            return shieldsIo.create(status);
+            final String current = cache.computeIfAbsent(actuator_url, actuator);
+            return shieldsIo.create(calcBadeStatus(latest, current));
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());
         }
-
     }
 
+    private BadgeStatus calcBadeStatus(final String latest, String current) {
+        if (StringUtils.hasText(current)) {
+            if (StringUtils.hasText(latest)) {
+                if (current.equals(latest)) {
+                    return BadgeStatus.ofLatest(current);
+                } else {
+                    return BadgeStatus.ofOutDated(current);
+                }
+            } else {
+                return BadgeStatus.ofError("no latest");
+            }
+        } else {
+            return BadgeStatus.ofError("no current");
+        }
+    }
 }

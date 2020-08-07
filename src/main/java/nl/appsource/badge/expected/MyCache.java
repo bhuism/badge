@@ -1,8 +1,9 @@
 package nl.appsource.badge.expected;
 
+import java.io.Serializable;
 import java.util.function.Function;
 
-public interface MyCache<K, V> {
+public interface MyCache<V> {
 
     interface Stats {
         long getHits();
@@ -14,7 +15,7 @@ public interface MyCache<K, V> {
         long getStarted();
     }
 
-    V computeIfAbsent(final K key, final Function<? super K, ? extends V> valueSupplier);
+    <L extends Serializable> V computeIfAbsent(final L key, final Function<L, V> valueSupplier);
 
     Stats getStats();
 

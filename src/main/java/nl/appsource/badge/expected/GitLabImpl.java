@@ -18,12 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.min;
 import static java.util.Arrays.asList;
-import static nl.appsource.badge.BadgeApplication.cache;
 import static nl.appsource.badge.controller.BadgeStatus.Status.ERROR;
-import static nl.appsource.badge.controller.BadgeStatus.Status.LATEST;
-import static nl.appsource.badge.controller.BadgeStatus.Status.OUTDATED;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
@@ -35,12 +31,10 @@ public class GitLabImpl implements GitLab {
 
     private final RestTemplate restTemplate;
 
-    @Override
-    public BadgeStatus getBadgeStatus(final String id, final String branch, final String commit_sha) throws BadgeException {
-        return cache.computeIfAbsent(getKey(id, branch, commit_sha), (key) -> callGitLab(id, branch, commit_sha));
-    }
+    public String apply(final GitLabKey key) throws BadgeException {
 
-    private BadgeStatus callGitLab(final String id, final String branch, final String commit_sha) {
+        final String id = key.getId();
+        final String branch = key.getBranch();
 
         final long startTime = System.currentTimeMillis();
 
@@ -54,7 +48,6 @@ public class GitLabImpl implements GitLab {
                 requestHeaders.add(AUTHORIZATION, "bearer " + token);
             }
 
-
             final Map<String, String> vars = new HashMap<>();
 
             vars.put(ID, id);
@@ -66,27 +59,21 @@ public class GitLabImpl implements GitLab {
 
                 final List<GitLabResponse> gitLabResponse = asList(gitLabResponseEntity.getBody());
 
-                final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 7));
-
-                final BadgeStatus.Status badgeStatus = gitLabResponse
+                return gitLabResponse
                     .stream()
                     .findFirst()
                     .map(GitLabResponse::getShort_id)
                     .map(short_id -> short_id.substring(0, 7))
-                    .filter(short_id -> commit_sha_short.equals(short_id))
-                    .map((a) -> LATEST)
-                    .orElse(OUTDATED);
-
-                return new BadgeStatus(badgeStatus, commit_sha_short);
+                    .get();
 
             } else {
-                return new BadgeStatus(ERROR, gitLabResponseEntity.getStatusCode().getReasonPhrase());
+                throw new BadgeException(gitLabResponseEntity.getStatusCode().getReasonPhrase());
             }
         } catch (final Exception e) {
             log.error("Gitlab", e);
-            return new BadgeStatus(ERROR, "Gitlab:" + e.getLocalizedMessage());
+            throw new BadgeException("Gitlab:" + e.getLocalizedMessage());
         } finally {
-            log.info("Gitlab: " + id + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec, ");
+            log.info("Gitlab: " + id + ", branch=" + branch + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec, ");
         }
 
     }
@@ -105,10 +92,6 @@ public class GitLabImpl implements GitLab {
             return url;
         }
 
-    }
-
-    private String getKey(String id, String branch, String commit_sha) {
-        return id + "/" + branch + "/" + commit_sha;
     }
 
     private String getToken() {

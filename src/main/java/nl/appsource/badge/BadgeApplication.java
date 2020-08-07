@@ -7,8 +7,6 @@ import nl.appsource.badge.controller.ActuatorController;
 import nl.appsource.badge.controller.ActuatorControllerImpl;
 import nl.appsource.badge.controller.BadgeController;
 import nl.appsource.badge.controller.BadgeControllerImpl;
-import nl.appsource.badge.controller.BadgeStatus;
-import nl.appsource.badge.expected.FixedImpl;
 import nl.appsource.badge.expected.GitHubImpl;
 import nl.appsource.badge.expected.GitLabImpl;
 import nl.appsource.badge.expected.MyCache;
@@ -44,7 +42,7 @@ public class BadgeApplication {
 
     private static final MediaType IMAGE_SVGXML = new MediaType("image", "svg+xml", UTF_8);
 
-    public static final MyCache<String, BadgeStatus> cache = new MyCacheImpl<>();
+    public static final MyCache<String> cache = new MyCacheImpl<>();
 
     private static final Consumer<HttpHeaders> NOCACHE_HEADERS = (header) -> {
         header.set(HttpHeaders.EXPIRES, "0");
@@ -68,7 +66,6 @@ public class BadgeApplication {
             .bean(Actuator.class)
             .bean(GitHubImpl.class)
             .bean(GitLabImpl.class)
-            .bean(FixedImpl.class)
             .bean(BadgeControllerImpl.class)
             .bean(ActuatorControllerImpl.class)
             .bean(Svg.class)

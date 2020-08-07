@@ -27,10 +27,6 @@
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.badge.expected.FixedImpl",
-    "allPublicConstructors": true
-  },
-  {
     "name": "nl.appsource.badge.expected.GitHubImpl",
     "allPublicConstructors": true
   },

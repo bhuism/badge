@@ -1,12 +1,17 @@
 package nl.appsource.badge.controller;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public class BadgeException extends RuntimeException {
 
-@Getter
-@RequiredArgsConstructor
-public class BadgeException extends Exception {
+    public BadgeException(final String message) {
+        super(message);
+    }
 
-    private final BadgeStatus badgeStatus;
+    public BadgeException(final String message, final Exception e) {
+        super(message, e);
+    }
+
+    public BadgeStatus getBadgeStatus() {
+        return BadgeStatus.ofError(getMessage());
+    }
 
 }

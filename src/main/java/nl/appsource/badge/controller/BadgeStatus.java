@@ -4,8 +4,10 @@ package nl.appsource.badge.controller;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @Getter
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = PRIVATE)
 public class BadgeStatus {
 
     @Getter
@@ -24,5 +26,17 @@ public class BadgeStatus {
 
     private final Status status;
     private final String messageText;
+
+    public static BadgeStatus ofError(final String message) {
+        return new BadgeStatus(Status.ERROR, message);
+    }
+
+    public static BadgeStatus ofOutDated(final String message) {
+        return new BadgeStatus(Status.OUTDATED, message);
+    }
+
+    public static BadgeStatus ofLatest(final String message) {
+        return new BadgeStatus(Status.LATEST, message);
+    }
 
 }
