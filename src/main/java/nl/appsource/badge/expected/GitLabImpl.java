@@ -66,7 +66,7 @@ public class GitLabImpl implements GitLab {
 
                 final List<GitLabResponse> gitLabResponse = asList(gitLabResponseEntity.getBody());
 
-                final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 8));
+                final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 7));
 
                 final BadgeStatus badgeStatus;
 
