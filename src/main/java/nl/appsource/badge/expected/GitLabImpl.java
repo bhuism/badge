@@ -63,7 +63,6 @@ public class GitLabImpl implements GitLab {
                     .stream()
                     .findFirst()
                     .map(GitLabResponse::getShort_id)
-                    .map(short_id -> short_id.substring(0, 7))
                     .get();
 
             } else {

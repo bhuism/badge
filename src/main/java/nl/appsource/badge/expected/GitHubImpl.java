@@ -89,7 +89,7 @@ public class GitHubImpl implements GitHub {
             responseHeaders = gitHubResponseEntity.getHeaders();
 
             if (gitHubResponseEntity.getBody() != null && gitHubResponseEntity.getStatusCode().equals(HttpStatus.OK)) {
-                return gitHubResponseEntity.getBody().getSha().substring(0, 7);
+                return gitHubResponseEntity.getBody().getSha();
             } else {
                 throw new BadgeException(gitHubResponseEntity.getStatusCode().getReasonPhrase());
             }
