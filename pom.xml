@@ -166,7 +166,8 @@
                                 -H:ResourceConfigurationFiles=classes/resource-config.json
                                 -H:+TraceClassInitialization
                                 -H:UseMuslC=${project.build.directory}/bundle/
-                                --enable-https
+                                --enable-all-security-services
+                                --enable-url-protocols=https,http
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
                                 --native-image-info
