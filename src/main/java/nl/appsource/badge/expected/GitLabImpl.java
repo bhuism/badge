@@ -3,7 +3,6 @@ package nl.appsource.badge.expected;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.badge.controller.BadgeException;
-import nl.appsource.badge.controller.BadgeStatus;
 import nl.appsource.badge.model.gitlab.GitLabResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +18,6 @@ import java.util.Map;
 
 import static java.lang.Math.abs;
 import static java.util.Arrays.asList;
-import static nl.appsource.badge.controller.BadgeStatus.Status.ERROR;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
