@@ -28,6 +28,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.util.stream.Collectors.joining;
 import static nl.appsource.badge.BadgeApplication.cache;
@@ -82,7 +83,7 @@ public class GitHubImpl implements GitHub {
 
     private BadgeStatus callGitHub(final String owner, final String repo, final String branch, final String commit_sha) {
 
-        Long duration = null;
+        final long startTime = System.currentTimeMillis();
 
         HttpHeaders responseHeaders = null;
 
@@ -105,11 +106,7 @@ public class GitHubImpl implements GitHub {
             vars.put(COMMIT_SHA, commit_sha);
 
 
-            final long startTime = System.currentTimeMillis();
-
             final ResponseEntity<GitHubResponse[]> gitHubResponseEntity = restTemplate.exchange(GIT_BRANCHES_WHERE_HEAD_URL, HttpMethod.GET, new HttpEntity<>(requestHeaders), GitHubResponse[].class, vars);
-
-            duration = Math.abs(System.currentTimeMillis() - startTime);
 
             responseHeaders = gitHubResponseEntity.getHeaders();
 
@@ -142,7 +139,7 @@ public class GitHubImpl implements GitHub {
             log.error("Github", e);
             return new BadgeStatus(ERROR, "Github:" + e.getLocalizedMessage());
         } finally {
-            log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + duration + " msec, " + safeHeadersPrint.apply(responseHeaders));
+            log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", sha=" + commit_sha + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec, " + safeHeadersPrint.apply(responseHeaders));
         }
 
     }

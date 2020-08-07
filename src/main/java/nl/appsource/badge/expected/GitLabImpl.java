@@ -68,21 +68,16 @@ public class GitLabImpl implements GitLab {
 
                 final String commit_sha_short = commit_sha.substring(0, min(commit_sha.length(), 7));
 
-                final BadgeStatus badgeStatus;
-
-                if (gitLabResponse
+                final BadgeStatus.Status badgeStatus = gitLabResponse
                     .stream()
                     .findFirst()
                     .map(GitLabResponse::getShort_id)
                     .map(short_id -> short_id.substring(0, 7))
                     .filter(short_id -> commit_sha_short.equals(short_id))
-                    .isPresent()) {
-                    badgeStatus = new BadgeStatus(LATEST, commit_sha_short);
-                } else {
-                    badgeStatus = new BadgeStatus(OUTDATED, commit_sha_short);
-                }
+                    .map((a) -> LATEST)
+                    .orElse(OUTDATED);
 
-                return badgeStatus;
+                return new BadgeStatus(badgeStatus, commit_sha_short);
 
             } else {
                 return new BadgeStatus(ERROR, gitLabResponseEntity.getStatusCode().getReasonPhrase());

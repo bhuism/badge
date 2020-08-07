@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
+import static java.lang.Math.abs;
 import static nl.appsource.badge.controller.BadgeStatus.Status.ERROR;
 
 @Slf4j
@@ -25,22 +26,31 @@ public class Actuator {
 
     public String getCommitSha(final String actuator_url) throws BadgeException {
 
+        final long startTime = System.currentTimeMillis();
+
         final HttpHeaders headers = new HttpHeaders();
+
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        String result = null;
 
         try {
 
             final ResponseEntity<Info> info = restTemplate.exchange(actuator_url, HttpMethod.GET, new HttpEntity<>(headers), Info.class);
 
             if (info.getStatusCode().equals(HttpStatus.OK)) {
-                return info.getBody().getGit().getCommit().getId();
+                result = info.getBody().getGit().getCommit().getId();
             } else {
-                return info.getStatusCode().getReasonPhrase();
+                result = info.getStatusCode().getReasonPhrase();
             }
+
+            return result;
 
         } catch (Exception e) {
             log.error("actuator: " + actuator_url, e);
             throw new BadgeException(new BadgeStatus(ERROR, "actuator:" + e.getLocalizedMessage()));
+        } finally {
+            log.info("Actuator: " + actuator_url + ", result=" + result + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec");
         }
 
     }
