@@ -44,14 +44,6 @@ public class BadgeControllerImpl implements BadgeController {
         }
     }
 
-//    private ShieldsIoResponse runWithBadgeException(final CatchBadgeException supplier) {
-//        try {
-//            return supplier.get();
-//        } catch (final BadgeException badgeException) {
-//            return shieldsIo.create(badgeException.getBadgeStatus());
-//        }
-//    }
-
     @Override
     public String badgeGitLab(final String id, final String branch, final String current) {
         return stringWithBadgeException(() -> {
@@ -112,14 +104,19 @@ public class BadgeControllerImpl implements BadgeController {
         });
     }
 
-    private BadgeStatus calcBadeStatus(final String latest, String current) {
-        if (StringUtils.hasText(current)) {
-            if (StringUtils.hasText(latest)) {
-                if (current.equals(latest)) {
+    private BadgeStatus calcBadeStatus(final String _latest, final String _current) {
+        if (StringUtils.hasText(_current) && _current.length() >= 7) {
+            if (StringUtils.hasText(_latest) && _latest.length() >= 7) {
+
+                final String latest = _latest.substring(0, 7);
+                final String current = _current.substring(0, 7);
+
+                if (latest.equals(current)) {
                     return BadgeStatus.ofLatest(current);
                 } else {
                     return BadgeStatus.ofOutDated(current);
                 }
+
             } else {
                 return BadgeStatus.ofError("no latest");
             }
