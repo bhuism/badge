@@ -1,6 +1,6 @@
 package nl.appsource.badge.output;
 
-import nl.appsource.badge.controller.BadgeStatus;
+import nl.appsource.badge.BadgeStatus;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.PropertyPlaceholderHelper;

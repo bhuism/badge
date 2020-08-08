@@ -1,4 +1,4 @@
-package nl.appsource.badge.controller;
+package nl.appsource.badge;
 
 
 import lombok.Getter;

@@ -1,9 +1,9 @@
 package nl.appsource.badge.output;
 
-import nl.appsource.badge.controller.BadgeStatus;
+import nl.appsource.badge.BadgeStatus;
 import nl.appsource.badge.model.shieldsio.ShieldsIoResponse;
 
-import static nl.appsource.badge.controller.BadgeStatus.Status.ERROR;
+import static nl.appsource.badge.BadgeStatus.Status.ERROR;
 
 public class ShieldsIo implements Output<ShieldsIoResponse> {
 

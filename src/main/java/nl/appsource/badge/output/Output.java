@@ -1,6 +1,6 @@
 package nl.appsource.badge.output;
 
-import nl.appsource.badge.controller.BadgeStatus;
+import nl.appsource.badge.BadgeStatus;
 
 public interface Output<T> {
 

@@ -23,7 +23,7 @@
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.badge.controller.BadgeControllerImpl",
+    "name": "nl.appsource.badge.service.BadgeControllerImpl",
     "allPublicConstructors": true
   },
   {

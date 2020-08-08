@@ -1,7 +1,9 @@
-package nl.appsource.badge.controller;
+package nl.appsource.badge.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.appsource.badge.BadgeException;
+import nl.appsource.badge.BadgeStatus;
 import nl.appsource.badge.actual.Actuator;
 import nl.appsource.badge.expected.GitHub;
 import nl.appsource.badge.expected.GitLab;

@@ -1,4 +1,4 @@
-package nl.appsource.badge.controller;
+package nl.appsource.badge.service;
 
 import nl.appsource.badge.model.shieldsio.ShieldsIoResponse;
 

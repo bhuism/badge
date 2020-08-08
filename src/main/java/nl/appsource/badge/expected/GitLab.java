@@ -3,7 +3,7 @@ package nl.appsource.badge.expected;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import nl.appsource.badge.controller.BadgeException;
+import nl.appsource.badge.BadgeException;
 
 import java.io.Serializable;
 import java.util.function.Function;

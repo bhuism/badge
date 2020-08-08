@@ -1,4 +1,4 @@
-package nl.appsource.badge.controller;
+package nl.appsource.badge;
 
 public class BadgeException extends RuntimeException {
 
