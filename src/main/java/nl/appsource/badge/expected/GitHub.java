@@ -8,7 +8,7 @@ import nl.appsource.badge.BadgeException;
 import java.io.Serializable;
 import java.util.function.Function;
 
-public interface GitHub extends Function<GitHub.GitHubKey, String>  {
+public interface GitHub extends Function<GitHub.GitHubKey, String> {
 
     @Getter
     @EqualsAndHashCode
