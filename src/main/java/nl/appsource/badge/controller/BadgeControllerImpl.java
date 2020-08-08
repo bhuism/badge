@@ -118,10 +118,10 @@ public class BadgeControllerImpl implements BadgeController {
                 }
 
             } else {
-                return BadgeStatus.ofError("no latest");
+                return BadgeStatus.ofError("latest:" + _latest);
             }
         } else {
-            return BadgeStatus.ofError("no current");
+            return BadgeStatus.ofError("current:" + _current);
         }
     }
 }

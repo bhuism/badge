@@ -1,7 +1,6 @@
 package nl.appsource.badge.controller;
 
 import nl.appsource.badge.BadgeApplication;
-import nl.appsource.badge.expected.MyCache;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 

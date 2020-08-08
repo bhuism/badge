@@ -1,7 +1,6 @@
-package nl.appsource.badge.expected;
+package nl.appsource.badge.cache;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class Timed<V> {

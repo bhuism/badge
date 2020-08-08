@@ -1,4 +1,4 @@
-package nl.appsource.badge.expected;
+package nl.appsource.badge.cache;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +26,13 @@ public class MyCacheImpl<V> implements MyCache<V> {
         calls++;
         return _cache.computeIfAbsent(_key, (key) -> {
             misses++;
-            return new Timed<V>(valueSupplier.apply((L) key), System.currentTimeMillis());
+            return new Timed<>(valueSupplier.apply((L) key), System.currentTimeMillis());
         }).getValue();
     }
 
     @Getter
     @RequiredArgsConstructor
-    public class StatsImpl implements Stats {
+    public static class StatsImpl implements Stats {
         private final long hits;
         private final long misses;
         private final long size;
