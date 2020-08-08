@@ -48,13 +48,13 @@
     "allPublicConstructors": true
   },
   {
-    "name": "nl.appsource.badge.expected.MyCache",
+    "name": "nl.appsource.badge.cache.MyCache",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true
   },
   {
-    "name": "nl.appsource.badge.expected.MyCache$Stats",
+    "name": "nl.appsource.badge.cache.MyCache$Stats",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true,
