@@ -81,13 +81,15 @@ public class BadgeApplication {
                         asList(
                             new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
                             new RouterCall("/gitlab/actuator/{id}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())),
+                            new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}", IMAGE_SVGXML, (r) -> badgeController.shieldsIoGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
+                            new RouterCall("/gitlab/actuator/{id}/{branch}", IMAGE_SVGXML, (r) -> badgeController.shieldsIoGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())),
 
                             new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
                             new RouterCall("/github/actuator/{owner}/{repo}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
                             new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}", APPLICATION_JSON, (r) -> badgeController.shieldsIoGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
-                            new RouterCall("/github/actuator/{owner}/{repo}/{branch}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
+                            new RouterCall("/github/actuator/{owner}/{repo}/{branch}", APPLICATION_JSON, (r) -> badgeController.shieldsIoGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
 
-                            new RouterCall("/fixed/actuator/{latest}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
+                            new RouterCall("/fixed/actuator/{latest}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
 
                             new RouterCall("/actuator/info", APPLICATION_JSON, (r) -> actuatorController.info()),
                             new RouterCall("/actuator/health", APPLICATION_JSON, (r) -> actuatorController.health()),

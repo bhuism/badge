@@ -8,13 +8,17 @@ public interface BadgeController {
 
     String badgeGitLabActuator(String id, String branch, String actuator_url);
 
+    ShieldsIoResponse shieldsIoGitLab(String id, String branch, String commit_sha);
+
+    ShieldsIoResponse shieldsIoGitLabActuator(String id, String branch, String actuator_url);
+
     String badgeGitHub(String owner, String repo, String branch, String commit_sha);
 
     String badgeGitHubActuator(String owner, String repo, String branch, String actuator_url);
 
     ShieldsIoResponse shieldsIoGitHub(String owner, String repo, String branch, String commit_sha);
 
-    ShieldsIoResponse shieldsIoActuator(String owner, String repo, String branch, String actuator_url);
+    ShieldsIoResponse shieldsIoGitHubActuator(String owner, String repo, String branch, String actuator_url);
 
     ShieldsIoResponse shieldsIoActuator(String latest, String actuator_url);
 

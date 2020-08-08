@@ -63,6 +63,22 @@ public class BadgeControllerImpl implements BadgeController {
         });
     }
 
+    @Override
+    public ShieldsIoResponse shieldsIoGitLab(final String id, final String branch, final String current) {
+        return shieldsIoWithBadgeException(() -> {
+            final String latest = cache.computeIfAbsent(new GitLab.GitLabKey(id, branch), gitLab);
+            return shieldsIo.create(calcBadeStatus(latest, current));
+        });
+    }
+
+    @Override
+    public ShieldsIoResponse shieldsIoGitLabActuator(final String id, final String branch, final String actuator_url) {
+        return shieldsIoWithBadgeException(() -> {
+            final String latest = cache.computeIfAbsent(new GitLab.GitLabKey(id, branch), gitLab);
+            final String current = cache.computeIfAbsent(actuator_url, actuator);
+            return shieldsIo.create(calcBadeStatus(latest, current));
+        });
+    }
 
     @Override
     public String badgeGitHub(final String owner, final String repo, final String branch, final String current) {
@@ -90,7 +106,7 @@ public class BadgeControllerImpl implements BadgeController {
     }
 
     @Override
-    public ShieldsIoResponse shieldsIoActuator(final String owner, final String repo, final String branch, final String actuator_url) {
+    public ShieldsIoResponse shieldsIoGitHubActuator(final String owner, final String repo, final String branch, final String actuator_url) {
         return shieldsIoWithBadgeException(() -> {
             final String latest = cache.computeIfAbsent(new GitHub.GitHubKey(owner, repo, branch), gitHub);
             final String current = cache.computeIfAbsent(actuator_url, actuator);
