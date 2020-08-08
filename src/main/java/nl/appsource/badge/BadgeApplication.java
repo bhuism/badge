@@ -9,7 +9,6 @@ import nl.appsource.badge.controller.ActuatorController;
 import nl.appsource.badge.controller.ActuatorControllerImpl;
 import nl.appsource.badge.expected.GitHubImpl;
 import nl.appsource.badge.expected.GitLabImpl;
-import nl.appsource.badge.model.actuator.Info;
 import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
 import nl.appsource.badge.service.BadgeController;
@@ -110,17 +109,16 @@ public class BadgeApplication {
             ))
     );
 
-    public static void main(String[] args) throws IOException {
-
-        System.out.println("result: " + Info.Git.Commit.class.toString());
+    public static void main(final String[] args) throws IOException {
 
         final ClassLoader defaultClassLoader = ClassUtils.getDefaultClassLoader();
         final Resource resource = new DefaultResourceLoader(defaultClassLoader).getResource("banner.txt");
         final String banner = StreamUtils.copyToString(resource.getInputStream(), UTF_8);
 
-        System.out.println(banner);
+        log.info(banner);
 
         app.run(args);
+
     }
 
 }
