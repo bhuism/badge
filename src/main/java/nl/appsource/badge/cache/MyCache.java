@@ -1,4 +1,4 @@
-package nl.appsource.badge.expected;
+package nl.appsource.badge.cache;
 
 import java.io.Serializable;
 import java.util.function.Function;
