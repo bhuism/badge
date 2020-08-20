@@ -130,7 +130,7 @@
                 </property>
             </activation>
             <properties>
-                <graalvm.version>20.1.0</graalvm.version>
+                <graalvm.version>20.2.0</graalvm.version>
                 <skipNative>false</skipNative>
             </properties>
             <dependencies>
