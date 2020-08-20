@@ -3,7 +3,7 @@
 #sudo rm -Rf target src/main/resources/META-INF/native-image
 sudo rm -Rf target
 
-IMAGE=oracle/graalvm-ce:20.1.0-java11
+IMAGE=oracle/graalvm-ce:20.2.0-java11
   
 mkdir -p src/main/resources/META-INF/native-image
 
