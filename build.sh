@@ -11,6 +11,15 @@ ln -s /opt/apache-maven-$MAVEN_VERSION /opt/maven
 
 export PATH=$PATH:/opt/maven/bin
 
-curl -L -o target/musl.tar.gz https://github.com/gradinac/musl-bundle-example/releases/download/v1.0/musl.tar.gz && tar -xzf target/musl.tar.gz -C target
+rm -Rf bundle
 
-mvn -B -DskipTests package
+#curl -L -o target/musl.tar.gz https://github.com/gradinac/musl-bundle-example/releases/download/v1.0/musl.tar.gz && tar -xzf target/musl.tar.gz -C target
+curl -L -o target/musl.tar.gz https://github.com/bhuism/musl-bundle-example/releases/download/v1.1/musl.tar.gz && tar -xzf target/musl.tar.gz -C target
+
+ln -s target/bundle
+
+export PATH=$PATH:/build/bundle/bin
+
+mvn -U -B -DskipTests package
+
+rm -Rf bundle
