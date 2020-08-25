@@ -74,13 +74,6 @@
     "allDeclaredConstructors": true
   },
   {
-    "name": "nl.appsource.badge.model.github.GitHubResponse$Commit",
-    "allDeclaredFields": true,
-    "allDeclaredMethods": true,
-    "allDeclaredConstructors": true,
-    "allPublicConstructors": true
-  },
-  {
     "name": "nl.appsource.badge.model.github.GitHubResponse[]"
   },
   {

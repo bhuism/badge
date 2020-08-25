@@ -21,6 +21,7 @@
     <properties>
         <java.version>11</java.version>
         <start-class>nl.appsource.badge.BadgeApplication</start-class>
+        <spring-fu-jafu.version>0.3.2</spring-fu-jafu.version>
     </properties>
 
     <distributionManagement>
@@ -50,7 +51,7 @@
         <dependency>
             <groupId>org.springframework.fu</groupId>
             <artifactId>spring-fu-jafu</artifactId>
-            <version>0.3.2</version>
+            <version>${spring-fu-jafu.version}</version>
         </dependency>
 
         <dependency>
@@ -165,13 +166,13 @@
                                 -H:ReflectionConfigurationResources=manual-reflection.json
                                 -H:ResourceConfigurationFiles=classes/resource-config.json
                                 -H:+TraceClassInitialization
-                                -H:UseMuslC=${project.build.directory}/bundle/
                                 --enable-all-security-services
                                 --enable-url-protocols=https,http
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
                                 --native-image-info
                                 --static
+                                --libc=musl
                                 --install-exit-handlers
                                 --no-fallback
                             </buildArgs>
@@ -196,6 +197,11 @@
     </profiles>
 
     <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Repository</name>
+            <url>https://repo.spring.io/snapshot</url>
+        </repository>
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
