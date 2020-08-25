@@ -20,6 +20,17 @@ ln -s target/bundle
 
 export PATH=$PATH:/build/bundle/bin
 
+echo PATH=$PATH
+echo 1
+ls -la target/bundle
+echo 2
+ls -la bundle
+echo 3
+ls -la bundle/bin
+
+echo Starting maven
+
+
 mvn -U -B -DskipTests package
 
 rm -Rf bundle
