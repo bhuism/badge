@@ -13,6 +13,7 @@ import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
 import nl.appsource.badge.service.BadgeController;
 import nl.appsource.badge.service.BadgeControllerImpl;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.fu.jafu.JafuApplication;
@@ -77,7 +78,12 @@ public class BadgeApplication {
                         final BadgeController badgeController = s.ref(BadgeController.class);
                         final ActuatorController actuatorController = s.ref(ActuatorController.class);
 
+                        router.GET("/", (r) ->
+                            ok().contentType(MediaType.TEXT_HTML).body(new ClassPathResource("/static/index.html"))
+                        );
+
                         asList(
+
                             new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
                             new RouterCall("/gitlab/actuator/{id}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())),
                             new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}", IMAGE_SVGXML, (r) -> badgeController.shieldsIoGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
@@ -93,6 +99,7 @@ public class BadgeApplication {
                             new RouterCall("/actuator/info", APPLICATION_JSON, (r) -> actuatorController.info()),
                             new RouterCall("/actuator/health", APPLICATION_JSON, (r) -> actuatorController.health()),
                             new RouterCall("/actuator/stats", APPLICATION_JSON, (r) -> actuatorController.cache())
+
                         ).forEach(rc -> {
                             router.GET(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
                             router.HEAD(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).build());
