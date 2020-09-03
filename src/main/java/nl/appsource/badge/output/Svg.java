@@ -1,11 +1,11 @@
 package nl.appsource.badge.output;
 
+import lombok.SneakyThrows;
 import nl.appsource.badge.BadgeStatus;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.PropertyPlaceholderHelper;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
@@ -16,7 +16,8 @@ public class Svg implements Output<String> {
 
     private final String template;
 
-    public Svg() throws IOException {
+    @SneakyThrows
+    public Svg() {
         template = FileCopyUtils.copyToString(new InputStreamReader(new ClassPathResource("/template.svg").getInputStream(), UTF_8));
     }
 

@@ -175,8 +175,7 @@
                                 -H:Name=badge
                                 -H:ReflectionConfigurationResources=manual-reflection.json
                                 -H:ResourceConfigurationFiles=classes/resource-config.json
-                                -H:+TraceClassInitialization
-                                -H:+PrintClassInitialization
+                                -H:+ReportExceptionStackTraces
                                 --enable-all-security-services
                                 --enable-url-protocols=https,http
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
