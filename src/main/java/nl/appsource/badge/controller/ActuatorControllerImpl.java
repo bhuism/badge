@@ -1,10 +1,10 @@
 package nl.appsource.badge.controller;
 
+import lombok.SneakyThrows;
 import nl.appsource.badge.BadgeApplication;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
@@ -14,7 +14,8 @@ public class ActuatorControllerImpl implements ActuatorController {
 
     private final String info;
 
-    public ActuatorControllerImpl() throws IOException {
+    @SneakyThrows
+    public ActuatorControllerImpl() {
         info = FileCopyUtils.copyToString(new InputStreamReader(new ClassPathResource("/info.json").getInputStream(), UTF_8));
     }
 
