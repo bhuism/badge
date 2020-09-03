@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -29,7 +28,6 @@ import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class GitHubImpl implements GitHub {
 
