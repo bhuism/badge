@@ -75,16 +75,17 @@ public class BadgeApplication {
                     .bean(Actuator.class, () -> new Actuator(restTemplate))
                     .bean(GitHubImpl.class, () -> new GitHubImpl(restTemplate))
                     .bean(GitLabImpl.class, () -> new GitLabImpl(restTemplate))
-                    .bean(Svg.class, () -> new Svg())
-                    .bean(ShieldsIo.class, () -> new ShieldsIo())
+                    .bean(Svg.class, Svg::new)
+                    .bean(ActuatorController.class, ActuatorControllerImpl::new)
+                    .bean(ShieldsIo.class, ShieldsIo::new)
+                    .bean(BadgeController.class, () -> new BadgeControllerImpl(b.ref(GitHub.class), b.ref(GitLab.class), b.ref(Actuator.class), b.ref(Svg.class), b.ref(ShieldsIo.class)))
                 )
                 .enable(webMvc(s -> s
                     .port(8080)
                     .router(router -> {
 
-                            final BadgeController badgeController = new BadgeControllerImpl(s.ref(GitHub.class), s.ref(GitLab.class), s.ref(Actuator.class), s.ref(Svg.class), s.ref(ShieldsIo.class));
-
-                            final ActuatorController actuatorController = new ActuatorControllerImpl();
+                            final BadgeController badgeController = s.ref(BadgeController.class);
+                            final ActuatorController actuatorController = s.ref(ActuatorController.class);
 
                             router.GET("/", (r) ->
                                 ok().contentType(MediaType.TEXT_HTML).body(new ClassPathResource("/static/index.html"))
