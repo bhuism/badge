@@ -21,12 +21,12 @@ public class MyCacheImpl<V> implements MyCache<V> {
     private final ConcurrentHashMap<Serializable, Timed<V>> _cache = new ConcurrentHashMap<>();
 
     @Override
-    public V computeIfAbsent(Serializable _key, Function<Serializable, V> valueSupplier) {
+    public <L extends Serializable> V computeIfAbsent(L _key, Function<L, V> valueSupplier) {
         removeOldEntries();
         calls++;
         return _cache.computeIfAbsent(_key, (key) -> {
             misses++;
-            return new Timed<>(valueSupplier.apply(key), System.currentTimeMillis());
+            return new Timed<>(valueSupplier.apply((L) key), System.currentTimeMillis());
         }).getValue();
     }
 

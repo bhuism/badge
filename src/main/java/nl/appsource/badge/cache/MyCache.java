@@ -15,7 +15,7 @@ public interface MyCache<V> {
         long getStarted();
     }
 
-    V computeIfAbsent(final Serializable key, final Function<Serializable, V> valueSupplier);
+    <L extends Serializable> V computeIfAbsent(final L key, final Function<L, V> valueSupplier);
 
     Stats getStats();
 
