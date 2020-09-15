@@ -17,8 +17,6 @@ import nl.appsource.badge.service.BadgeController;
 import nl.appsource.badge.service.BadgeControllerImpl;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.fu.jafu.JafuApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.ClassUtils;
@@ -47,13 +45,15 @@ public class BadgeApplication {
 
     private static final MediaType IMAGE_SVGXML = new MediaType("image", "svg+xml", UTF_8);
 
+    private static String commitSha;
+
     public static final MyCache<String> cache = new MyCacheImpl<>();
 
     private static final Consumer<HttpHeaders> NOCACHE_HEADERS = (header) -> {
         header.set(EXPIRES, "0");
         header.setPragma("no-cache");
         header.setCacheControl("no-cache, no-store, max-age=0, must-revalidate");
-        header.set(VERSION_HEADER, "@env.COMMIT_SHA@");
+        header.set(VERSION_HEADER, commitSha);
     };
 
     private static final Supplier<ServerResponse.BodyBuilder> OK_NOCACHE = () -> ok().headers(NOCACHE_HEADERS);
@@ -65,13 +65,15 @@ public class BadgeApplication {
         public final Function<ServerRequest, Object> handlerFunction;
     }
 
-    public static final JafuApplication app;
-
-    static {
+    public static void main(final String[] args) throws IOException {
 
         final RestTemplate restTemplate = new RestTemplate();
 
-        app = webApplication(
+        final ClassLoader defaultClassLoader = ClassUtils.getDefaultClassLoader();
+        final DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader(defaultClassLoader);
+        commitSha = StreamUtils.copyToString(defaultResourceLoader.getResource("version.properties").getInputStream(), UTF_8);
+
+        webApplication(
 
             a -> a
                 .beans(b -> b
@@ -127,18 +129,7 @@ public class BadgeApplication {
                     )
 
                 ))
-        );
-    }
-
-    public static void main(final String[] args) throws IOException {
-
-        final ClassLoader defaultClassLoader = ClassUtils.getDefaultClassLoader();
-        final Resource resource = new DefaultResourceLoader(defaultClassLoader).getResource("banner.txt");
-        final String banner = StreamUtils.copyToString(resource.getInputStream(), UTF_8);
-
-        log.info(banner);
-
-        app.run(args);
+        ).run(args);
 
     }
 

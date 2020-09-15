@@ -8,6 +8,9 @@
     },
     {
       "pattern": ".*\\.json$"
+    },
+    {
+      "pattern": ".*\\.properties$"
     }
   ]
 }
