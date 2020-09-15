@@ -36,23 +36,27 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static org.springframework.fu.jafu.Jafu.webApplication;
 import static org.springframework.fu.jafu.webmvc.WebMvcServerDsl.webMvc;
+import static org.springframework.http.HttpHeaders.EXPIRES;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.servlet.function.ServerResponse.ok;
 
 @Slf4j
 public class BadgeApplication {
 
+    private static final String VERSION_HEADER = "X-Badge-Version";
+
     private static final MediaType IMAGE_SVGXML = new MediaType("image", "svg+xml", UTF_8);
 
     public static final MyCache<String> cache = new MyCacheImpl<>();
 
     private static final Consumer<HttpHeaders> NOCACHE_HEADERS = (header) -> {
-        header.set(HttpHeaders.EXPIRES, "0");
+        header.set(EXPIRES, "0");
         header.setPragma("no-cache");
         header.setCacheControl("no-cache, no-store, max-age=0, must-revalidate");
+        header.set(VERSION_HEADER, "@env.COMMIT_SHA@");
     };
 
-    private static final Supplier<ServerResponse.BodyBuilder> NOCACHES = () -> ok().headers(NOCACHE_HEADERS);
+    private static final Supplier<ServerResponse.BodyBuilder> OK_NOCACHE = () -> ok().headers(NOCACHE_HEADERS);
 
     @RequiredArgsConstructor
     private static class RouterCall {
@@ -88,7 +92,7 @@ public class BadgeApplication {
                             final ActuatorController actuatorController = s.ref(ActuatorController.class);
 
                             router.GET("/", (r) ->
-                                ok().contentType(MediaType.TEXT_HTML).body(new ClassPathResource("/static/index.html"))
+                                ok().contentType(MediaType.TEXT_HTML).headers(NOCACHE_HEADERS).body(new ClassPathResource("/static/index.html"))
                             );
 
                             asList(
@@ -110,8 +114,8 @@ public class BadgeApplication {
                                 new RouterCall("/actuator/stats", APPLICATION_JSON, (r) -> actuatorController.cache())
 
                             ).forEach(rc -> {
-                                router.GET(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
-                                router.HEAD(rc.pattern, (r) -> NOCACHES.get().contentType(rc.contentType).build());
+                                router.GET(rc.pattern, (r) -> OK_NOCACHE.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
+                                router.HEAD(rc.pattern, (r) -> OK_NOCACHE.get().contentType(rc.contentType).build());
                             });
 
                         }
