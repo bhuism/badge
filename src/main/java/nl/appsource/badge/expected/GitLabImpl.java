@@ -29,6 +29,7 @@ public class GitLabImpl implements GitLab {
 
     private final RestTemplate restTemplate;
 
+    @Override
     public String apply(final GitLabKey key) throws BadgeException {
 
         final String id = key.getId();

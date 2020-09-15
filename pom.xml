@@ -118,6 +118,13 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
             </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/java/nl/appsource/badge</directory>
+                <includes>
+                    <include>BadgeApplication.java</include>
+                </includes>
+            </resource>
         </resources>
     </build>
 
