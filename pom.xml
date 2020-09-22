@@ -21,7 +21,7 @@
     <properties>
         <java.version>11</java.version>
         <start-class>nl.appsource.badge.BadgeApplication</start-class>
-        <spring-fu-jafu.version>0.4.0</spring-fu-jafu.version>
+        <spring-fu-jafu.version>0.4.1</spring-fu-jafu.version>
     </properties>
 
     <distributionManagement>
