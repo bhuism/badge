@@ -61,6 +61,13 @@
     "allPublicConstructors": true
   },
   {
+    "name": "nl.appsource.badge.lib.Widths",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true
+  },
+  {
     "name": "nl.appsource.badge.model.actuator.Info$Git$Commit",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
