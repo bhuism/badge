@@ -1,6 +1,7 @@
 package nl.appsource.badge.lib;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static java.util.Arrays.asList;
 
@@ -10,6 +11,7 @@ public class Widths {
         return (int) text.chars()
             .map(x -> x >= 0 && x <= 255 ? x : 32)
             .mapToDouble(simpleWidths::get)
+            .filter(Objects::nonNull)
             .sum()
             ;
     }
