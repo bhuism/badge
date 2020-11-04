@@ -14,7 +14,7 @@ export PATH=$PATH:/opt/maven/bin
 mkdir /build
 
 #curl -L -o target/musl.tar.gz https://github.com/gradinac/musl-bundle-example/releases/download/v1.0/musl.tar.gz && tar -xzf target/musl.tar.gz -C target
-curl -L -o target/musl.tar.gz https://github.com/bhuism/musl-bundle-example/releases/download/v1.1/musl.tar.gz && tar -xzf target/musl.tar.gz -C /build
+curl -sL -o target/musl.tar.gz https://github.com/bhuism/musl-bundle-example/releases/download/v1.1/musl.tar.gz && tar -xzf target/musl.tar.gz -C /build
 
 export PATH=$PATH:/build/bundle/bin
 
