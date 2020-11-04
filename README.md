@@ -24,8 +24,8 @@ Docker image availlable at https://hub.docker.com/r/bhuism/badge, just:
 docker run -p 8080:8080 bhuism/badge
 ```
 
-Run local
----------
+Build & Run
+-----------
 
 ```
 ./run.sh
