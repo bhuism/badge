@@ -172,14 +172,13 @@
                                 -H:ResourceConfigurationFiles=classes/resource-config.json
                                 -H:+ReportExceptionStackTraces
                                 -H:+TraceClassInitialization
+                                -H:+StaticExecutableWithDynamicLibC
                                 --enable-all-security-services
                                 --enable-url-protocols=https,http
                                 --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
                                 --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
                                 --initialize-at-build-time=org.springframework.boot.context.properties.bind.Bindable
                                 --native-image-info
-                                --static
-                                --libc=musl
                                 --install-exit-handlers
                                 --no-fallback
                             </buildArgs>
