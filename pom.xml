@@ -134,7 +134,7 @@
 
             <properties>
                 <graalvm.version>20.2.0</graalvm.version>
-                <skipNative>false</skipNative>
+                <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
             </properties>
 
             <dependencies>
@@ -183,7 +183,6 @@
                                 --install-exit-handlers
                                 --no-fallback
                             </buildArgs>
-                            <skip>${skipNative}</skip>
                         </configuration>
                         <executions>
                             <execution>
