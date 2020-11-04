@@ -22,6 +22,7 @@
         <java.version>11</java.version>
         <start-class>nl.appsource.badge.BadgeApplication</start-class>
         <spring-fu-jafu.version>0.4.2</spring-fu-jafu.version>
+        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
     </properties>
 
     <distributionManagement>
@@ -134,7 +135,6 @@
 
             <properties>
                 <graalvm.version>20.2.0</graalvm.version>
-                <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
             </properties>
 
             <dependencies>
