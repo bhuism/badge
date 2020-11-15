@@ -33,3 +33,5 @@ build/
 .mvn
 google-key.json
 /submit.sh
+
+bundle/
