@@ -134,7 +134,7 @@
             </activation>
 
             <properties>
-                <graalvm.version>20.2.0</graalvm.version>
+                <graalvm.version>20.3.0</graalvm.version>
             </properties>
 
             <dependencies>
@@ -167,17 +167,17 @@
                                 -Dspring.native.remove-xml-support=true
                                 -Dspring.native.remove-spel-support=true
                                 -Dspring.native.remove-jmx-support=true
+                                -Dspring.native.remove-unused-autoconfig=true
                                 -H:Name=badge
                                 -H:ReflectionConfigurationResources=manual-reflection.json
                                 -H:ResourceConfigurationFiles=classes/resource-config.json
                                 -H:+ReportExceptionStackTraces
-                                -H:+TraceClassInitialization
+                                -H:TraceClassInitialization=true
                                 -H:+StaticExecutableWithDynamicLibC
                                 --enable-all-security-services
-                                --enable-url-protocols=https,http
-                                --initialize-at-build-time=org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
-                                --initialize-at-build-time=org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
-                                --initialize-at-build-time=org.springframework.boot.context.properties.bind.Bindable
+                                --enable-url-protocols=https
+                                --initialize-at-build-time=org.springframework.boot.logging.java.JavaLoggingSystem$Factory
+                                --initialize-at-build-time=org.springframework.boot.logging.logback.LogbackLoggingSystem$Factory
                                 --native-image-info
                                 --install-exit-handlers
                                 --no-fallback
