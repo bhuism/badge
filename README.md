@@ -1,8 +1,10 @@
 # Deploy status Badge Service
 
 [![Version badge](https://badge.odee.net/github/actuator/bhuism/badge/master/badge.svg?actuator_url=https://badge.odee.net/actuator/info)](https://badge.odee.net)
-[![Renovate](https://badges.renovateapi.com/github/bhuism/badge)](https://renovate.whitesourcesoftware.com/)
+[![versionspringboot](https://img.shields.io/badge/dynamic/xml?color=brightgreen&url=https://raw.githubusercontent.com/bhuism/badge/master/pom.xml&query=%2F%2A%5Blocal-name%28%29%3D%27project%27%5D%2F%2A%5Blocal-name%28%29%3D%27parent%27%5D%2F%2A%5Blocal-name%28%29%3D%27version%27%5D&label=springboot)](https://github.com/spring-projects/spring-boot)
+[![versionspring-graalvm-native](https://img.shields.io/badge/dynamic/xml?color=brightgreen&url=https://raw.githubusercontent.com/bhuism/badge/master/pom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27graalvm.version%27%5D&label=graalvm)](https://github.com/spring-projects-experimental/spring-graalvm-native)
 [![Api Status](https://img.shields.io/badge/dynamic/json?color=4c1&label=api&query=%24.status&url=https%3A%2F%2Fbadge.odee.net%2Factuator%2Fhealth)](https://badge.odee.net/)
+[![Renovate](https://badges.renovateapi.com/github/bhuism/badge)](https://renovate.whitesourcesoftware.com/)
 [![Open Issues](https://img.shields.io/github/issues/bhuism/badge.svg)](https://github.com/bhuism/badge/issues)
 [![License](https://img.shields.io/github/license/bhuism/badge.svg?color=4c1)](https://github.com/bhuism/badge/blob/master/LICENSE)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5ae2a1bef066937ec493/maintainability)](https://codeclimate.com/github/bhuism/badge/maintainability)
