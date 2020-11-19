@@ -15,6 +15,7 @@ import nl.appsource.badge.output.ShieldsIo;
 import nl.appsource.badge.output.Svg;
 import nl.appsource.badge.service.BadgeController;
 import nl.appsource.badge.service.BadgeControllerImpl;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +40,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.servlet.function.ServerResponse.ok;
 
 @Slf4j
+@SpringBootApplication(proxyBeanMethods = false)
 public class BadgeApplication {
 
     private static final String VERSION_HEADER = "X-Badge-Version";

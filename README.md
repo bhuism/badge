@@ -32,6 +32,12 @@ Docker image availlable at https://hub.docker.com/r/bhuism/badge, just:
 docker run -p 8080:8080 bhuism/badge
 ```
 
+Build & Run
+-----------
+
+```
+./run.sh
+```
 
 Usage
 -----
@@ -64,7 +70,9 @@ GitLab Example:
 <img src="https://badge.odee.net/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg"></img>
 ```
 
+```
 https://badge.odee.net/gitlab/sha/12289803/master/14021d07/badge.svg
+```
 
 ShieldsIo endpoint Example:
 
@@ -82,7 +90,9 @@ https://badge.odee.net/github/sha/{user}/{repo}/{branch}/{commit_sha}
 
 Example:
 
+```
 https://badge.odee.net/github/sha/bhuism/badge/master/29d4e9731a09f535a230570a5be96c5c91e7a7ec
+```
 
 ShieldsIo Endpoint URL Example for actuator:
 
@@ -92,5 +102,6 @@ https://badge.odee.net/github/sha/{user}/{repo}/{branch}?actuator_url={actuator_
 
 Example:
 
+```
 https://img.shields.io/endpoint?url=https%3A%2F%2Fbadge.odee.net%2Fgithub%2Factuator%2Fbhuism%2Fbadge%2Fmaster%3Factuator_url%3Dhttps%3A%2F%2Fbadge.odee.net%2Factuator%2Finfo
-
+```

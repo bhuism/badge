@@ -3,18 +3,18 @@
 #sudo rm -Rf target src/main/resources/META-INF/native-image
 sudo rm -Rf target
 
-IMAGE=oracle/graalvm-ce:20.2.0-java11
+IMAGE=oracle/graalvm-ce:20.3.0-java11
   
 mkdir -p src/main/resources/META-INF/native-image
 
 docker run --rm \
-    --volume $(pwd):/build \
+    --volume "$(pwd)":/build \
     --workdir /build \
     --volume "$HOME"/.m2:/root/.m2 \
     -e NATIVEPROFILE=true \
-    -e COMMIT_SHA=`git rev-parse HEAD` \
-    -e SHORT_SHA=`git rev-parse --short HEAD` \
-    -e BRANCH_NAME=`git rev-parse --abbrev-ref HEAD` \
+    -e COMMIT_SHA="`git rev-parse HEAD`" \
+    -e SHORT_SHA="`git rev-parse --short HEAD`" \
+    -e BRANCH_NAME="`git rev-parse --abbrev-ref HEAD`" \
     $IMAGE \
     ./build.sh
 
