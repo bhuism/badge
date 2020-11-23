@@ -176,8 +176,6 @@
                                 -H:+StaticExecutableWithDynamicLibC
                                 --enable-all-security-services
                                 --enable-url-protocols=https
-                                --initialize-at-build-time=org.springframework.boot.logging.java.JavaLoggingSystem$Factory
-                                --initialize-at-build-time=org.springframework.boot.logging.logback.LogbackLoggingSystem$Factory
                                 --native-image-info
                                 --install-exit-handlers
                                 --no-fallback
