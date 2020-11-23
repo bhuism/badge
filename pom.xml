@@ -149,7 +149,7 @@
                 <dependency>
                     <groupId>org.springframework.experimental</groupId>
                     <artifactId>spring-graalvm-native</artifactId>
-                    <version>0.8.2</version>
+                    <version>0.8.3</version>
                 </dependency>
 
             </dependencies>
@@ -176,8 +176,6 @@
                                 -H:+StaticExecutableWithDynamicLibC
                                 --enable-all-security-services
                                 --enable-url-protocols=https
-                                --initialize-at-build-time=org.springframework.boot.logging.java.JavaLoggingSystem$Factory
-                                --initialize-at-build-time=org.springframework.boot.logging.logback.LogbackLoggingSystem$Factory
                                 --native-image-info
                                 --install-exit-handlers
                                 --no-fallback

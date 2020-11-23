@@ -40,7 +40,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.servlet.function.ServerResponse.ok;
 
 @Slf4j
-@SpringBootApplication(proxyBeanMethods = false)
+@SpringBootApplication
 public class BadgeApplication {
 
     private static final String VERSION_HEADER = "X-Badge-Version";
