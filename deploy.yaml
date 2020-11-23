@@ -22,6 +22,3 @@ steps:
 
   - name: "gcr.io/cloud-builders/gcloud"
     args: [ "run", "deploy", "badge", "--image", 'eu.gcr.io/badge-260212/badge:latest', "--set-env-vars=GITHUB_TOKEN=$_GITHUB_TOKEN","--region", "europe-west4", "--platform", "managed", "--concurrency", "80", "--max-instances", "10", "--memory", "128Mi", "--timeout", "15s", "--allow-unauthenticated" ]
-
-options:
-  machineType: "N1_HIGHCPU_8"
