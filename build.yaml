@@ -1,8 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/mvn'
     id: build
-    args: ['-B', 'install']
+    args: [ '-B', 'install' ]
     env:
       - 'COMMIT_SHA=$COMMIT_SHA'
       - 'SHORT_SHA=$SHORT_SHA'
       - 'BRANCH_NAME=$BRANCH_NAME'
+      - 'MAVEN_OPTS=-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
