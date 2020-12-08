@@ -45,6 +45,8 @@ public class BadgeApplication {
 
     private static final String VERSION_HEADER = "X-Badge-Version";
 
+    public static final String ACTUATOR = "/actuator";
+
     private static final MediaType IMAGE_SVGXML = new MediaType("image", "svg+xml", UTF_8);
 
     private static String commitSha;
@@ -113,9 +115,10 @@ public class BadgeApplication {
 
                                 new RouterCall("/fixed/actuator/{latest}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
 
-                                new RouterCall("/actuator/info", APPLICATION_JSON, (r) -> actuatorController.info()),
-                                new RouterCall("/actuator/health", APPLICATION_JSON, (r) -> actuatorController.health()),
-                                new RouterCall("/actuator/stats", APPLICATION_JSON, (r) -> actuatorController.cache())
+                                new RouterCall(ACTUATOR, APPLICATION_JSON, (r) -> actuatorController.index(r)),
+                                new RouterCall(ACTUATOR + "/info", APPLICATION_JSON, (r) -> actuatorController.info()),
+                                new RouterCall(ACTUATOR + "/health", APPLICATION_JSON, (r) -> actuatorController.health()),
+                                new RouterCall(ACTUATOR + "/stats", APPLICATION_JSON, (r) -> actuatorController.cache())
 
                             ).forEach(rc -> {
                                 router.GET(rc.pattern, (r) -> OK_NOCACHE.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
