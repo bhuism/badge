@@ -174,8 +174,8 @@
                                 -H:+ReportExceptionStackTraces
                                 -H:TraceClassInitialization=true
                                 -H:+StaticExecutableWithDynamicLibC
-                                --enable-all-security-services
-                                --enable-url-protocols=http,https
+                                --enable-http
+                                --enable-https
                                 --native-image-info
                                 --install-exit-handlers
                                 --no-fallback
