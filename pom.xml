@@ -135,6 +135,7 @@
 
             <properties>
                 <graalvm.version>20.3.0</graalvm.version>
+                <repackage.skip>true</repackage.skip>
             </properties>
 
             <dependencies>
