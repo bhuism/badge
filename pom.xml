@@ -175,7 +175,7 @@
                                 -H:TraceClassInitialization=true
                                 -H:+StaticExecutableWithDynamicLibC
                                 --enable-all-security-services
-                                --enable-url-protocols=https
+                                --enable-url-protocols=http,https
                                 --native-image-info
                                 --install-exit-handlers
                                 --no-fallback
