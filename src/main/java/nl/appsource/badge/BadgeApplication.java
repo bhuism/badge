@@ -20,6 +20,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -72,6 +74,13 @@ public class BadgeApplication {
     public static void main(final String[] args) throws IOException {
 
         final RestTemplate restTemplate = new RestTemplate();
+
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter() {
+            @Override
+            public boolean canRead(Type type, Class<?> contextClass, MediaType mediaType) {
+                return super.canRead(type, contextClass, mediaType != null && mediaType.equals(MediaType.APPLICATION_OCTET_STREAM) ? APPLICATION_JSON : mediaType);
+            }
+        });
 
         final ClassLoader defaultClassLoader = ClassUtils.getDefaultClassLoader();
         final DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader(defaultClassLoader);
