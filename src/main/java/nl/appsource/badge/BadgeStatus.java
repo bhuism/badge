@@ -1,6 +1,7 @@
 package nl.appsource.badge;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,6 +9,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @RequiredArgsConstructor(access = PRIVATE)
+@Builder
 public class BadgeStatus {
 
     @Getter

@@ -35,6 +35,8 @@ public class BadgeControllerImpl implements BadgeController {
             return supplier.get();
         } catch (final BadgeException badgeException) {
             return svg.create(badgeException.getBadgeStatus());
+        } catch (final Exception e) {
+            return svg.create(BadgeStatus.builder().status(BadgeStatus.Status.ERROR).messageText(e.getLocalizedMessage()).build());
         }
     }
 
@@ -43,6 +45,8 @@ public class BadgeControllerImpl implements BadgeController {
             return supplier.get();
         } catch (final BadgeException badgeException) {
             return shieldsIo.create(badgeException.getBadgeStatus());
+        } catch (final Exception e) {
+            return shieldsIo.create(BadgeStatus.builder().status(BadgeStatus.Status.ERROR).messageText(e.getLocalizedMessage()).build());
         }
     }
 
