@@ -16,7 +16,9 @@
 IFS=$'\n\t'
 set -eou pipefail
 
-for project in badge citaten citatenfront corona ; do
+gcloud config set account bas@appsource.nl
+
+for project in badge citaten citaten-client ; do
 
 	IMAGE=eu.gcr.io/badge-260212/$project
 
