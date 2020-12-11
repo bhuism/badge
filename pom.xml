@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
+        <version>2.4.1</version>
         <relativePath/>
     </parent>
 
@@ -135,6 +135,7 @@
 
             <properties>
                 <graalvm.version>20.3.0</graalvm.version>
+                <repackage.skip>true</repackage.skip>
             </properties>
 
             <dependencies>
@@ -174,8 +175,8 @@
                                 -H:+ReportExceptionStackTraces
                                 -H:TraceClassInitialization=true
                                 -H:+StaticExecutableWithDynamicLibC
-                                --enable-all-security-services
-                                --enable-url-protocols=https
+                                --enable-http
+                                --enable-https
                                 --native-image-info
                                 --install-exit-handlers
                                 --no-fallback
