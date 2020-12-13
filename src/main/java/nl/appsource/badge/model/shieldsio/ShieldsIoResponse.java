@@ -2,7 +2,6 @@ package nl.appsource.badge.model.shieldsio;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,6 @@ import static java.lang.Boolean.FALSE;
 @Getter
 @Setter
 @JsonInclude(NON_NULL)
-@Builder
 public class ShieldsIoResponse {
 
     private Long schemaVersion = 1L;
