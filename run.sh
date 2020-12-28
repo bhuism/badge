@@ -20,4 +20,4 @@ docker run --rm \
 
 docker rmi -f badge:latest
 docker build -t badge:latest .
-docker run -it -e GITHUB_TOKEN -e GITLAB_URL -e GITLAB_TOKEN -p 8080:8080 badge:latest
+docker run --rm -it -e GITHUB_TOKEN -e GITLAB_URL -e GITLAB_TOKEN -p 8080:8080 badge:latest

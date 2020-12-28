@@ -13,8 +13,6 @@ export PATH=$PATH:/opt/maven/bin
 
 mkdir /build
 
-export PATH=$PATH:/build/bundle/bin
-
 echo Starting maven
 mvn -U -B -DskipTests package
 

@@ -150,7 +150,7 @@
                 <dependency>
                     <groupId>org.springframework.experimental</groupId>
                     <artifactId>spring-graalvm-native</artifactId>
-                    <version>0.8.3</version>
+                    <version>0.8.5</version>
                 </dependency>
 
             </dependencies>
@@ -171,7 +171,7 @@
                                 -Dspring.native.remove-unused-autoconfig=true
                                 -H:Name=badge
                                 -H:ReflectionConfigurationResources=manual-reflection.json
-                                -H:ResourceConfigurationFiles=classes/resource-config.json
+                                -H:ResourceConfigurationResources=resource-config.json
                                 -H:+ReportExceptionStackTraces
                                 -H:TraceClassInitialization=true
                                 -H:+StaticExecutableWithDynamicLibC
