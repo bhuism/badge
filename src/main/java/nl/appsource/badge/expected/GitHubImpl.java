@@ -111,8 +111,8 @@ public class GitHubImpl implements GitHub {
 
         final String token = System.getenv("GITHUB_TOKEN");
 
-        if (StringUtils.isEmpty(token)) {
-            log.error("Empty GITHUB_TOKEN");
+        if (!StringUtils.hasText(token)) {
+            log.warn("Empty GITHUB_TOKEN");
         }
 
         return token;
