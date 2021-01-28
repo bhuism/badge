@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -67,9 +68,12 @@ public class GitLabImpl implements GitLab {
             } else {
                 throw new BadgeException(gitLabResponseEntity.getStatusCode().getReasonPhrase());
             }
+        } catch (HttpClientErrorException e) {
+            log.error("gitlab: " + e.getLocalizedMessage());
+            throw new BadgeException("actuator:" + e.getStatusText());
         } catch (final Exception e) {
             log.error("Gitlab", e);
-            throw new BadgeException("Gitlab:" + e.getLocalizedMessage());
+            throw new BadgeException("gitlab:" + e.getLocalizedMessage());
         } finally {
             log.info("Gitlab: " + id + ", branch=" + branch + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec, ");
         }

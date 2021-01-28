@@ -94,13 +94,13 @@ public class GitHubImpl implements GitHub {
         } catch (final HttpClientErrorException.Forbidden f) {
             final HttpHeaders h = f.getResponseHeaders();
             log.warn("Got rate limited by github: " + f.getLocalizedMessage() + ", " + safeHeadersPrint.apply(h));
-            throw new BadgeException("Github:" + f.getStatusText());
+            throw new BadgeException("github:" + f.getStatusText());
         } catch (final HttpClientErrorException f) {
             log.error("Github: " + f.getLocalizedMessage());
-            throw new BadgeException("Github:" + f.getStatusText());
+            throw new BadgeException("github:" + f.getStatusText());
         } catch (final Exception e) {
             log.error("Github", e);
-            throw new BadgeException("Github:" + e.getMessage());
+            throw new BadgeException("github:" + e.getMessage());
         } finally {
             log.info("Github: " + owner + "/" + repo + ", branch=" + branch + ", duration=" + abs(System.currentTimeMillis() - startTime) + " msec, " + safeHeadersPrint.apply(responseHeaders));
         }
