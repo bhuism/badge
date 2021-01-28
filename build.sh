@@ -3,13 +3,15 @@
 rm -Rf target
 mkdir target
 
-gu install --no-progress native-image
+apt -y update && apt -y upgrade && apt -y install maven
 
-MAVEN_VERSION=3.6.3
-curl -sL /tmp/maven.tar.gz https://www-us.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xz -C /opt
-ln -s /opt/apache-maven-$MAVEN_VERSION /opt/maven
+#gu update
+#gu install --no-progress native-image
 
-export PATH=$PATH:/opt/maven/bin
+#MAVEN_VERSION=3.6.3
+#curl -sL /tmp/maven.tar.gz https://www-us.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xz -C /opt
+#ln -s /opt/apache-maven-$MAVEN_VERSION /opt/maven
+#export PATH=$PATH:/opt/maven/bin
 
 mkdir /build
 
