@@ -1,5 +1,5 @@
 steps:
-  - name: "oracle/graalvm-ce:20.3.0-java11"
+  - name: "springci/graalvm-ce:21.0-dev-java11"
     args: [ "./build.sh" ]
   - name: "gcr.io/cloud-builders/docker"
     args: [ "build", "-t", 'eu.gcr.io/badge-260212/badge:latest', "-t", "bhuism/badge:latest", "." ]
