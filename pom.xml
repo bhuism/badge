@@ -21,7 +21,7 @@
     <properties>
         <java.version>11</java.version>
         <start-class>nl.appsource.badge.BadgeApplication</start-class>
-        <spring-fu-jafu.version>0.4.2</spring-fu-jafu.version>
+        <spring-fu-jafu.version>0.4.3</spring-fu-jafu.version>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
     </properties>
 
@@ -92,7 +92,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.1.4</version>
+                <version>4.2.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
@@ -150,7 +150,7 @@
                 <dependency>
                     <groupId>org.springframework.experimental</groupId>
                     <artifactId>spring-graalvm-native</artifactId>
-                    <version>0.8.3</version>
+                    <version>0.8.5</version>
                 </dependency>
 
             </dependencies>
@@ -171,7 +171,7 @@
                                 -Dspring.native.remove-unused-autoconfig=true
                                 -H:Name=badge
                                 -H:ReflectionConfigurationResources=manual-reflection.json
-                                -H:ResourceConfigurationFiles=classes/resource-config.json
+                                -H:ResourceConfigurationResources=resource-config.json
                                 -H:+ReportExceptionStackTraces
                                 -H:TraceClassInitialization=true
                                 -H:+StaticExecutableWithDynamicLibC

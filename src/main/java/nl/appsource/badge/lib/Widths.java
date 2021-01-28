@@ -1,54 +1,55 @@
 package nl.appsource.badge.lib;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
-import java.util.Objects;
 
 import static java.util.Arrays.asList;
 
+@Slf4j
 public class Widths {
 
     public static int getWidthOfString(final String text) {
         return (int) text.chars()
             .map(x -> x >= 0 && x <= 255 ? x : 32)
             .mapToDouble(simpleWidths::get)
-            .filter(Objects::nonNull)
             .sum()
             ;
     }
 
     private static final ArrayList<Double> simpleWidths = new ArrayList<>(asList(
-        null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
+        0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
         , 38.67
         , 43.29
         , 50.49
@@ -144,39 +145,39 @@ public class Widths {
         , 49.95
         , 69.82
         , 90.02
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
-        , null
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
+        , 0.0
         , 38.67
         , 43.29
         , 69.93
@@ -272,6 +273,6 @@ public class Widths {
         , 69.61
         , 65.1
         , 68.54
-        , null));
+        , 0.0));
 
 }

@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static nl.appsource.badge.lib.Widths.getWidthOfString;
+import static org.springframework.util.StringUtils.hasText;
 
 public class Svg implements Output<String> {
 
@@ -25,10 +26,12 @@ public class Svg implements Output<String> {
         return createSvgImage(badgeStatus.getStatus().getLabelText(), badgeStatus.getMessageText(), badgeStatus.getStatus().getLabelColor(), badgeStatus.getStatus().getMessageColor());
     }
 
-    private String createSvgImage(final String labelText, final String messageText, final String labelColor, final String messageColor) {
+    private String createSvgImage(final String _labelText, final String _messageText, final String labelColor, final String messageColor) {
+
+        final String labelText = hasText(_labelText) ? _labelText : "null";
+        final String messageText = hasText(_messageText) ? _messageText : "null";
 
         final Properties properties = new Properties();
-
         final double leftTextWidth = getWidthOfString(labelText) / 10.0;
         final double rightTextWidth = getWidthOfString(messageText) / 10.0;
         final double leftWidth = leftTextWidth + 10 + 14 + 3;

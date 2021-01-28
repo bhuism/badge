@@ -3,7 +3,12 @@
 #sudo rm -Rf target src/main/resources/META-INF/native-image
 sudo rm -Rf target
 
-IMAGE=oracle/graalvm-ce:20.3.0-java11
+#IMAGE=oracle/graalvm-ce:20.3.0-java11
+#IMAGE=springci/graalvm-ce:master-java11
+IMAGE=springci/graalvm-ce:21.0-dev-java11
+#IMAGE=springci/graalvm-ce:20.3-dev-java11
+
+
   
 mkdir -p src/main/resources/META-INF/native-image
 
@@ -20,4 +25,4 @@ docker run --rm \
 
 docker rmi -f badge:latest
 docker build -t badge:latest .
-docker run -it -e GITHUB_TOKEN -e GITLAB_URL -e GITLAB_TOKEN -p 8080:8080 badge:latest
+docker run --rm -it -e GITHUB_TOKEN -e GITLAB_URL -e GITLAB_TOKEN -p 8080:8080 badge:latest
