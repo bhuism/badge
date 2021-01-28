@@ -3,7 +3,12 @@
 #sudo rm -Rf target src/main/resources/META-INF/native-image
 sudo rm -Rf target
 
-IMAGE=oracle/graalvm-ce:20.3.0-java11
+#IMAGE=oracle/graalvm-ce:20.3.0-java11
+#IMAGE=springci/graalvm-ce:master-java11
+IMAGE=springci/graalvm-ce:21.0-dev-java11
+#IMAGE=springci/graalvm-ce:20.3-dev-java11
+
+
   
 mkdir -p src/main/resources/META-INF/native-image
 
