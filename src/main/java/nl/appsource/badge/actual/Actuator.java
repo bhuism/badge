@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -45,6 +46,9 @@ public class Actuator implements Function<String, String> {
 
             return result;
 
+        } catch (HttpClientErrorException e) {
+            log.error("actuator: " + actuator_url, e);
+            throw new BadgeException("actuator:" + e.getStatusText());
         } catch (Exception e) {
             log.error("actuator: " + actuator_url, e);
             throw new BadgeException("actuator:" + e.getLocalizedMessage());

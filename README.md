@@ -48,7 +48,7 @@ https://badge.odee.net/github/sha/bhuism/badge/master/29d4e9731a09f535a230570a5b
 When the commit_sha is not known (outside your app) the commit_sha can be retreived with the spring info actuator:
 
 ```
-<img src="https://badge.odee.net/github/sha/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}"></img>
+<img src="https://badge.odee.net/github/actuator/{user}/{repo}/{branch}/badge.svg?actuator_url={actuator_url}"></img>
 ```
 
 (Don't forget to urlencode the actualtor_url request parameter)
