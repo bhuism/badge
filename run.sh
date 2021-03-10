@@ -8,7 +8,7 @@ sudo rm -Rf target
 IMAGE=springci/graalvm-ce:21.0-dev-java11
 #IMAGE=springci/graalvm-ce:20.3-dev-java11
 
-IMAGE=ghcr.io/graalvm/graalvm-ce:latest
+#IMAGE=ghcr.io/graalvm/graalvm-ce:latest
 
   
 mkdir -p src/main/resources/META-INF/native-image
