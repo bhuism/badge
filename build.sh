@@ -3,7 +3,7 @@
 rm -Rf target
 mkdir target
 
-apt -y update && apt -y upgrade && apt -y install maven
+apt -qy update && apt -qy upgrade && apt -qy install maven
 
 #gu update
 #gu install --no-progress native-image
@@ -16,5 +16,9 @@ apt -y update && apt -y upgrade && apt -y install maven
 mkdir /build
 
 echo Starting maven
+
+#export MAVEN_OPTS='--add-exports=java.base/jdk.internal.module=ALL-UNNAMED'
+#echo MAVEN_OPTS=$MAVEN_OPTS
+
 mvn -U -B -DskipTests package
 

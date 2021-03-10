@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.appsource.badge.BadgeException;
 import nl.appsource.badge.BadgeStatus;
 import nl.appsource.badge.actual.Actuator;
+import nl.appsource.badge.actual.MetaTag;
 import nl.appsource.badge.expected.GitHub;
 import nl.appsource.badge.expected.GitLab;
 import nl.appsource.badge.expected.GitLab.GitLabKey;
@@ -24,6 +25,7 @@ public class BadgeControllerImpl implements BadgeController {
     private final Actuator actuator;
     private final Svg svg;
     private final ShieldsIo shieldsIo;
+    private final MetaTag metaTag;
 
     @FunctionalInterface
     interface CatchBadgeException<T> {
@@ -146,4 +148,14 @@ public class BadgeControllerImpl implements BadgeController {
             return BadgeStatus.ofError("current:" + _current);
         }
     }
+
+    @Override
+    public String badgeGitHubHtmlUrl(String owner, String repo, String branch, String htmlUrl) {
+        return stringWithBadgeException(() -> {
+            final String latest = cache.computeIfAbsent(new GitHub.GitHubKey(owner, repo, branch), gitHub);
+            final String current = cache.computeIfAbsent(htmlUrl, metaTag);
+            return svg.create(calcBadeStatus(latest, current));
+        });
+    }
+
 }
