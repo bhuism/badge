@@ -22,4 +22,6 @@ public interface BadgeController {
 
     ShieldsIoResponse shieldsIoActuator(String latest, String actuator_url);
 
+    String badgeGitHubHtmlUrl(String owner, String repo, String branch, String htmlUrl);
+
 }

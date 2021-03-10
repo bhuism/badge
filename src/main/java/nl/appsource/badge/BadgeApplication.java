@@ -3,6 +3,7 @@ package nl.appsource.badge;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.appsource.badge.actual.Actuator;
+import nl.appsource.badge.actual.MetaTag;
 import nl.appsource.badge.cache.MyCache;
 import nl.appsource.badge.cache.MyCacheImpl;
 import nl.appsource.badge.controller.ActuatorController;
@@ -88,7 +89,8 @@ public class BadgeApplication {
                     .bean(Svg.class, Svg::new)
                     .bean(ActuatorController.class, ActuatorControllerImpl::new)
                     .bean(ShieldsIo.class, ShieldsIo::new)
-                    .bean(BadgeController.class, () -> new BadgeControllerImpl(b.ref(GitHub.class), b.ref(GitLab.class), b.ref(Actuator.class), b.ref(Svg.class), b.ref(ShieldsIo.class)))
+                    .bean(MetaTag.class, MetaTag::new)
+                    .bean(BadgeController.class, () -> new BadgeControllerImpl(b.ref(GitHub.class), b.ref(GitLab.class), b.ref(Actuator.class), b.ref(Svg.class), b.ref(ShieldsIo.class), b.ref(MetaTag.class)))
                 )
                 .enable(webMvc(s -> s
                     .port(8080)
@@ -112,6 +114,8 @@ public class BadgeApplication {
                                 new RouterCall("/github/actuator/{owner}/{repo}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
                                 new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}", APPLICATION_JSON, (r) -> badgeController.shieldsIoGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
                                 new RouterCall("/github/actuator/{owner}/{repo}/{branch}", APPLICATION_JSON, (r) -> badgeController.shieldsIoGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
+
+                                new RouterCall("/github/metatag/{owner}/{repo}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHubHtmlUrl(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("html_url").get())),
 
                                 new RouterCall("/fixed/actuator/{latest}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
 
