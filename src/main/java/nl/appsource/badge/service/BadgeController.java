@@ -24,4 +24,6 @@ public interface BadgeController {
 
     String badgeGitHubHtmlUrl(String owner, String repo, String branch, String htmlUrl);
 
+    String badgeGitLabHtmlUrl(String id, String branch, String htmlUrl);
+
 }

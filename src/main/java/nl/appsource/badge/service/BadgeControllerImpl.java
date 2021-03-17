@@ -150,7 +150,7 @@ public class BadgeControllerImpl implements BadgeController {
     }
 
     @Override
-    public String badgeGitHubHtmlUrl(String owner, String repo, String branch, String htmlUrl) {
+    public String badgeGitHubHtmlUrl(final String owner, final String repo, final String branch, final String htmlUrl) {
         return stringWithBadgeException(() -> {
             final String latest = cache.computeIfAbsent(new GitHub.GitHubKey(owner, repo, branch), gitHub);
             final String current = cache.computeIfAbsent(htmlUrl, metaTag);
@@ -158,4 +158,10 @@ public class BadgeControllerImpl implements BadgeController {
         });
     }
 
+    @Override
+    public String badgeGitLabHtmlUrl(final String id, final String branch, final String htmlUrl) {
+        final String latest = cache.computeIfAbsent(new GitLabKey(id, branch), gitLab);
+        final String current = cache.computeIfAbsent(htmlUrl, metaTag);
+        return svg.create(calcBadeStatus(latest, current));
+    }
 }
