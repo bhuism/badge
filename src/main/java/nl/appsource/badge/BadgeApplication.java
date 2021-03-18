@@ -17,6 +17,8 @@ import nl.appsource.badge.output.Svg;
 import nl.appsource.badge.service.BadgeController;
 import nl.appsource.badge.service.BadgeControllerImpl;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.http.HttpHeaders;
@@ -78,6 +80,121 @@ public class BadgeApplication {
         final DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader(defaultClassLoader);
         commitSha = StreamUtils.copyToString(defaultResourceLoader.getResource("version.properties").getInputStream(), UTF_8);
 
+        final ApplicationContextInitializer<GenericApplicationContext> webMvc = webMvc(s -> s
+            .port(8080)
+            .router(router -> {
+
+                    final BadgeController badgeController = s.ref(BadgeController.class);
+                    final ActuatorController actuatorController = s.ref(ActuatorController.class);
+
+                    router.GET("/", (r) ->
+                        ok().contentType(MediaType.TEXT_HTML).headers(NOCACHE_HEADERS).body(new ClassPathResource("/static/index.html"))
+                    );
+
+                    asList(
+
+                        new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.badgeGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
+
+                        new RouterCall("/gitlab/actuator/{id}/{branch}/badge.svg",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.badgeGitLabActuator(
+                                r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get()
+                            )
+                        ),
+
+                        new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.shieldsIoGitLab(
+                                r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha")
+                            )
+                        ),
+
+                        new RouterCall("/gitlab/actuator/{id}/{branch}",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.shieldsIoGitLabActuator(
+                                r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get()
+                            )
+                        ),
+
+                        new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.badgeGitHub(
+                                r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha")
+                            )
+                        ),
+
+                        new RouterCall("/github/actuator/{owner}/{repo}/{branch}/badge.svg",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.badgeGitHubActuator(
+                                r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get()
+                            )
+                        ),
+
+                        new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}",
+                            APPLICATION_JSON,
+                            (r) -> badgeController.shieldsIoGitHub(
+                                r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha")
+                            )
+                        ),
+
+                        new RouterCall("/github/actuator/{owner}/{repo}/{branch}",
+                            APPLICATION_JSON,
+                            (r) -> badgeController.shieldsIoGitHubActuator(
+                                r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get()
+                            )
+                        ),
+
+                        new RouterCall("/gitlab/metatag/{id}/{branch}/badge.svg",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.badgeGitLabHtmlUrl(
+                                r.pathVariable("id"), r.pathVariable("branch"), r.param("html_url").get()
+                            )
+                        ),
+
+                        new RouterCall("/github/metatag/{owner}/{repo}/{branch}/badge.svg",
+                            IMAGE_SVGXML,
+                            (r) -> badgeController.badgeGitHubHtmlUrl(
+                                r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("html_url").get()
+                            )
+                        ),
+
+                        new RouterCall("/fixed/actuator/{latest}",
+                            APPLICATION_JSON,
+                            (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
+
+                        new RouterCall(ACTUATOR,
+                            APPLICATION_JSON,
+                            (r) -> actuatorController.index(r)),
+
+                        new RouterCall(ACTUATOR + "/info",
+                            APPLICATION_JSON,
+                            (r) -> actuatorController.info()),
+
+                        new RouterCall(ACTUATOR + "/health",
+                            APPLICATION_JSON,
+                            (r) -> actuatorController.health()),
+
+                        new RouterCall(ACTUATOR + "/stats",
+                            APPLICATION_JSON,
+                            (r) -> actuatorController.cache())
+
+                    ).forEach(rc -> {
+                        router.GET(rc.pattern, (r) -> OK_NOCACHE.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
+                        router.HEAD(rc.pattern, (r) -> OK_NOCACHE.get().contentType(rc.contentType).build());
+                    });
+
+                }
+            )
+            .converters(c -> c
+                .resource()
+                .string()
+                .jackson()
+            )
+
+        );
+
         webApplication(
 
             a -> a
@@ -92,53 +209,7 @@ public class BadgeApplication {
                     .bean(MetaTag.class, MetaTag::new)
                     .bean(BadgeController.class, () -> new BadgeControllerImpl(b.ref(GitHub.class), b.ref(GitLab.class), b.ref(Actuator.class), b.ref(Svg.class), b.ref(ShieldsIo.class), b.ref(MetaTag.class)))
                 )
-                .enable(webMvc(s -> s
-                    .port(8080)
-                    .router(router -> {
-
-                            final BadgeController badgeController = s.ref(BadgeController.class);
-                            final ActuatorController actuatorController = s.ref(ActuatorController.class);
-
-                            router.GET("/", (r) ->
-                                ok().contentType(MediaType.TEXT_HTML).headers(NOCACHE_HEADERS).body(new ClassPathResource("/static/index.html"))
-                            );
-
-                            asList(
-
-                                new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
-                                new RouterCall("/gitlab/actuator/{id}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())),
-                                new RouterCall("/gitlab/sha/{id}/{branch}/{commit_sha}", IMAGE_SVGXML, (r) -> badgeController.shieldsIoGitLab(r.pathVariable("id"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
-                                new RouterCall("/gitlab/actuator/{id}/{branch}", IMAGE_SVGXML, (r) -> badgeController.shieldsIoGitLabActuator(r.pathVariable("id"), r.pathVariable("branch"), r.param("actuator_url").get())),
-
-                                new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
-                                new RouterCall("/github/actuator/{owner}/{repo}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
-                                new RouterCall("/github/sha/{owner}/{repo}/{branch}/{commit_sha}", APPLICATION_JSON, (r) -> badgeController.shieldsIoGitHub(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.pathVariable("commit_sha"))),
-                                new RouterCall("/github/actuator/{owner}/{repo}/{branch}", APPLICATION_JSON, (r) -> badgeController.shieldsIoGitHubActuator(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("actuator_url").get())),
-
-                                new RouterCall("/gitlab/metatag/{id}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitLabHtmlUrl(r.pathVariable("id"), r.pathVariable("branch"), r.param("html_url").get())),
-                                new RouterCall("/github/metatag/{owner}/{repo}/{branch}/badge.svg", IMAGE_SVGXML, (r) -> badgeController.badgeGitHubHtmlUrl(r.pathVariable("owner"), r.pathVariable("repo"), r.pathVariable("branch"), r.param("html_url").get())),
-
-                                new RouterCall("/fixed/actuator/{latest}", APPLICATION_JSON, (r) -> badgeController.shieldsIoActuator(r.pathVariable("latest"), r.param("actuator_url").get())),
-
-                                new RouterCall(ACTUATOR, APPLICATION_JSON, (r) -> actuatorController.index(r)),
-                                new RouterCall(ACTUATOR + "/info", APPLICATION_JSON, (r) -> actuatorController.info()),
-                                new RouterCall(ACTUATOR + "/health", APPLICATION_JSON, (r) -> actuatorController.health()),
-                                new RouterCall(ACTUATOR + "/stats", APPLICATION_JSON, (r) -> actuatorController.cache())
-
-                            ).forEach(rc -> {
-                                router.GET(rc.pattern, (r) -> OK_NOCACHE.get().contentType(rc.contentType).body(rc.handlerFunction.apply(r)));
-                                router.HEAD(rc.pattern, (r) -> OK_NOCACHE.get().contentType(rc.contentType).build());
-                            });
-
-                        }
-                    )
-                    .converters(c -> c
-                        .resource()
-                        .string()
-                        .jackson()
-                    )
-
-                ))
+                .enable(webMvc)
         ).run(args);
 
     }
