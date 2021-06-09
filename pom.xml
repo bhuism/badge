@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.1</version>
+        <version>2.5.0</version>
         <relativePath/>
     </parent>
 
@@ -21,7 +21,7 @@
     <properties>
         <java.version>11</java.version>
         <start-class>nl.appsource.badge.BadgeApplication</start-class>
-        <spring-fu-jafu.version>0.4.3</spring-fu-jafu.version>
+        <spring-fu-jafu.version>0.4.4</spring-fu-jafu.version>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
     </properties>
 
@@ -98,12 +98,12 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.2.0</version>
+                <version>4.2.3</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.2.2</version>
+                        <version>4.2.3</version>
                     </dependency>
                 </dependencies>
             </plugin>
